@@ -1,0 +1,10 @@
+# Each project folder has its own .gitignore (finance-tracker-api/, finance-tracker-web/).
+
+# Personal, machine-specific tool settings
+.claude/settings.local.json
+
+# OS / editor noise at the root
+.DS_Store
+Thumbs.db
+/.idea/
+/.vscode/
