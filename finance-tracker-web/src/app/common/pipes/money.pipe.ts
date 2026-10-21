@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { formatMoney, MoneyKind } from '../formatting/money.utils';
+import { MoneyKind } from '../formatting/money.model';
+import { formatMoney } from '../formatting/money.utils';
 
 /**
  * `{{ 1234.56 | money }}` → "1 234,56 zł"; `{{ 24 | money: 'expense' }}` → "−24,00 zł".

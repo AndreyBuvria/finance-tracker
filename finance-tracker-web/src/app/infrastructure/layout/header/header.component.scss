@@ -1,0 +1,35 @@
+@use '../layout-metrics' as metrics;
+
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: block;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: metrics.$top-bar-height;
+  padding: 0 8px 0 16px;
+  background: var(--mat-sys-surface-container);
+}
+
+.app-name {
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-title-large);
+  text-decoration: none;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.shortcut {
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font: var(--mat-sys-label-medium);
+}

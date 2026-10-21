@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { OnboardingPage } from './onboarding-page';
+import { OnboardingComponent } from './onboarding.component';
 
 export const ONBOARDING_ROUTES: Routes = [
   {
     path: '',
     title: $localize`:@@onboarding.route.title:Welcome · Finance Tracker`,
-    component: OnboardingPage,
+    component: OnboardingComponent,
   },
 ];

@@ -61,3 +61,7 @@ dotnet_diagnostic.IDE0005.severity = warning
 # Test names follow [Method]_[Scenario]_[ExpectedResult]
 dotnet_naming_rule.async_methods_suffix.severity = none
 dotnet_diagnostic.CA1707.severity = none
+
+[src/FinanceTracker.Infrastructure/Persistence/Migrations/*.cs]
+# EF Core generated migrations and model snapshot.
+generated_code = true

@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideAppLocale } from '../locale/locale';
-import { MoneyKind } from '../formatting/money.utils';
+import { provideAppLocale } from '../locale/locale.utils';
+import { MoneyKind } from '../formatting/money.model';
 import { MoneyPipe } from './money.pipe';
 
 @Component({

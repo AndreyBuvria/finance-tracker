@@ -1,0 +1,35 @@
+<a class="skip-link" href="#main-content" (click)="skipToMain($event)" i18n="@@shell.skipLink"
+  >Skip to main content</a
+>
+
+<app-header
+  [homePath]="homePath()"
+  [settingsPath]="settingsPath()"
+  [userName]="userName()"
+  [showAddButton]="isDesktop()"
+  (addRequested)="addRequested.emit()"
+  (logoutRequested)="logoutRequested.emit()"
+/>
+
+<div class="body">
+  @if (isDesktop()) {
+    <app-navigation variant="rail" [items]="navItems()" />
+  }
+  <main #main id="main-content" tabindex="-1">
+    <ng-content />
+  </main>
+</div>
+
+@if (!isDesktop()) {
+  <button
+    mat-fab
+    type="button"
+    class="fab"
+    aria-label="Add transaction"
+    i18n-aria-label="@@shell.fab.label"
+    (click)="addRequested.emit()"
+  >
+    <mat-icon aria-hidden="true">add</mat-icon>
+  </button>
+  <app-navigation variant="bottom" [items]="navItems()" />
+}

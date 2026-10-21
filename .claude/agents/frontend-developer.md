@@ -20,15 +20,23 @@ If `PLAN.md`, `FEATURES.md`, `DESIGN.md` and the conventions disagree, stop and 
 - Standalone components, without `standalone: true` or an explicit `OnPush`.
   - Use `input()`/`output()`/`model()`, signals, `computed()`, and native control flow.
   - Use `host: {}` instead of `@HostBinding`/`@HostListener`, and use `inject()`.
+- Reactivity:
+  - Use RxJS for events and async flows (HTTP, input streams, debounce, `switchMap`).
+  - Templates prefer signals (`toSignal()`/`rxResource()`); the `async` pipe is fine where converting adds nothing. Use `toObservable()` for signal → RxJS.
+  - `subscribe` only for side effects, always with `takeUntilDestroyed()`.
 - Forms: typed Reactive Forms with `NonNullableFormBuilder`. Never Signal Forms or template-driven forms.
 - Services use `@Injectable({ providedIn: 'root' })`, never `@Service`.
 - Get the current date from the clock service, never `new Date()` directly.
 - Follow "Project structure" in `finance-tracker-web/CLAUDE.md`:
-  - Pages live in `pages/<page>/`, with their own `components/` and `data/`.
-  - Shared non-UI code goes in `common/`, and shared generic UI in `infrastructure/`.
+  - Features live in `pages/<feature>/`, mirroring the app level: one folder per page (`auth/login/`), plus the feature's own `common/` (shared within the feature) and `utils/`.
+  - Global/shared styles and design-system constants go in `src/styles/` (imported via `index.scss` / `@styles/*`).
+  - Aliases: `@common/*`, `@infrastructure/*`, `@styles/*`, plus `@pages/*` from the app root only (never feature → feature).
+  - Selector/dropdown components are `*-select.component.ts`. App-level ones live in a domain folder of `common/` (e.g. `common/date/month-select/`); feature-only ones in the feature's `common/selects/`.
+  - Route paths come from `AppRoutesEnum`. Keep components small; split them into child components.
+  - Shared code (including domain-tied reusable components such as `common/date/month-select/`) goes in `common/`, grouped by domain; shared generic UI building blocks (layout, cards, empty states) go in `infrastructure/`.
   - Imports go only `pages → infrastructure → common`, never page → page. Import across layers with the `@common/*` and `@infrastructure/*` aliases.
   - Promote code to `common/` or `infrastructure/` only once a second page needs it.
-  - Helper/function files are named `*.utils.ts` (e.g. `money.utils.ts`).
+  - File names state their content type: `.component.ts`, `.service.ts`, `.directive.ts`, `.guard.ts`, `.interceptor.ts`, `.model.ts`, `.enum.ts`, `.context.ts`, `.token.ts`, `.constants.ts`. Helpers use `.utils.ts`.
 - Every page is lazy-loaded. Transaction filters live in URL query params.
 - Formatting:
   - Money: `pl-PL`, `1 234,56 zł`. Expenses `−` with a red accent, income `+` in green, transfers neutral.

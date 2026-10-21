@@ -31,6 +31,12 @@ Run Claude Code from the repo root so the agents and both projects are available
 
 Suggested flow for any task (whoever writes the code): implement → matching convention reviewer → `spec-qa-reviewer` → tick the checkbox in `PLAN.md`.
 
+**Delegated task pipeline (mandatory for agent-implemented work):**
+1. Developer agent implements (`frontend-developer` / `backend-developer` / …).
+2. The matching convention reviewer reviews the result (`frontend-convention-reviewer` / `backend-convention-reviewer`).
+3. If the verdict is CHANGES REQUIRED (any Blocker/Major), the developer agent fixes the findings and the reviewer reviews once more.
+4. Only then report to the project owner: what was built, the review verdict, remaining Minor findings, and any open questions. The owner checks the result before the next batch starts.
+
 **Paths:** when a doc, agent or rule says `PLAN.md`, `FEATURES.md` or `DESIGN.md`, it means the file in `.claude/docs/`.
 
 **Delegation rule:** every change to frontend or backend code or config — no matter how small, including refactors, fixes and restructuring — goes to the dedicated agent (`frontend-developer`, `backend-developer`, `import-pipeline-developer`, `devops-engineer`). The main session only coordinates, edits the docs in `.claude/` (`docs/*.md`, `CLAUDE.md` files, agent definitions) and relays results.

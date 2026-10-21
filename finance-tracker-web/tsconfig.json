@@ -16,7 +16,9 @@
     "module": "preserve",
     "paths": {
       "@common/*": ["./src/app/common/*"],
-      "@infrastructure/*": ["./src/app/infrastructure/*"]
+      "@infrastructure/*": ["./src/app/infrastructure/*"],
+      "@pages/*": ["./src/app/pages/*"],
+      "@styles/*": ["./src/styles/*"]
     }
   },
   "angularCompilerOptions": {

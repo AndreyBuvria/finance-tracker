@@ -33,7 +33,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/index.scss"
             ],
             "polyfills": [
               "@angular/localize/init"

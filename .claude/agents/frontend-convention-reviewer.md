@@ -29,22 +29,33 @@ Work in `finance-tracker-web/`. Determine what to review:
    - Native control flow; no `*ngIf`/`*ngFor`/`*ngSwitch`.
    - No `ngClass`/`ngStyle`.
    - No `CommonModule` import.
-   - Async pipe for observables.
+   - Async pipe for observables; signals preferred where they fit.
    - Simple templates without complex logic.
+3a. **Reactivity:**
+   - RxJS is used for events and async flows (HTTP, input streams, `switchMap`/`debounceTime`).
+   - Templates prefer signals (`toSignal()`/`rxResource()`); the `async` pipe on an observable is allowed. `toObservable()` is used for signal → RxJS.
+   - Flag subscribe-and-assign used for display.
+   - Every `subscribe` is for a side effect and is cleaned up with `takeUntilDestroyed()`.
 4. **Forms:** typed Reactive Forms (`NonNullableFormBuilder`). No Signal Forms, no template-driven forms.
 5. **Services:**
    - Single responsibility.
    - `@Injectable({ providedIn: 'root' })` for singletons. Never `@Service`.
 6. **Time:** no direct `new Date()` / `Date.now()` in components or services; the clock service is used.
 7. **Structure & routing** ("Project structure" in `CLAUDE.md`):
-   - Files are in the right layer: `common/` for non-UI shared code, `infrastructure/` for generic shared UI, `pages/<page>/` for page-specific code.
+   - Files are in the right layer:
+     - `src/styles/` for global/shared styles and design-system constants;
+     - app-level `common/` for shared code grouped by domain, including domain-tied reusable components (e.g. `common/date/month-select/`), and `infrastructure/` for generic shared UI building blocks;
+     - `pages/<feature>/` for feature code, with one folder per page plus the feature's `common/` and `utils/`.
    - Components are feature-specific and live under their page.
    - `infrastructure/` components are generic: they take inputs/outputs and don't call page APIs.
-   - Imports follow `pages → infrastructure → common`, with no page → page imports. Check relative paths like `../other-page/` by hand, because lint can't catch them.
-   - Cross-layer imports use the `@common/*` and `@infrastructure/*` aliases.
+   - Imports follow `pages → infrastructure → common`, with no feature → feature imports. Check relative paths into sibling features by hand.
+   - Route paths come from `AppRoutesEnum`; there are no hard-coded path strings.
+   - Components are small. Flag oversized components that should be split into child components.
+   - Cross-layer imports use the `@common/*`, `@infrastructure/*` and `@styles/*` aliases. `@pages/*` is used from the app root only, and never from one feature into another.
+   - Selector/dropdown components are named `*-select.component.ts`. App-level ones live in a domain folder of `common/` (e.g. `common/date/month-select/`); feature `common/` folders group components by kind (e.g. `common/selects/`).
    - Nothing is promoted to `common/` or `infrastructure/` before a second page uses it.
    - Every page is lazy-loaded.
-   - File naming: helper/function files use the `.utils.ts` suffix (`money.utils.ts`). Angular artifacts keep their own suffixes.
+   - File naming states the content type (`.component.ts`, `.service.ts`, `.directive.ts`, `.guard.ts`, `.interceptor.ts`, `.model.ts`, `.enum.ts`, `.context.ts`, `.token.ts`, `.constants.ts`). Helpers use `.utils.ts`. Class names match (`AccountComponent`).
    - Transaction filters are kept in URL query params.
 8. **Images:** `NgOptimizedImage` for static images (except inline base64).
 9. **TypeScript:** strict mode, no `any` (`unknown` where uncertain), and inference where the type is obvious.

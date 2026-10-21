@@ -1,4 +1,4 @@
-import '../locale/locale';
+import '../locale/locale.utils';
 import { formatMoney } from './money.utils';
 
 /** Replace non-breaking spaces so expectations stay readable. */

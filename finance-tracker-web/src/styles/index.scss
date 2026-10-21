@@ -1,0 +1,5 @@
+// Global stylesheet entry (angular.json → build.options.styles). Only `@use`s the partials below;
+// component-specific styles stay next to their component.
+@use './theme';
+@use './base';
+@use './a11y';

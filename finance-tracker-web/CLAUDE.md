@@ -5,33 +5,66 @@ Angular app for Finance Tracker, in a monorepo; the API lives in the sibling fol
 ## Project structure
 
 ```
-src/app/
-  common/                      shared non-UI code (import via @common/...)
-    config/ locale/ time/ formatting/ pipes/   (later: api/, auth/, models/)
-  infrastructure/              shared UI building blocks (import via @infrastructure/...)
-    layout/ cards/ empty-state/ skeleton/ ...
-  pages/                       one folder per page/route
-    <page>/
-      <page>.routes.ts         lazy-loaded from app.routes.ts
-      <page>-page.ts           the routed page component
-      components/<name>/       components used only by this page
-      data/                    API service, models and state used only by this page
+src/
+  styles/                      global styles and the design system (import via @styles/... from TS)
+    index.scss                 the global stylesheet entry; @use/@forward every partial below
+    _theme-colors.scss, _semantic-colors.scss, modal.scss, ...
+    category-palette.constants.ts, category-icons.constants.ts, budget-status.constants.ts, *.model.ts, ...   design-system constants and types
+  app/
+    app.component.ts, app.routes.ts, app.config.ts    app root
+    authenticated-layout.component.ts       route-level composition of the layout with auth (app root is allowed for this)
+    common/                    shared code, grouped by domain (import via @common/...)
+      auth/ config/ date/ locale/ time/ formatting/ pipes/ routing/ ...
+      date/month-select/month-select.component.ts   e.g. a reusable date-related component
+    infrastructure/            shared UI building blocks (import via @infrastructure/...)
+      layout/ directives/ cards/ empty-state/ ...
+    pages/                     one folder per feature
+      <feature>/
+        <feature>.routes.ts                lazy-loaded from app.routes.ts
+        <page>/<page>.component.ts         one folder per routed page of the feature (e.g. auth/login, auth/register)
+        common/<kind>/<name>/<name>.component.ts  components (and services/models) shared by pages of this feature, grouped by kind (e.g. common/selects/<name>-select/)
+        utils/<name>.utils.ts              helpers used by this feature only
 ```
 
-- **`common/`** holds everything shared that is not UI: services, API clients and models used by more than one page, interceptors, guards, locale/time/formatting helpers, pipes, utilities.
-- **`infrastructure/`** holds shared UI building blocks: app shell/layout, navigation, generic cards, empty states, skeleton loaders, confirm dialog. These are presentational and generic. They get data through `input()` and report through `output()`. They have no page-specific logic and don't call page APIs.
-- **`pages/`** holds the screens. A page composes things from `common/` and `infrastructure/` with its own components.
-- **All components are feature-specific.** A component belongs to the page that uses it and lives in `pages/<page>/components/`.
-- **Promoting shared code.** When a second page needs a component, make it generic and move it to `infrastructure/`. When a second page needs a service, model or helper, move it to `common/`. Don't put a component in `infrastructure/` "in case" it gets reused.
-- **Dependency direction.** Imports go only `pages → infrastructure → common`:
+A feature mirrors the app-level layout: its own `common/` and `utils/` folders, and one folder per page. A feature with a single page may keep that page's component at the feature root (e.g. `pages/dashboard/dashboard.component.ts`).
+
+- **`src/styles/`** holds global styles and the design system:
+  - theme and semantic color tokens;
+  - styles shared by many places or tied to a common feature, e.g. a modal window → `src/styles/modal.scss`, imported in `index.scss`;
+  - spec-defined design-system constants: the category color palette (hex), the category icon set and budget status visuals.
+
+  Component-specific styles stay next to their component.
+- **`common/`** (app level) holds shared code grouped by domain folder: services, API clients and models used by more than one feature, interceptors, guards, the route enum, locale/time/formatting helpers, pipes, and reusable components tied to a domain (e.g. `common/date/month-select/`). It is not limited to non-UI code.
+- **`infrastructure/`** holds shared UI building blocks: layout (header, navigation), shared directives, generic cards, empty states, skeleton loaders, confirm dialog. These are presentational and generic. They get data through `input()` and report through `output()`. They have no feature-specific logic and don't call feature APIs.
+- **`pages/<feature>/`** holds the screens. A page composes things from the app-level `common/`, `infrastructure/` and `src/styles/` with its feature's own `common/` and `utils/`.
+- **All components are feature-specific.** A component belongs to the feature that uses it:
+  - in the page folder if only that page uses it;
+  - in the feature's `common/` if several pages of the feature use it.
+- **Promoting shared code.** When a second feature needs a component or directive, make it generic and move it to `infrastructure/`. When a second feature needs a service, model or helper, move it to the app-level `common/`. Don't promote "in case" it gets reused.
+- **Keep components small.** Split a large component into focused child components (e.g. the layout is composed of a header component and a navigation component). Encapsulate a piece of logic in its own component when that makes the parent clearer.
+- **Dependency direction.** Imports go only `pages → infrastructure → common`. `src/styles/` may be imported from anywhere and imports nothing from `src/app`.
   - `common/` imports nothing from the other two.
   - `infrastructure/` never imports from `pages/`.
-  - **A page never imports from another page.**
-- **Import paths.** Import across layers with the `@common/*` and `@infrastructure/*` aliases. Use relative imports only inside the same page or the same layer.
-- **Enforcement.** ESLint (`no-restricted-imports`) enforces the boundaries. One exception it can't catch is a page reaching into a sibling page by a short relative path (`../other-page/...`), so the reviewer checks that by hand.
-- **File naming:**
-  - Angular artifacts keep their type suffix: `*.service.ts`, `*.pipe.ts`, `*.routes.ts`, `*-page.ts`.
-  - A file that contains plain functions or helpers (not a component, service, pipe, directive or routes file) gets a `.utils` suffix: `money.utils.ts`, tested in `money.utils.spec.ts`. This applies in every layer.
+  - **A feature never imports from another feature.**
+- **Import paths.**
+  - Import app-level code with the `@common/*`, `@infrastructure/*` and `@styles/*` aliases.
+  - Import features from the app root (e.g. lazy routes in `app.routes.ts`) with `@pages/*`, e.g. `@pages/onboarding/...`.
+  - Inside a feature, use relative imports for the feature's own files. Never use `@pages/*` to reach another feature.
+  - Use relative imports only inside the same feature or the same layer.
+- **Routes.** Route paths are defined once in `AppRoutesEnum` (`common/routing/app-routes.enum.ts`); never hard-code a path string elsewhere.
+- **Enforcement.** ESLint enforces the layer boundaries. Anything lint can't catch (e.g. a short relative path into a sibling feature) is checked by the reviewer.
+- **File naming: the file name states the type of its content** (classic Angular convention):
+  - Use `name.<type>.ts`:
+    - `account.component.ts`, with `.component.html`, `.component.scss` and `.component.spec.ts` (class `AccountComponent`);
+    - `.service.ts`, `.directive.ts`, `.pipe.ts`, `.guard.ts`, `.interceptor.ts`, `.routes.ts`;
+    - `.model.ts` (interfaces and types), `.enum.ts`;
+    - `.context.ts` for `HttpContextToken`s, e.g. `auth.context.ts`;
+    - `.token.ts` for `InjectionToken`s;
+    - `.adapter.ts` for adapter classes, e.g. `monday-first.adapter.ts` (a Material `DateAdapter`);
+    - `.constants.ts` for constant values.
+  - Selector/dropdown components are named `<name>-select.component.ts` (e.g. `month-select.component.ts`, class `MonthSelectComponent`).
+  - Files with plain functions/helpers use `.utils.ts` (`money.utils.ts`, tested in `money.utils.spec.ts`).
+  - Test helpers and fakes follow the same rule (e.g. `fake-clock.service.ts` if it is a service double).
 - **Feature used across pages** (e.g. the Quick-add dialog opened from the layout on every screen): if the case doesn't fit these rules, ask before choosing where it lives.
 
 ## Angular frontend conventions
@@ -50,7 +83,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
 - Do NOT set `changeDetection: ChangeDetectionStrategy.OnPush` explicitly. `OnPush` is the default in Angular v22+.
 - Use signals for state management
-- Implement lazy loading for every page (`pages/<page>/<page>.routes.ts` via `loadChildren`)
+- Implement lazy loading for every feature (`pages/<feature>/<feature>.routes.ts` via `loadChildren`)
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
 - Use `NgOptimizedImage` for all static images.
   - `NgOptimizedImage` does not work for inline base64 images.
@@ -74,6 +107,13 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Do NOT import `CommonModule`, import only the directives and pipes the template uses, such as `AsyncPipe` or `DatePipe`
 - When using external templates/styles, use paths relative to the component TS file.
 
+## Reactivity: RxJS for events, signals preferred for display
+
+- **RxJS handles events and async flows:** HTTP calls, user-input streams (search with `debounceTime`, filter changes), and combining or cancelling work (`switchMap`, `combineLatest`). Services expose HTTP results as observables.
+- **Templates prefer signals.** Turn an observable into a signal with `toSignal()` (or `rxResource()` for request-style loading) and read the signal in the template. When converting adds nothing (e.g. a simple stream that is only displayed), binding the observable with the `async` pipe is fine.
+- **Signal → RxJS:** when signal state has to drive an RxJS pipeline (e.g. a filter signal feeding a debounced HTTP request), use `toObservable()`.
+- **No manual subscribe-and-assign** to push values into fields or signals for display. Use `subscribe` only for side effects (navigation, snackbar, saving), and always clean up with `takeUntilDestroyed()`.
+
 ## State Management
 
 - Use signals for local component state
@@ -85,7 +125,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 
 - Keep templates simple and avoid complex logic
 - Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
-- Use the async pipe to handle observables
+- Use the async pipe to handle observables (prefer signals where it fits; see "Reactivity")
 - Do not assume globals like (`new Date()`) are available. Get the current date/time from the injectable clock service so tests can control "today".
 
 ## Testing

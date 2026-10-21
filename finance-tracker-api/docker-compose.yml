@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-finance}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-finance}
     ports:
-      - "${POSTGRES_HOST_PORT:-5432}:5432"
+      - "${POSTGRES_HOST_PORT:-55432}:5432"
     volumes:
       # PostgreSQL 18+ images keep data in a versioned subdirectory of /var/lib/postgresql.
       - postgres-data:/var/lib/postgresql
@@ -32,6 +32,8 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: "8080"
       ConnectionStrings__Default: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-finance_tracker};Username=${POSTGRES_USER:-finance};Password=${POSTGRES_PASSWORD:-finance}"
+      # Local development only. Deployed environments read the key from Secrets Manager.
+      Jwt__SigningKey: "${JWT_SIGNING_KEY:-local-dev-only-jwt-signing-key-do-not-use-in-production}"
     ports:
       - "${API_HOST_PORT:-5080}:8080"
 

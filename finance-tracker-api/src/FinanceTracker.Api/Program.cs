@@ -1,11 +1,14 @@
 using System.Diagnostics;
+using FinanceTracker.Api.Authentication;
 using FinanceTracker.Application;
 using FinanceTracker.Infrastructure;
 using FinanceTracker.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+    // Required-field messages come from the FluentValidation validators (FEATURES.md wording).
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 builder.Services.AddOpenApi();
 
 builder.Services.AddProblemDetails(options =>
@@ -18,7 +21,8 @@ builder.Services.AddSingleton(TimeProvider.System);
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure();
+    .AddInfrastructure()
+    .AddJwtAuthentication();
 
 builder.Services
     .AddHealthChecks()
@@ -26,15 +30,23 @@ builder.Services
 
 var app = builder.Build();
 
+if (app.Configuration.GetValue<bool>(DatabaseMigrator.MigrateOnStartupKey))
+{
+    await app.Services.MigrateDatabaseAsync(app.Lifetime.ApplicationStopping);
+}
+
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.MapOpenApi().AllowAnonymous();
 }
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health").AllowAnonymous();
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

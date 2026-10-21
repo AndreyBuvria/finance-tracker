@@ -19,8 +19,97 @@ const restrictedPaths = [
   },
 ];
 
-// Layer boundaries (CLAUDE.md → Project structure): pages → infrastructure → common.
+// Syntax banned everywhere outside tests (CLAUDE.md): tests may build fixed dates as fixtures.
+const clockSyntax = [
+  {
+    selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+    message: 'Read the current date from ClockService (common/time), never new Date().',
+  },
+  {
+    selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
+    message: 'Read the current time from ClockService (common/time), never Date.now().',
+  },
+];
+
+// Decorator options banned everywhere, tests included (CLAUDE.md).
+const decoratorSyntax = [
+  {
+    selector: "Decorator Property[key.name='standalone'][value.value=true]",
+    message: 'Do not set standalone: true; it is the default (CLAUDE.md).',
+  },
+  {
+    selector:
+      "Decorator Property[key.name='changeDetection'] MemberExpression[property.name='OnPush']",
+    message: 'Do not set OnPush explicitly; it is the default in Angular v22+ (CLAUDE.md).',
+  },
+];
+
+// Shared for the same reason as restrictedPaths: a later `no-restricted-syntax` entry replaces the earlier one.
+const restrictedSyntax = [...clockSyntax, ...decoratorSyntax];
+
+// Layer boundaries (CLAUDE.md → Project structure): pages → infrastructure → common;
+// src/styles imports nothing from src/app.
 const layerRule = (patterns) => ['error', { paths: restrictedPaths, patterns }];
+
+const MAX_DEPTH = 6;
+
+/**
+ * Relative imports may not climb out of `root` (a feature folder, or src/styles).
+ * ESLint matches import strings, not resolved paths, so one config block per folder depth bans
+ * as many `../` as it takes to leave `root` from that depth:
+ * `pages/auth/login/x.ts` may use `../common/…` (still inside the feature) but not `../../…`.
+ * The first block is a catch-all for every file under `root`; the per-depth blocks after it
+ * replace it for depths below MAX_DEPTH. Files nested MAX_DEPTH or more folders deep keep the
+ * catch-all, which bans MAX_DEPTH + 1 or more `../` (exact at depth MAX_DEPTH, stricter below it).
+ */
+const stayInside = (root, message) => [
+  {
+    files: [`${root}/**/*.ts`],
+    pattern: { regex: `^(\\.\\./){${MAX_DEPTH + 1},}`, message },
+  },
+  ...Array.from({ length: MAX_DEPTH }, (_, depth) => ({
+    files: [`${root}/${'*/'.repeat(depth)}*.ts`],
+    pattern: { regex: `^(\\.\\./){${depth + 1}}`, message },
+  })),
+];
+
+const LEAVE_FEATURE =
+  'Do not leave the feature with a relative import. Use @common/*, @infrastructure/* or @styles/*; ' +
+  'a feature never imports another feature (CLAUDE.md → Project structure).';
+const LEAVE_STYLES = 'src/styles must not import from src/app (CLAUDE.md → Project structure).';
+const APP_ALIASES = {
+  regex: '^@(common|infrastructure|pages)/',
+  message: LEAVE_STYLES,
+};
+// `@pages/*` is only for the app root (e.g. lazy routes in app.routes.ts).
+const pagesAlias = (message) => ({ regex: '^@pages(/|$)', message });
+const PAGES_ALIAS_IN_FEATURE =
+  'Do not use @pages/* inside a feature. Import your own feature files relatively; ' +
+  'a feature never imports another feature (CLAUDE.md → Project structure).';
+const PAGES_ALIAS_IN_LAYER = (layer) =>
+  `${layer} must not depend on pages/ (CLAUDE.md → Project structure).`;
+// `no-restricted-imports` does not check `import()`, so lazy imports of `@pages/*` are banned via
+// syntax, both as a string literal and as a template literal (`@pages/${name}/…`).
+const LAYER_FILES = [
+  'src/app/pages/**/*.ts',
+  'src/app/common/**/*.ts',
+  'src/app/infrastructure/**/*.ts',
+  'src/styles/**/*.ts',
+];
+const DYNAMIC_PAGES_IMPORT_MESSAGE =
+  '@pages/* is only for the app root (e.g. app.routes.ts). Features import their own files ' +
+  'relatively; common/, infrastructure/ and src/styles never depend on pages/ (CLAUDE.md → Project structure).';
+const DYNAMIC_PAGES_IMPORTS = [
+  {
+    selector: 'ImportExpression[source.value=/^@pages\\b/]',
+    message: DYNAMIC_PAGES_IMPORT_MESSAGE,
+  },
+  {
+    selector:
+      "ImportExpression[source.type='TemplateLiteral'][source.quasis.0.value.raw=/^@pages\\b/]",
+    message: DYNAMIC_PAGES_IMPORT_MESSAGE,
+  },
+];
 
 module.exports = defineConfig([
   {
@@ -56,26 +145,7 @@ module.exports = defineConfig([
       '@angular-eslint/use-injectable-provided-in': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       'no-restricted-imports': ['error', { paths: restrictedPaths, patterns: [] }],
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: "NewExpression[callee.name='Date'][arguments.length=0]",
-          message: 'Read the current date from ClockService (common/time), never new Date().',
-        },
-        {
-          selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
-          message: 'Read the current time from ClockService (common/time), never Date.now().',
-        },
-        {
-          selector: "Decorator Property[key.name='standalone'][value.value=true]",
-          message: 'Do not set standalone: true; it is the default (CLAUDE.md).',
-        },
-        {
-          selector:
-            "Decorator Property[key.name='changeDetection'] MemberExpression[property.name='OnPush']",
-          message: 'Do not set OnPush explicitly; it is the default in Angular v22+ (CLAUDE.md).',
-        },
-      ],
+      'no-restricted-syntax': ['error', ...restrictedSyntax],
     },
   },
   {
@@ -87,6 +157,7 @@ module.exports = defineConfig([
           message:
             'common/ must not depend on infrastructure/ or pages/ (CLAUDE.md → Project structure).',
         },
+        pagesAlias(PAGES_ALIAS_IN_LAYER('common/')),
       ]),
     },
   },
@@ -102,31 +173,33 @@ module.exports = defineConfig([
           regex: '^\\.{1,2}/(.*/)?common/',
           message: 'Import common code through the @common/* alias.',
         },
+        pagesAlias(PAGES_ALIAS_IN_LAYER('infrastructure/')),
       ]),
     },
   },
-  {
-    files: ['src/app/pages/**/*.ts'],
+  // `pages/<feature>/*` sits one level below `pages/`, so the feature root is `src/app/pages/*`.
+  ...stayInside('src/app/pages/*', LEAVE_FEATURE).map(({ files, pattern }) => ({
+    files,
     rules: {
-      'no-restricted-imports': layerRule([
-        {
-          regex: '^\\.{1,2}/(.*/)?pages/',
-          message:
-            'A page must not import another page. Move shared code to common/ or infrastructure/ (CLAUDE.md → Project structure).',
-        },
-        {
-          regex: '^\\.{1,2}/(.*/)?(common|infrastructure)/',
-          message: 'Import shared code through the @common/* and @infrastructure/* aliases.',
-        },
-      ]),
+      'no-restricted-imports': layerRule([pattern, pagesAlias(PAGES_ALIAS_IN_FEATURE)]),
     },
+  })),
+  ...stayInside('src/styles', LEAVE_STYLES).map(({ files, pattern }) => ({
+    files,
+    rules: { 'no-restricted-imports': layerRule([pattern, APP_ALIASES]) },
+  })),
+  {
+    files: LAYER_FILES,
+    rules: { 'no-restricted-syntax': ['error', ...restrictedSyntax, ...DYNAMIC_PAGES_IMPORTS] },
   },
   {
-    // Tests may compare against the real clock.
+    // Tests may build dates from the real clock as fixtures; the decorator bans still apply.
     files: ['**/*.spec.ts'],
-    rules: {
-      'no-restricted-syntax': 'off',
-    },
+    rules: { 'no-restricted-syntax': ['error', ...decoratorSyntax] },
+  },
+  {
+    files: LAYER_FILES.map((glob) => glob.replace(/\*\.ts$/, '*.spec.ts')),
+    rules: { 'no-restricted-syntax': ['error', ...decoratorSyntax, ...DYNAMIC_PAGES_IMPORTS] },
   },
   {
     files: ['**/*.html'],

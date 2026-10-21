@@ -99,7 +99,7 @@ After onboarding → Dashboard. Store `OnboardingCompletedAt` on the user so it 
 - Fields: Name (required, max 50, unique per user among non-archived), Type (Card / Savings / Cash), Currency (PLN only in MVP, field disabled with hint "More currencies coming soon"), Starting balance.
 - **Starting balance** is explained in the form: "The balance on the day you start tracking. Check your bank app." It can be edited later; editing it changes all computed balances.
 - Balance shown on each account card. If the computed balance differs from the bank, the user fixes it by editing the starting balance or adding a correction transaction (category "Other"). No special reconciliation feature in the MVP.
-- Archive (not delete): the account disappears from pickers and the net worth, but its transactions remain in history and reports, shown with an "Archived" badge. Archived accounts can be restored.
+- Archive (not delete): the account disappears from pickers and the net worth, but its transactions remain in history and reports, shown with an "Archived" badge. Archived accounts can be restored. If an active account already uses the same name, restore fails with: "An account with this name already exists. Rename it first."
 - Cannot archive the last active account: "You need at least one active account."
 
 ### Empty state
@@ -124,7 +124,7 @@ Never empty after onboarding (≥1 account is required).
   1. **Type** toggle: Expense (default) / Income.
   2. **Amount** — focused automatically, numeric keyboard on mobile, accepts both `12,50` and `12.50`.
   3. **Category** — grid of icons for the user's most-used categories (top 8 by usage in the last 90 days, defaults for new users), "More" opens the full list.
-  4. **Merchant / note** — optional, single text field, autocompletes from past merchants. Choosing a past merchant pre-selects its last-used category if the user hasn't picked one.
+  4. **Merchant / note** — optional, single text field, saved as the transaction's Merchant (the separate Note is edited in the full edit form), autocompletes from past merchants. Choosing a past merchant pre-selects its last-used category if the user hasn't picked one.
   5. **Date** — defaults to today; quick chips "Today", "Yesterday", or a date picker.
   6. **Account** — defaults to the last account used.
 - "Save" closes the dialog and shows a toast "Expense added · −24,00 zł Eating out" with **Undo** (5 seconds).

@@ -1,0 +1,37 @@
+// Semantic color tokens (DESIGN.md: green = income/OK, amber = warning, red = expense accent/over
+// budget, neutral = transfers). Each pair uses `light-dark()`, so it follows the same
+// `color-scheme` as the Material theme (light by default, dark with prefers-color-scheme: dark).
+//
+// Contrast (WCAG AA, ≥ 4.5:1 for text) was checked against the M3 surfaces of this theme:
+// light white / surface #f6faf8 / surface-container-highest #dfe3e1,
+// dark surface #101413 / surface-container #1c211f / surface-container-highest #313634.
+//
+// | token                 | light   | ratio (worst) | dark    | ratio (worst) |
+// | --------------------- | ------- | ------------- | ------- | ------------- |
+// | ok / income           | #1b6c30 | 5.01          | #7ed992 | 7.16          |
+// | warning               | #8a4f00 | 5.07          | #ffb868 | 7.21          |
+// | over / expense accent | #b3261e | 5.05          | #ffb4ab | 7.24          |
+// | transfer (neutral)    | #3f4946 | 7.20          | #bec9c5 | 7.23          |
+//
+// `*-container` / `on-*-container` pairs are for filled chips, banners and badges
+// (≥ 7:1 in both modes). Never use these colors as the only signal: pair them with a sign,
+// icon or text label (see `src/styles/budget-status.constants.ts`).
+@mixin tokens() {
+  --app-color-ok: light-dark(#1b6c30, #7ed992);
+  --app-color-ok-container: light-dark(#c4efcb, #0e5225);
+  --app-color-on-ok-container: light-dark(#00391a, #c4efcb);
+
+  --app-color-warning: light-dark(#8a4f00, #ffb868);
+  --app-color-warning-container: light-dark(#ffdcbc, #6a3b00);
+  --app-color-on-warning-container: light-dark(#4a2800, #ffdcbc);
+
+  --app-color-over: light-dark(#b3261e, #ffb4ab);
+  --app-color-over-container: light-dark(#ffdad6, #93000a);
+  --app-color-on-over-container: light-dark(#690005, #ffdad6);
+
+  // Money (FEATURES.md §1): income green, expense red accent (amount text stays default color),
+  // transfers neutral.
+  --app-color-income: var(--app-color-ok);
+  --app-color-expense-accent: var(--app-color-over);
+  --app-color-transfer: light-dark(#3f4946, #bec9c5);
+}

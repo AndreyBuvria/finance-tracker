@@ -1,0 +1,50 @@
+@use './layout-metrics' as metrics;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  padding: 8px 16px;
+  border-radius: var(--mat-sys-corner-full);
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font: var(--mat-sys-label-large);
+  transform: translateY(-200%);
+
+  &:focus {
+    transform: none;
+  }
+}
+
+.body {
+  display: flex;
+  flex: 1;
+}
+
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 16px calc(#{metrics.$bottom-nav-height} + 88px);
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(#{metrics.$bottom-nav-height} + 16px);
+  z-index: 2;
+}
+
+:host(.desktop) main {
+  padding: 24px;
+}

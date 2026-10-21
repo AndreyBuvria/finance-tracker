@@ -1,0 +1,107 @@
+<app-auth-card>
+  <h1 i18n="@@auth.register.title">Create an account</h1>
+
+  @switch (error()) {
+    @case ('duplicateEmail') {
+      <p class="form-error" role="alert">
+        <span i18n="@@auth.register.error.duplicateEmail"
+          >An account with this email already exists.
+          <a [routerLink]="routes.Login" [queryParams]="{ email: duplicateEmail() }"
+            >Log in instead?</a
+          ></span
+        >
+      </p>
+    }
+    @case ('generic') {
+      <p class="form-error" role="alert" i18n="@@common.error.generic">
+        Something went wrong. Try again.
+      </p>
+    }
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <mat-form-field>
+      <mat-label i18n="@@auth.field.displayName">Display name</mat-label>
+      <input
+        matInput
+        appPreventWhitespace
+        formControlName="displayName"
+        autocomplete="nickname"
+        required
+      />
+      @if (form.controls.displayName.hasError('required')) {
+        <mat-error i18n="@@auth.field.displayName.required">Enter your name.</mat-error>
+      } @else if (form.controls.displayName.hasError('server')) {
+        <mat-error>{{ form.controls.displayName.getError('server') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label i18n="@@auth.field.email">Email</mat-label>
+      <input matInput type="email" formControlName="email" autocomplete="email" required />
+      @if (form.controls.email.hasError('required')) {
+        <mat-error i18n="@@auth.field.email.required">Enter your email.</mat-error>
+      } @else if (form.controls.email.hasError('email')) {
+        <mat-error i18n="@@auth.field.email.invalid">Enter a valid email address.</mat-error>
+      } @else if (form.controls.email.hasError('server')) {
+        <mat-error>{{ form.controls.email.getError('server') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label i18n="@@auth.field.password">Password</mat-label>
+      <input
+        matInput
+        [type]="passwordVisible() ? 'text' : 'password'"
+        formControlName="password"
+        autocomplete="new-password"
+        aria-describedby="password-rules"
+        required
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        aria-label="Show password"
+        i18n-aria-label="@@auth.field.password.show"
+        [attr.aria-pressed]="passwordVisible()"
+        (click)="passwordVisible.set(!passwordVisible())"
+      >
+        <mat-icon aria-hidden="true">{{
+          passwordVisible() ? 'visibility_off' : 'visibility'
+        }}</mat-icon>
+      </button>
+      @if (form.controls.password.hasError('required')) {
+        <mat-error i18n="@@auth.register.password.required">Enter a password.</mat-error>
+      } @else if (form.controls.password.hasError('passwordRules')) {
+        <mat-error i18n="@@auth.register.password.rules"
+          >Your password doesn't meet all the requirements.</mat-error
+        >
+      } @else if (form.controls.password.hasError('server')) {
+        <mat-error>{{ form.controls.password.getError('server') }}</mat-error>
+      }
+    </mat-form-field>
+    <app-password-checklist id="password-rules" class="rules" [password]="password()" />
+
+    <button
+      mat-flat-button
+      type="submit"
+      class="submit"
+      disabledInteractive
+      [disabled]="submitting()"
+    >
+      @if (submitting()) {
+        <mat-progress-spinner mode="indeterminate" diameter="20" aria-hidden="true" />
+        <span i18n="@@auth.register.submitting">Creating account…</span>
+      } @else {
+        <span i18n="@@auth.register.submit">Create account</span>
+      }
+    </button>
+  </form>
+
+  <p class="switch">
+    <span i18n="@@auth.register.haveAccount">Already have an account?</span>
+    {{ ' ' }}
+    <a [routerLink]="routes.Login" i18n="@@auth.register.login">Log in</a>
+  </p>
+</app-auth-card>

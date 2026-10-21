@@ -1,0 +1,24 @@
+// Angular Material M3 theme. Primary: calm teal (#00796b), generated with
+// `ng generate @angular/material:theme-color` into `_theme-colors.scss`.
+// Light and dark: the theme emits `light-dark()` values (theme-type `color-scheme`), so the
+// `color-scheme` below switches it with the OS setting (prefers-color-scheme).
+// Learn more: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@use './theme-colors' as theme;
+@use './semantic-colors' as semantic;
+
+html {
+  height: 100%;
+  color-scheme: light dark;
+  @include mat.theme(
+    (
+      color: (
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+  @include semantic.tokens();
+}

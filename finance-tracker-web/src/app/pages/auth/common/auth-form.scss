@@ -1,0 +1,52 @@
+// Shared by the login and register pages.
+h1 {
+  margin: 0 0 24px;
+  font: var(--mat-sys-headline-small);
+}
+
+form {
+  display: grid;
+  gap: 4px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-error {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--app-color-over-container);
+  color: var(--app-color-on-over-container);
+  font: var(--mat-sys-body-medium);
+
+  a {
+    color: inherit;
+    font-weight: 500;
+  }
+}
+
+.submit {
+  margin-top: 16px;
+  height: 48px;
+
+  mat-progress-spinner {
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+    --mat-progress-spinner-active-indicator-color: currentColor;
+  }
+}
+
+.switch {
+  margin: 24px 0 0;
+  text-align: center;
+}
+
+.rules {
+  display: block;
+  margin: 8px 0 4px;
+}

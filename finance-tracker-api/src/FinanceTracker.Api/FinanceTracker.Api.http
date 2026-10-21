@@ -4,3 +4,25 @@ GET {{FinanceTracker.Api_HostAddress}}/health
 Accept: text/plain
 
 ###
+
+POST {{FinanceTracker.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{ "displayName": "Kasia", "email": "kasia@example.com", "password": "Secret123" }
+
+###
+
+POST {{FinanceTracker.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "kasia@example.com", "password": "Secret123" }
+
+###
+
+# Paste the accessToken from register/login.
+@accessToken = paste-access-token-here
+
+GET {{FinanceTracker.Api_HostAddress}}/api/me
+Authorization: Bearer {{accessToken}}
+
+###

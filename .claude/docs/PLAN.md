@@ -53,7 +53,7 @@ One git repository (monorepo) with the backend and frontend in separate top-leve
     README.md                        # backend setup and run instructions
   /finance-tracker-web             # frontend (Angular) — rules in its CLAUDE.md
     /src/app
-      /common                      # shared non-UI code: services, API clients, models, pipes, locale/time
+      /common                      # shared code by domain: services, API clients, models, pipes, locale/time, date (e.g. month-select)
       /infrastructure              # shared UI building blocks: layout, cards, empty states
       /pages/<page>                # one folder per page; its feature-specific components live inside
 ```
@@ -74,18 +74,39 @@ Infrastructure as code (post-MVP) goes in an `/infra` folder in the same repo.
 
 | Entity | Fields | Constraints |
 | --- | --- | --- |
-| User | Id, Email, PasswordHash, DisplayName, DefaultCurrency, CreatedAt, OnboardingCompletedAt? | Identity |
+| User | Id, Email, PasswordHash, DisplayName, DefaultCurrency, CreatedAt, OnboardingCompletedAt? | Identity. UserName = Email; email unique (`RequireUniqueEmail`), so concurrent duplicate registrations fail (409) |
 | RefreshToken | Id, UserId, TokenHash, CreatedAt, ExpiresAt, RevokedAt?, ReplacedByTokenId? | Unique (TokenHash). Rotated on every refresh; reuse of a revoked token revokes the whole chain |
-| Account | Id, UserId, Name, Type (Card/Savings/Cash), Currency, InitialBalance, IsArchived | Unique (UserId, Name) among non-archived |
-| Category | Id, UserId, Name, Type (Expense/Income), Icon, Color, SystemKey?, IsArchived | Defaults are **copied to each user on registration**; `SystemKey` (e.g. `groceries`, `other`) marks a default and survives renames. Unique (UserId, Type, Name) |
-| Transaction | Id, UserId, AccountId, CategoryId?, Type (Expense/Income/Transfer), TransferDirection? (Out/In), Amount, Date, Merchant, Note, Source (Manual/Csv/OpenBanking), ExternalHash?, ImportBatchId?, TransferPairId? | Index (UserId, Date); unique (AccountId, ExternalHash); `TransferDirection` set only for transfers |
+| Account | Id, UserId, Name, Type (Card/Savings/Cash), Currency, InitialBalance, IsArchived | Unique (UserId, Name) among non-archived, case-insensitive |
+| Category | Id, UserId, Name, Type (Expense/Income), Icon (Material Symbols Rounded name from the fixed set), Color (hex `#RRGGBB` from the fixed 12-color palette), SystemKey? (snake_case, e.g. `eating_out`), IsArchived | Defaults are **copied to each user on registration**; `SystemKey` (e.g. `groceries`, `other`) marks a default and survives renames. Unique (UserId, Type, Name) among non-archived, case-insensitive |
+| Transaction | Id, UserId, AccountId, CategoryId?, Type (Expense/Income/Transfer), TransferDirection? (Out/In), Amount, Date, Merchant, Note, Source (Manual/Csv/OpenBanking), ExternalHash?, ImportBatchId?, TransferPairId? | Index (UserId, Date); unique (AccountId, ExternalHash); `TransferDirection` set only for transfers; `CategoryId` required for Expense/Income, null for Transfer |
 | Budget | Id, UserId, CategoryId, Month (first day of month), LimitAmount | Unique (UserId, CategoryId, Month) |
 | CategoryRule | Id, UserId, Pattern, MatchType (Contains/StartsWith), CategoryId, Priority | |
-| ImportBatch | Id, UserId, AccountId, FileKey, BankFormat, Status (Pending/Processing/Done/Failed), RowsTotal, RowsImported, RowsSkipped, Error, CreatedAt | |
+| ImportBatch | Id, UserId, AccountId, FileKey, OriginalFileName (added in Phase 4, shown in import history), BankFormat, Status (Pending/Processing/Done/Failed), RowsTotal, RowsImported, RowsSkipped, Error, CreatedAt | |
 | DeletedImportHash | AccountId, ExternalHash | Tombstone so re-import doesn't restore deleted rows |
 | Alert | Id, UserId, CategoryId, Month, Level (Warning/Over), CreatedAt, ReadAt? | Unique (UserId, CategoryId, Month, Level) |
 
-**Seeded default categories** (per user, with `SystemKey`) — Expense: Groceries, Eating out, Transport, Housing, Utilities, Health, Shopping, Entertainment, Subscriptions, Other. Income: Salary, Other income.
+**Category colors** (fixed palette, stored as hex): `#c62828` red, `#ad1457` pink, `#7b1fa2` purple, `#3949ab` indigo, `#1565c0` blue, `#00838f` cyan, `#2e7d32` green, `#c0ca33` lime, `#fbc02d` yellow, `#ef6c00` orange, `#6d4c41` brown, `#546e7a` blue grey.
+
+**Category icons** (fixed set, Material Symbols Rounded names): shopping_cart, restaurant, local_cafe, local_bar, bakery_dining, directions_bus, directions_car, local_taxi, train, local_gas_station, flight, home, bolt, water_drop, wifi, smartphone, build, medical_services, medication, fitness_center, spa, shopping_bag, checkroom, devices, card_giftcard, movie, sports_esports, music_note, subscriptions, beach_access, celebration, school, menu_book, child_care, pets, volunteer_activism, payments, work, savings, category.
+
+The frontend copies are `finance-tracker-web/src/styles/category-palette.constants.ts` and `category-icons.constants.ts`; keep both sides in sync.
+
+**Seeded default categories** (per user, with `SystemKey`). The backend owns this list; the frontend never hard-codes it and reads categories (with icon and color) from `GET /categories`.
+
+| SystemKey | Name | Type | Icon | Color |
+| --- | --- | --- | --- | --- |
+| `groceries` | Groceries | Expense | shopping_cart | `#2e7d32` |
+| `eating_out` | Eating out | Expense | restaurant | `#ef6c00` |
+| `transport` | Transport | Expense | directions_bus | `#1565c0` |
+| `housing` | Housing | Expense | home | `#6d4c41` |
+| `utilities` | Utilities | Expense | bolt | `#fbc02d` |
+| `health` | Health | Expense | medical_services | `#c62828` |
+| `shopping` | Shopping | Expense | shopping_bag | `#ad1457` |
+| `entertainment` | Entertainment | Expense | movie | `#7b1fa2` |
+| `subscriptions` | Subscriptions | Expense | subscriptions | `#3949ab` |
+| `other` | Other | Expense | category | `#546e7a` |
+| `salary` | Salary | Income | payments | `#00838f` |
+| `other_income` | Other income | Income | savings | `#c0ca33` |
 
 ## 6. Business rules
 
@@ -106,7 +127,7 @@ Infrastructure as code (post-MVP) goes in an `/infra` folder in the same repo.
 
 ### Categories
 - System defaults (`SystemKey` set) can be renamed and hidden (archived), not deleted.
-- A custom category with transactions can only be archived or merged; without transactions it can be deleted.
+- A custom category with transactions can only be archived or merged; without transactions it can be deleted. Deleting it also deletes its budgets, rules and alerts.
 - Merge moves transactions, budgets (limits summed for the same month) and rules, then archives the source.
 - "Other" (`SystemKey = other`) can't be hidden or merged.
 
@@ -158,13 +179,23 @@ All under `/api`, JWT required except register/login/refresh.
 | Imports | `POST /imports`, `GET /imports`, `GET /imports/{id}` |
 | Alerts | `GET /alerts`, `POST /alerts/{id}/read` |
 
+### Auth contract (agreed)
+
+- `POST /auth/register` `{ displayName, email, password }` → **201** `AuthTokens`; **409** ProblemDetails for a duplicate email; **400** validation ProblemDetails.
+- `POST /auth/login` `{ email, password }` → **200** `AuthTokens`; **401** ProblemDetails for a wrong email or password (never says which).
+- `POST /auth/refresh` `{ refreshToken }` → **200** `AuthTokens` (refresh token rotated); **401** when invalid, expired or revoked.
+- `POST /auth/logout` `{ refreshToken }` (JWT required) → **204**, revokes the token.
+- `GET /me` → **200** `{ id, email, displayName, onboardingCompletedAt: string | null }`.
+- `AuthTokens` = `{ accessToken, expiresIn /* seconds */, refreshToken }`. The refresh token is returned in the body; the SPA keeps it in `localStorage` (MVP decision; httpOnly cookie is a possible later hardening).
+- Errors are RFC 7807 ProblemDetails; validation errors carry `errors` keyed by field name.
+
 ## 8. Screens (Angular)
 
 1. **Dashboard** — month selector; cards: Left to spend (+ daily allowance), Spent this month (± % vs last month), Income, Net worth; budget progress bars sorted by usage, colored by status; donut by category; bar chart last 6 months; last 5 transactions; alerts banner; Quick add button.
 2. **Transactions** — table: Date, Merchant/note, Category (inline edit), Account, Amount (red/green), Source badge. Filters in URL query params, server-side paging (50) and sorting, bulk actions, footer totals. Quick-add dialog: amount focused first, last-used account preselected.
 3. **Budgets** — Category, Limit (inline edit), Spent, Remaining, Usage bar, Status; Copy from last month; Unbudgeted row; row click → filtered Transactions.
 4. **Accounts** — cards with balances; add/edit/archive/restore; Import CSV per account; import history.
-5. **Settings** — categories (add/rename/hide/archive/merge) and rules.
+5. **Settings** — categories (add/rename/hide/archive/merge), rules, and a toggle to disable single-key keyboard shortcuts (WCAG 2.1.4).
 6. **Auth** — login, register; JWT interceptor; route guards.
 
 ## 9. Phases and tasks
@@ -174,7 +205,7 @@ All under `/api`, JWT required except register/login/refresh.
 
 Backend (`finance-tracker-api`):
 - [x] Solution + project structure from §3; Docker Compose with Postgres
-- [ ] Domain entities + EF Core configuration + initial migration (incl. `unaccent`, `pg_trgm`)
+- [x] Domain entities + EF Core configuration + initial migration (incl. `unaccent`, `pg_trgm`)
 - [ ] Identity + JWT auth (register, login, refresh with rotation, logout); per-user default categories seeded on registration; `GET /me`, onboarding complete
 - [ ] Accounts CRUD + archive/restore + computed balances
 - [ ] Categories CRUD (hide/archive, restore, delete, merge, top used)
