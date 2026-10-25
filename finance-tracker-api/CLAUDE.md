@@ -134,7 +134,7 @@ Enforce these invariants:
 
 1. A transaction amount must be greater than zero and have at most two decimal places.
 2. Transaction date may be at most tomorrow to tolerate timezone differences; there is no lower date limit.
-3. Expenses use expense categories, income uses income categories, and transfers have no category.
+3. Expenses use expense categories; income uses an income category, or an expense category as a refund (which lowers Spent); transfers have no category.
 4. Accounts and categories must belong to the current user and be active when used for a new transaction. Preserve history for archived records.
 5. Account balances and budget usage are computed by queries; do not persist derived balances or totals as source-of-truth values.
 6. Balance = initial balance + income − expenses − transfers out + transfers in. Transfers affect both accounts but are excluded from income, spending, budgets, category charts, and reports.

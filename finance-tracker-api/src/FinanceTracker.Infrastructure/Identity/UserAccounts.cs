@@ -1,9 +1,9 @@
+using System.Security.Cryptography;
 using FinanceTracker.Application.Abstractions;
 using FinanceTracker.Application.Me;
 using FinanceTracker.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace FinanceTracker.Infrastructure.Identity;
 
@@ -11,6 +11,21 @@ internal sealed class UserAccounts(UserManager<User> userManager, AppDbContext d
 {
     /// <summary>Identity's unique index on <c>NormalizedUserName</c>; UserName = Email, so it guards email uniqueness.</summary>
     private const string _userNameIndex = "UserNameIndex";
+
+    /// <summary>
+    /// Hash of a random password, verified when the email is unknown so that login does the same
+    /// password-hashing work (and takes the same time) as for a wrong password. Created once per
+    /// process with the configured hasher, so its cost always matches real users' hashes.
+    /// </summary>
+    private static string? _sharedDummyPasswordHash;
+
+    private static readonly User _dummyUser = new() { DisplayName = string.Empty };
+
+    // Initialized when the first instance is constructed (before any request uses it), so an
+    // unknown-email login only ever pays for one verify, never for hash + verify.
+    private readonly string _dummyPasswordHash = _sharedDummyPasswordHash ??= userManager.PasswordHasher.HashPassword(
+        _dummyUser,
+        Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)));
 
     public async Task<CreateUserResult> CreateAsync(NewUser newUser, string password, CancellationToken cancellationToken)
     {
@@ -31,7 +46,7 @@ internal sealed class UserAccounts(UserManager<User> userManager, AppDbContext d
             // UserManager has no per-call CancellationToken; it saves through the shared scoped DbContext.
             result = await userManager.CreateAsync(user, password);
         }
-        catch (DbUpdateException ex) when (IsUniqueViolation(ex, _userNameIndex))
+        catch (DbUpdateException ex) when (PostgresErrors.IsUniqueViolation(ex, _userNameIndex))
         {
             // A concurrent registration with the same email passed Identity's pre-check first.
             dbContext.Entry(user).State = EntityState.Detached;
@@ -64,6 +79,7 @@ internal sealed class UserAccounts(UserManager<User> userManager, AppDbContext d
         var user = await userManager.FindByEmailAsync(email);
         if (user is null)
         {
+            VerifyAgainstDummyHash(password);
             return null;
         }
 
@@ -89,10 +105,7 @@ internal sealed class UserAccounts(UserManager<User> userManager, AppDbContext d
         return updated > 0 || await dbContext.Users.AnyAsync(u => u.Id == userId, cancellationToken);
     }
 
-    private static bool IsUniqueViolation(DbUpdateException exception, string constraintName) =>
-        exception.InnerException is PostgresException
-        {
-            SqlState: PostgresErrorCodes.UniqueViolation,
-        } postgresException
-        && postgresException.ConstraintName == constraintName;
+    private void VerifyAgainstDummyHash(string password) =>
+        // The outcome is irrelevant (it can never succeed); only the work matters.
+        _ = userManager.PasswordHasher.VerifyHashedPassword(_dummyUser, _dummyPasswordHash, password);
 }

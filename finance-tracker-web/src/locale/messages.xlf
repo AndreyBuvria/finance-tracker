@@ -6,49 +6,247 @@
         <source>Dashboard</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/authenticated-layout.component.ts</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="nav.transactions" datatype="html">
         <source>Transactions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/authenticated-layout.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="nav.accounts" datatype="html">
         <source>Accounts</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/authenticated-layout.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="nav.settings" datatype="html">
         <source>Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/authenticated-layout.component.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="monthSelect.label" datatype="html">
         <source>Month</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/date/month-select/month-select.component.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="monthSelect.previous" datatype="html">
         <source>Previous month</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/date/month-select/month-select.component.ts</context>
-          <context context-type="linenumber">23,24</context>
+          <context context-type="linenumber">18,19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="monthSelect.next" datatype="html">
         <source>Next month</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/date/month-select/month-select.component.ts</context>
-          <context context-type="linenumber">32,33</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.calendar" datatype="html">
+        <source>Calendar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.open" datatype="html">
+        <source>Open calendar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.close" datatype="html">
+        <source>Close calendar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.prevMonth" datatype="html">
+        <source>Previous month</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.nextMonth" datatype="html">
+        <source>Next month</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.prevYear" datatype="html">
+        <source>Previous year</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.nextYear" datatype="html">
+        <source>Next year</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.prevYears" datatype="html">
+        <source>Previous 24 years</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.nextYears" datatype="html">
+        <source>Next 24 years</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.chooseDate" datatype="html">
+        <source>Choose date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.chooseMonthYear" datatype="html">
+        <source>Choose month and year</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.startDate" datatype="html">
+        <source>Start date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.endDate" datatype="html">
+        <source>End date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.comparisonRange" datatype="html">
+        <source>Comparison range</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="datepicker.yearRange" datatype="html">
+        <source><x id="start" equiv-text="start"/> to <x id="end" equiv-text="end"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/locale/localized-datepicker-intl.service.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.error.generic" datatype="html">
+        <source>Something went wrong. Try again.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/infrastructure/feedback/load-error/load-error.component.ts</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">171</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">15,17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/auth/login/login.component.html</context>
+          <context context-type="linenumber">12,15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
+          <context context-type="linenumber">17,20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/accounts-step.component.html</context>
+          <context context-type="linenumber">25,27</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">23,27</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">21,24</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">191</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">199</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">13,17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/load-state/quick-add-load-state.component.ts</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">26,28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/bulk-error.utils.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.action.retry" datatype="html">
+        <source>Try again</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/infrastructure/feedback/load-error/load-error.component.ts</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/load-state/quick-add-load-state.component.ts</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.error.id" datatype="html">
+        <source>Error ID:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/infrastructure/feedback/load-error/load-error.component.ts</context>
+          <context context-type="linenumber">20,22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="shell.accountMenu.settings" datatype="html">
@@ -86,29 +284,19 @@
           <context context-type="linenumber">2,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="shell.fab.label" datatype="html">
-        <source>Add transaction</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/infrastructure/layout/app-layout.component.html</context>
-          <context context-type="linenumber">28,29</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="app.name" datatype="html">
         <source>Finance Tracker</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/infrastructure/layout/header/header.component.ts</context>
-          <context context-type="linenumber">13,14</context>
+          <context context-type="linenumber">19,20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/common/auth-card/auth-card.component.ts</context>
           <context context-type="linenumber">9,10</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="shell.add" datatype="html">
-        <source>Add</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/infrastructure/layout/header/header.component.ts</context>
-          <context context-type="linenumber">24,25</context>
+          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.html</context>
+          <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="shell.nav.label" datatype="html">
@@ -118,11 +306,172 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="accounts.card.balance" datatype="html">
+        <source>Balance</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/account-card/account-card.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.badge.archived" datatype="html">
+        <source>Archived</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/account-card/account-card.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">24,27</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/display/account-label/account-label.component.ts</context>
+          <context context-type="linenumber">15,18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/selects/account-filter-select/account-filter-select.component.ts</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.card.restore" datatype="html">
+        <source>Restore</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/account-card/account-card.component.html</context>
+          <context context-type="linenumber">45,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.card.edit" datatype="html">
+        <source>Edit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/account-card/account-card.component.html</context>
+          <context context-type="linenumber">54,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.card.archive" datatype="html">
+        <source>Archive</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/account-card/account-card.component.html</context>
+          <context context-type="linenumber">59,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.card.restoreLabel" datatype="html">
+        <source>Restore <x id="name" equiv-text="this.account().name"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/account-card/account-card.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.card.menuLabel" datatype="html">
+        <source>More actions for <x id="name" equiv-text="this.account().name"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/account-card/account-card.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.loading" datatype="html">
+        <source>Loading accounts…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts-skeleton/accounts-skeleton.component.ts</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/accounts-step.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="accounts.page.title" datatype="html">
         <source>Accounts</source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.netWorth" datatype="html">
+        <source>Net worth</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.active.label" datatype="html">
+        <source>Active accounts</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.action.add.label" datatype="html">
+        <source>Add account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.html</context>
+          <context context-type="linenumber">27,31</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
-          <context context-type="linenumber">6,8</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.action.add" datatype="html">
+        <source>Add</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.toast.updated" datatype="html">
+        <source>Account updated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.toast.added" datatype="html">
+        <source>Account added</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.error.lastActive" datatype="html">
+        <source>You need at least one active account.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.action.undo" datatype="html">
+        <source>Undo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">136</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.toast.archived" datatype="html">
+        <source>Account archived</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.error.restoreNameTaken" datatype="html">
+        <source>An account with this name already exists. Rename it first.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">152</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.toast.restored" datatype="html">
+        <source>Account restored</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/accounts.component.ts</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="accounts.route.title" datatype="html">
@@ -130,6 +479,292 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/accounts/accounts.routes.ts</context>
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.archived.heading" datatype="html">
+        <source>Archived accounts (<x id="INTERPOLATION" equiv-text="{{ accounts().length }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/archived-accounts/archived-accounts.component.ts</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.type.card" datatype="html">
+        <source>Card</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/constants/account-type.constants.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.type.savings" datatype="html">
+        <source>Savings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/constants/account-type.constants.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.type.cash" datatype="html">
+        <source>Cash</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/constants/account-type.constants.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.dialog.editTitle" datatype="html">
+        <source>Edit account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">3,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.dialog.addTitle" datatype="html">
+        <source>Add account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">5,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.name.required" datatype="html">
+        <source>Enter an account name.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.name.tooLong" datatype="html">
+        <source>Name can be at most <x id="INTERPOLATION" equiv-text="{{ nameMaxLength }}"/> characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.name.duplicate" datatype="html">
+        <source>An account with this name already exists.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">34,36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">19,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.type" datatype="html">
+        <source>Type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.type.required" datatype="html">
+        <source>Choose an account type.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">64,67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.currency" datatype="html">
+        <source>Currency</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">72,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.currency.hint" datatype="html">
+        <source>More currencies coming soon</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">74,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.initialBalance" datatype="html">
+        <source>Starting balance</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">79,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accounts.field.initialBalance.hint" datatype="html">
+        <source>The balance on the day you start tracking. Check your bank app.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">89,91</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">38,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.amount.invalid" datatype="html">
+        <source>Enter a valid amount.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">66,67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.amount.tooManyDecimals" datatype="html">
+        <source>Enter an amount with at most 2 decimal places.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">95,97</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">45,47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">48,50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">73,75</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">69,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.amount.tooLarge" datatype="html">
+        <source>Enter a smaller amount.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">98,99</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">76,77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">46,48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">72,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.action.cancel" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">106,108</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">73,76</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/delete-category-dialog/delete-category-dialog.component.ts</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">69,72</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/delete-transactions-dialog/delete-transactions-dialog.component.ts</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.action.saving" datatype="html">
+        <source>Saving…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">116,118</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/accounts-step.component.html</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">71,73</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">26,30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">52,54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">79,81</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">84,86</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">170,172</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.action.save" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/accounts/common/dialogs/account-dialog/account-dialog.component.html</context>
+          <context context-type="linenumber">118,121</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">86,89</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">172,175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.login.route.title" datatype="html">
@@ -160,17 +795,6 @@
           <context context-type="linenumber">7,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="common.error.generic" datatype="html">
-        <source> Something went wrong. Try again. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/auth/login/login.component.html</context>
-          <context context-type="linenumber">12,17</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">17,22</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="auth.field.email" datatype="html">
         <source>Email</source>
         <context-group purpose="location">
@@ -179,7 +803,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">40,41</context>
+          <context context-type="linenumber">44,45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.field.email.required" datatype="html">
@@ -190,7 +814,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">43,44</context>
+          <context context-type="linenumber">47,48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.field.email.invalid" datatype="html">
@@ -201,7 +825,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">45,46</context>
+          <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.field.password" datatype="html">
@@ -212,7 +836,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">52,54</context>
+          <context context-type="linenumber">60,62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.field.password.show" datatype="html">
@@ -223,14 +847,18 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">65,66</context>
+          <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="auth.login.password.required" datatype="html">
+      <trans-unit id="auth.field.password.required" datatype="html">
         <source>Enter your password.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/login/login.component.html</context>
           <context context-type="linenumber">51,54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
+          <context context-type="linenumber">83,84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.login.submitting" datatype="html">
@@ -326,60 +954,95 @@
           <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="auth.register.password.required" datatype="html">
-        <source>Enter a password.</source>
+      <trans-unit id="auth.field.displayName.tooLong" datatype="html">
+        <source>Name can be at most 100 characters.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">75,76</context>
+          <context context-type="linenumber">36,38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="auth.register.password.rules" datatype="html">
-        <source>Your password doesn&apos;t meet all the requirements.</source>
+      <trans-unit id="auth.field.email.tooLong" datatype="html">
+        <source>Email can be at most 256 characters.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">78,80</context>
+          <context context-type="linenumber">50,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.field.password.tooShort" datatype="html">
+        <source>Password must be at least 8 characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
+          <context context-type="linenumber">86,88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.field.password.tooLong" datatype="html">
+        <source>Password can be at most 128 characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
+          <context context-type="linenumber">90,92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.field.password.letterAndNumber" datatype="html">
+        <source>Password must include at least one letter and one number.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
+          <context context-type="linenumber">94,96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.register.submitting" datatype="html">
         <source>Creating account…</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">95,97</context>
+          <context context-type="linenumber">111,113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.register.submit" datatype="html">
         <source>Create account</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">97,100</context>
+          <context context-type="linenumber">113,116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.register.haveAccount" datatype="html">
         <source>Already have an account?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">103,105</context>
+          <context context-type="linenumber">119,121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.register.login" datatype="html">
         <source>Log in</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/auth/register/register.component.html</context>
-          <context context-type="linenumber">105,108</context>
+          <context context-type="linenumber">121,124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.page.title" datatype="html">
         <source>Dashboard</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/dashboard/dashboard.component.ts</context>
-          <context context-type="linenumber">15,16</context>
+          <context context-type="linenumber">20,21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.empty.message" datatype="html">
         <source>Add your first transaction to see your month.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/dashboard/dashboard.component.ts</context>
-          <context context-type="linenumber">19,23</context>
+          <context context-type="linenumber">24,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.action.add" datatype="html">
+        <source>Add</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/dashboard/dashboard.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.action.add.label" datatype="html">
+        <source>Add transaction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/dashboard/dashboard.component.ts</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.route.title" datatype="html">
@@ -389,11 +1052,124 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="onboarding.page.title" datatype="html">
-        <source>Welcome</source>
+      <trans-unit id="onboarding.accounts.balance" datatype="html">
+        <source>Current balance</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.ts</context>
-          <context context-type="linenumber">6,8</context>
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/account-suggestion-fields/account-suggestion-fields.component.html</context>
+          <context context-type="linenumber">28,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.accounts.required" datatype="html">
+        <source>Choose at least one to continue.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/accounts-step.component.html</context>
+          <context context-type="linenumber">59,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.action.continue" datatype="html">
+        <source>Continue</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/accounts-step/accounts-step.component.html</context>
+          <context context-type="linenumber">77,80</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">73,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.budget.hint" datatype="html">
+        <source>Not sure? Start with a guess. You can change it anytime.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">3,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.budget.loading" datatype="html">
+        <source>Loading categories…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.budget.negative" datatype="html">
+        <source>Enter an amount of 0 or more.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.action.back" datatype="html">
+        <source>Back</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/budget-step/budget-step.component.html</context>
+          <context context-type="linenumber">60,62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">67,69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.accounts.suggestion.card" datatype="html">
+        <source>Main card</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/common/constants/account-suggestions.constants.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.accounts.suggestion.savings" datatype="html">
+        <source>Savings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/common/constants/account-suggestions.constants.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.accounts.suggestion.cash" datatype="html">
+        <source>Cash</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/common/constants/account-suggestions.constants.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.action.skip" datatype="html">
+        <source>Skip</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.html</context>
+          <context context-type="linenumber">7,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.action.logout" datatype="html">
+        <source>Log out</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.html</context>
+          <context context-type="linenumber">16,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.progress" datatype="html">
+        <source>Step <x id="INTERPOLATION" equiv-text="{{ step() }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ stepCount }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.html</context>
+          <context context-type="linenumber">27,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.accounts.title" datatype="html">
+        <source>Where do you keep your money?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.html</context>
+          <context context-type="linenumber">34,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.budget.title" datatype="html">
+        <source>Set a monthly budget</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.html</context>
+          <context context-type="linenumber">38,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.spending.title" datatype="html">
+        <source>Add your spending</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/onboarding.component.html</context>
+          <context context-type="linenumber">41,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="onboarding.route.title" datatype="html">
@@ -403,11 +1179,794 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="onboarding.spending.import" datatype="html">
+        <source>Import a bank statement (CSV)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">35,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.badge.comingSoon" datatype="html">
+        <source>Coming soon</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">37,40</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-empty/transactions-empty.component.ts</context>
+          <context context-type="linenumber">29,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.spending.manual" datatype="html">
+        <source>Add a transaction manually</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">47,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onboarding.spending.later" datatype="html">
+        <source>I&apos;ll do it later</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/onboarding/spending-step/spending-step.component.ts</context>
+          <context context-type="linenumber">81,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.heading" datatype="html">
+        <source>Categories</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/categories-settings.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.action.add" datatype="html">
+        <source>Add category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/categories-settings.component.html</context>
+          <context context-type="linenumber">6,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.loading" datatype="html">
+        <source>Loading categories…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/categories-settings.component.html</context>
+          <context context-type="linenumber">13,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.expenseHeading" datatype="html">
+        <source>Expense categories</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/categories-settings.component.html</context>
+          <context context-type="linenumber">30,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.incomeHeading" datatype="html">
+        <source>Income categories</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/categories-settings.component.html</context>
+          <context context-type="linenumber">33,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.empty" datatype="html">
+        <source>No categories here yet.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/categories-settings.component.html</context>
+          <context context-type="linenumber">52,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.updated" datatype="html">
+        <source>Category updated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.added" datatype="html">
+        <source>Category added</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.hidden" datatype="html">
+        <source>Category hidden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.archived" datatype="html">
+        <source>Category archived</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.restored" datatype="html">
+        <source>Category restored</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.deleted" datatype="html">
+        <source>Category deleted</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-actions.service.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.count.transactions" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 transaction} other {<x id="INTERPOLATION"/> transactions}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">13,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.badge.hidden" datatype="html">
+        <source>Hidden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">22,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.action.rename" datatype="html">
+        <source>Rename</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">34,37</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">92,94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.action.delete" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">45,49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">103,106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.action.restore" datatype="html">
+        <source>Restore</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">58,61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.row.fallback" datatype="html">
+        <source>Used as the fallback category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">67,68</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">69,70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.action.hide" datatype="html">
+        <source>Hide</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">98,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.action.archive" datatype="html">
+        <source>Archive</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">108,111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.action.merge" datatype="html">
+        <source>Merge into…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.html</context>
+          <context context-type="linenumber">113,117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.row.menu" datatype="html">
+        <source>More actions for <x id="name" equiv-text="this.category().name"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.row.renameLabel" datatype="html">
+        <source>Rename <x id="name" equiv-text="this.category().name"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.row.deleteLabel" datatype="html">
+        <source>Delete <x id="name" equiv-text="this.category().name"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.row.restoreLabel" datatype="html">
+        <source>Restore <x id="name" equiv-text="this.category().name"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/category-row/category-row.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.hiddenHeading" datatype="html">
+        <source>Hidden &amp; archived (<x id="INTERPOLATION" equiv-text="{{ categories().length }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/hidden-categories/hidden-categories.component.ts</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.mergedWithRules" datatype="html">
+        <source>Moved <x id="ICU" equiv-text="{moved, plural, =1 {1 transaction} other {{{ moved }} transactions}}" xid="8136068767999087228"/>, <x id="ICU_1" equiv-text="{budgets, plural, =1 {1 budget} other {{{ budgets }} budgets}}" xid="7203965678277152259"/> and <x id="ICU_2" equiv-text="{rules, plural, =1 {1 rule} other {{{ rules }} rules}}" xid="1021236264756580712"/> to <x id="INTERPOLATION_3" equiv-text="{{ target }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">18,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="275122132113901028" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 transaction} other {<x id="INTERPOLATION"/> transactions}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4311007053994535385" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 budget} other {<x id="INTERPOLATION"/> budgets}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">46,47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6799431695330327454" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 rule} other {<x id="INTERPOLATION"/> rules}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.merged" datatype="html">
+        <source>Moved <x id="ICU" equiv-text="{moved, plural, =1 {1 transaction} other {{{ moved }} transactions}}" xid="8136068767999087228"/> and <x id="ICU_1" equiv-text="{budgets, plural, =1 {1 budget} other {{{ budgets }} budgets}}" xid="7203965678277152259"/> to <x id="INTERPOLATION_2" equiv-text="{{ target }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.mergedTransactions" datatype="html">
+        <source>Moved <x id="ICU" equiv-text="{moved, plural, =1 {1 transaction} other {{{ moved }} transactions}}" xid="8136068767999087228"/> to <x id="INTERPOLATION_1" equiv-text="{{ target }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">29,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.mergedBudgets" datatype="html">
+        <source>Moved <x id="ICU" equiv-text="{budgets, plural, =1 {1 budget} other {{{ budgets }} budgets}}" xid="7203965678277152259"/> to <x id="INTERPOLATION_1" equiv-text="{{ target }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">34,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.toast.mergedNothing" datatype="html">
+        <source>Merged into <x id="INTERPOLATION" equiv-text="{{ target }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/categories/merge-toast/merge-toast.component.ts</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.shoppingCart" datatype="html">
+        <source>Shopping cart</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.restaurant" datatype="html">
+        <source>Restaurant</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.cafe" datatype="html">
+        <source>Coffee</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.bar" datatype="html">
+        <source>Bar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.bakery" datatype="html">
+        <source>Bakery</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.bus" datatype="html">
+        <source>Bus</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.car" datatype="html">
+        <source>Car</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.taxi" datatype="html">
+        <source>Taxi</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.train" datatype="html">
+        <source>Train</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.fuel" datatype="html">
+        <source>Fuel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.flight" datatype="html">
+        <source>Flight</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.home" datatype="html">
+        <source>Home</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.electricity" datatype="html">
+        <source>Electricity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.water" datatype="html">
+        <source>Water</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.internet" datatype="html">
+        <source>Internet</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.phone" datatype="html">
+        <source>Phone</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.repairs" datatype="html">
+        <source>Repairs</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.medical" datatype="html">
+        <source>Medical care</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.medication" datatype="html">
+        <source>Medication</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.fitness" datatype="html">
+        <source>Fitness</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.spa" datatype="html">
+        <source>Beauty and spa</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.shoppingBag" datatype="html">
+        <source>Shopping bag</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.clothes" datatype="html">
+        <source>Clothes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.devices" datatype="html">
+        <source>Devices</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.gift" datatype="html">
+        <source>Gift</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.movie" datatype="html">
+        <source>Movies</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.games" datatype="html">
+        <source>Games</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.music" datatype="html">
+        <source>Music</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.subscriptions" datatype="html">
+        <source>Subscriptions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.holidays" datatype="html">
+        <source>Holidays</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.party" datatype="html">
+        <source>Party</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.school" datatype="html">
+        <source>School</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.books" datatype="html">
+        <source>Books</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.kids" datatype="html">
+        <source>Kids</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.pets" datatype="html">
+        <source>Pets</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.charity" datatype="html">
+        <source>Charity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.salary" datatype="html">
+        <source>Salary</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.work" datatype="html">
+        <source>Work</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.savings" datatype="html">
+        <source>Savings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.icon.other" datatype="html">
+        <source>Other</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-icon-labels.constants.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.type.expense" datatype="html">
+        <source>Expense</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-type.constants.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.type.income" datatype="html">
+        <source>Income</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/constants/category-type.constants.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.dialog.editTitle" datatype="html">
+        <source>Edit category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">3,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.dialog.addTitle" datatype="html">
+        <source>Add category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">5,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.name.required" datatype="html">
+        <source>Enter a category name.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.name.tooLong" datatype="html">
+        <source>Name can be at most <x id="INTERPOLATION" equiv-text="{{ nameMaxLength }}"/> characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.icon.required" datatype="html">
+        <source>Choose an icon.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">45,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.color.required" datatype="html">
+        <source>Choose a color.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-dialog.component.html</context>
+          <context context-type="linenumber">62,65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.type" datatype="html">
+        <source>Type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-type-field/category-type-field.component.ts</context>
+          <context context-type="linenumber">20,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.type.required" datatype="html">
+        <source>Choose a category type.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-type-field/category-type-field.component.ts</context>
+          <context context-type="linenumber">38,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.type.defaultLocked" datatype="html">
+        <source>The type of a default category can&apos;t be changed.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-type-field/category-type-field.component.ts</context>
+          <context context-type="linenumber">47,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.type.inUse" datatype="html">
+        <source>This category is already in use, so its type can&apos;t be changed.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/category-type-field/category-type-field.component.ts</context>
+          <context context-type="linenumber">53,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.color" datatype="html">
+        <source>Color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/color-picker/color-picker.component.ts</context>
+          <context context-type="linenumber">19,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.field.icon" datatype="html">
+        <source>Icon</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/category-dialog/icon-picker/icon-picker.component.ts</context>
+          <context context-type="linenumber">20,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.delete.title" datatype="html">
+        <source>Delete <x id="INTERPOLATION" equiv-text="{{ category.name }}"/>?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/delete-category-dialog/delete-category-dialog.component.ts</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.delete.body" datatype="html">
+        <source>Its budgets, rules and alerts are deleted too. This can&apos;t be undone.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/delete-category-dialog/delete-category-dialog.component.ts</context>
+          <context context-type="linenumber">18,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.delete.action" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/delete-category-dialog/delete-category-dialog.component.ts</context>
+          <context context-type="linenumber">27,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.title" datatype="html">
+        <source>Merge <x id="INTERPOLATION" equiv-text="{{ source.name }}"/> into…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">1,2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.target" datatype="html">
+        <source>Category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.target.required" datatype="html">
+        <source>Choose a category to merge into.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">33,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.questionWithBudgets" datatype="html">
+        <source>Move <x id="ICU" equiv-text="{moved, plural, =1 {1 transaction} other {{{ moved }} transactions}}" xid="8136068767999087228"/> and <x id="ICU_1" equiv-text="{budgets, plural, =1 {1 budget} other {{{ budgets }} budgets}}" xid="7203965678277152259"/> to <x id="INTERPOLATION_2" equiv-text="{{ chosen.name }}"/>?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">45,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.question" datatype="html">
+        <source>Move <x id="ICU" equiv-text="{moved, plural, =1 {1 transaction} other {{{ moved }} transactions}}" xid="8136068767999087228"/> to <x id="INTERPOLATION_1" equiv-text="{{ chosen.name }}"/>?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">51,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.questionBudgets" datatype="html">
+        <source>Move <x id="ICU" equiv-text="{budgets, plural, =1 {1 budget} other {{{ budgets }} budgets}}" xid="7203965678277152259"/> to <x id="INTERPOLATION_1" equiv-text="{{ chosen.name }}"/>?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">56,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.questionNothing" datatype="html">
+        <source>Merge <x id="INTERPOLATION" equiv-text="{{ source.name }}"/> into <x id="INTERPOLATION_1" equiv-text="{{ chosen.name }}"/>?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.merging" datatype="html">
+        <source>Merging…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">80,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.categories.merge.action" datatype="html">
+        <source>Merge</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/common/dialogs/merge-category-dialog/merge-category-dialog.component.html</context>
+          <context context-type="linenumber">82,85</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="settings.page.title" datatype="html">
         <source>Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/settings/settings.component.ts</context>
-          <context context-type="linenumber">6,8</context>
+          <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="settings.route.title" datatype="html">
@@ -417,18 +1976,1001 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="transactions.page.title" datatype="html">
-        <source>Transactions</source>
+      <trans-unit id="settings.shortcuts.heading" datatype="html">
+        <source>Keyboard shortcuts</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/shortcuts-setting/shortcuts-setting.component.ts</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.shortcuts.toggle" datatype="html">
+        <source>Single-key shortcuts</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/shortcuts-setting/shortcuts-setting.component.ts</context>
+          <context context-type="linenumber">18,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.shortcuts.hint" datatype="html">
+        <source>Press N to add a transaction or an account. Turn this off if keys trigger actions by accident, for example with speech input.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/settings/shortcuts-setting/shortcuts-setting.component.ts</context>
+          <context context-type="linenumber">22,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.bulk.label" datatype="html">
+        <source>Selected transactions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/bulk-bar/bulk-bar.component.ts</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.bulk.count" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 selected} other {<x id="INTERPOLATION"/> selected}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/bulk-bar/bulk-bar.component.ts</context>
+          <context context-type="linenumber">24,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.bulk.changeCategory" datatype="html">
+        <source>Change category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/bulk-bar/bulk-bar.component.ts</context>
+          <context context-type="linenumber">37,39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/bulk-bar/bulk-bar.component.ts</context>
+          <context context-type="linenumber">49,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.bulk.delete" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/bulk-bar/bulk-bar.component.ts</context>
+          <context context-type="linenumber">60,63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/delete-transactions-dialog/delete-transactions-dialog.component.ts</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">147,150</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.category.needsCategory" datatype="html">
+        <source>Needs category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/categories/category-chip/category-chip.component.ts</context>
+          <context context-type="linenumber">48,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.category.saved" datatype="html">
+        <source>Saved</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/categories/category-chip/category-chip.component.ts</context>
+          <context context-type="linenumber">54,58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-actions.service.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.category.changeLabel" datatype="html">
+        <source><x id="name" equiv-text="this.category().name"/>, change category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/categories/category-chip/category-chip.component.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.column.date" datatype="html">
+        <source>Date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-sort.constants.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.column.merchant" datatype="html">
+        <source>Merchant/Note</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-sort.constants.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.column.category" datatype="html">
+        <source>Category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-sort.constants.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.column.account" datatype="html">
+        <source>Account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-sort.constants.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.column.amount" datatype="html">
+        <source>Amount</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-sort.constants.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.type.expense" datatype="html">
+        <source>Expense</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-type.constants.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.type.income" datatype="html">
+        <source>Income</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-type.constants.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.type.transfer" datatype="html">
+        <source>Transfer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/constants/transaction-type.constants.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-list/transactions-list.component.html</context>
+          <context context-type="linenumber">56,58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">98,101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.delete.title" datatype="html">
+        <source> <x id="ICU" equiv-text="{data.count, plural,
+        =1 {Delete 1 transaction ({{ total }})?}
+        other {Delete {{ data.count }} transactions ({{ total }})?}
+      }" xid="8211427910194472967"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/delete-transactions-dialog/delete-transactions-dialog.component.ts</context>
+          <context context-type="linenumber">17,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3199275265835971766" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {Delete 1 transaction (<x id="INTERPOLATION"/>)?} other {Delete <x id="INTERPOLATION_1"/> transactions (<x id="INTERPOLATION"/>)?}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/delete-transactions-dialog/delete-transactions-dialog.component.ts</context>
+          <context context-type="linenumber">17,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.delete.importedHint" datatype="html">
+        <source> This won&apos;t be re-imported from the same statement. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/delete-transactions-dialog/delete-transactions-dialog.component.ts</context>
+          <context context-type="linenumber">25,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.category" datatype="html">
+        <source>Category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/category-grid/category-grid.component.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.category.more" datatype="html">
+        <source>More</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/category-grid/category-grid.component.html</context>
+          <context context-type="linenumber">41,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.category.required" datatype="html">
+        <source>Choose a category.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/category-grid/category-grid.component.html</context>
+          <context context-type="linenumber">69,75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.date.shortcuts" datatype="html">
+        <source>Date shortcuts</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/date-field/date-field.component.ts</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.date.today" datatype="html">
+        <source>Today</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/date-field/date-field.component.ts</context>
+          <context context-type="linenumber">33,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.date.yesterday" datatype="html">
+        <source>Yesterday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/date-field/date-field.component.ts</context>
+          <context context-type="linenumber">39,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.date" datatype="html">
+        <source>Date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/date-field/date-field.component.ts</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.date.invalid" datatype="html">
+        <source>Enter a valid date.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/date-field/date-field.component.ts</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.date.required" datatype="html">
+        <source>Choose a date.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/date-field/date-field.component.ts</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.date.future" datatype="html">
+        <source>Date can&apos;t be in the future.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/date-field/date-field.component.ts</context>
+          <context context-type="linenumber">53,55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.loading" datatype="html">
+        <source>Loading…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/load-state/quick-add-load-state.component.ts</context>
+          <context context-type="linenumber">15,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.merchant" datatype="html">
+        <source>Merchant or note</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/merchant-field/merchant-field.component.ts</context>
+          <context context-type="linenumber">34,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.merchant.tooLong" datatype="html">
+        <source>Merchant can be at most <x id="INTERPOLATION" equiv-text="{{ maxLength }}"/> characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/merchant-field/merchant-field.component.ts</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.editTitle" datatype="html">
+        <source>Edit transaction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.addTitle" datatype="html">
+        <source>Add transaction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">6,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.action.close" datatype="html">
+        <source>Close</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.type" datatype="html">
+        <source>Transaction type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.amount" datatype="html">
+        <source>Amount</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">53,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.amount.notPositive" datatype="html">
+        <source>Enter an amount greater than 0.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">69,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.account" datatype="html">
+        <source>Account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">108,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.account.required" datatype="html">
+        <source>Choose an account.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">115,116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.note" datatype="html">
+        <source>Note</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">124,125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.note.tooLong" datatype="html">
+        <source>Note can be at most <x id="INTERPOLATION" equiv-text="{{ noteMaxLength }}"/> characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">128,129</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.saveAndAddAnother" datatype="html">
+        <source>Save and add another</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/quick-add-dialog.component.html</context>
+          <context context-type="linenumber">158,162</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.fromAccount" datatype="html">
+        <source>From account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/transfer-accounts/transfer-accounts.component.ts</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.fromAccount.required" datatype="html">
+        <source>Choose the account to move money from.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/transfer-accounts/transfer-accounts.component.ts</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.toAccount" datatype="html">
+        <source>To account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/transfer-accounts/transfer-accounts.component.ts</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.toAccount.required" datatype="html">
+        <source>Choose the account to move money to.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/transfer-accounts/transfer-accounts.component.ts</context>
+          <context context-type="linenumber">39,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.quickAdd.toAccount.same" datatype="html">
+        <source>Choose two different accounts.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/dialogs/quick-add-dialog/transfer-accounts/transfer-accounts.component.ts</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.transfer.to" datatype="html">
+        <source>to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/display/account-label/account-label.component.ts</context>
+          <context context-type="linenumber">20,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.source.bankSync" datatype="html">
+        <source>Bank sync</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/display/source-badge/source-badge.component.ts</context>
+          <context context-type="linenumber">33,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.source.manual" datatype="html">
+        <source>Manual</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/display/source-badge/source-badge.component.ts</context>
+          <context context-type="linenumber">36,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.source.imported" datatype="html">
+        <source>Imported</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/display/source-badge/source-badge.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.source.importedOn" datatype="html">
+        <source>Imported on <x id="date" equiv-text="date"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/display/source-badge/source-badge.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.account" datatype="html">
+        <source>Account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/selects/account-filter-select/account-filter-select.component.ts</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-chips/filter-chips.component.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.account.all" datatype="html">
+        <source>All accounts</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/selects/account-filter-select/account-filter-select.component.ts</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.category" datatype="html">
+        <source>Category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/selects/category-filter-select/category-filter-select.component.ts</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-chips/filter-chips.component.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.category.hidden" datatype="html">
+        <source>Hidden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/common/selects/category-filter-select/category-filter-select.component.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.minAmount" datatype="html">
+        <source>Min amount</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.amount.negative" datatype="html">
+        <source>Enter an amount of 0 or more.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">39,41</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">65,67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.maxAmount" datatype="html">
+        <source>Max amount</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">51,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.amount.reversed" datatype="html">
+        <source>Maximum amount can&apos;t be less than minimum amount.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/amount-range/amount-range.component.ts</context>
+          <context context-type="linenumber">75,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.month.rangeHint" datatype="html">
+        <source> Showing the date range. Pick a month to go back to it. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">6,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.month.use" datatype="html">
+        <source>Show <x id="INTERPOLATION" equiv-text="{{ month() | date: monthFormat }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.search" datatype="html">
+        <source>Search merchant or note</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.search.clear" datatype="html">
+        <source>Clear search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.search.tooLong" datatype="html">
+        <source>Search can be at most <x id="INTERPOLATION" equiv-text="{{ searchMaxLength }}"/> characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">32,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.toggle" datatype="html">
+        <source>Filters</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">47,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.dateRange" datatype="html">
+        <source>Date range</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.dateRange.start" datatype="html">
+        <source>Start date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">64,65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.dateRange.end" datatype="html">
+        <source>End date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">70,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.dateRange.reversed" datatype="html">
+        <source>End date can&apos;t be before start date.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">78,80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.dateRange.invalid" datatype="html">
+        <source>Enter a valid date.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">81,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.type" datatype="html">
+        <source>Type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">90,91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.filter.type.all" datatype="html">
+        <source>All types</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-bar/filter-bar.component.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.chips.label" datatype="html">
+        <source>Active filters</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-chips/filter-chips.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.action.clearFilters" datatype="html">
+        <source>Clear filters</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-chips/filter-chips.component.ts</context>
+          <context context-type="linenumber">46,50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-empty/transactions-empty.component.ts</context>
+          <context context-type="linenumber">37,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.chips.remove" datatype="html">
+        <source>Remove filter <x id="filter" equiv-text="chip.label"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/filter-chips/filter-chips.component.ts</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.pager.label" datatype="html">
+        <source>Pagination</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/pager/pager.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.pager.previous" datatype="html">
+        <source>Previous page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/pager/pager.component.ts</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.pager.position" datatype="html">
+        <source>Page <x id="INTERPOLATION" equiv-text="{{ page() }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ totalPages() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/pager/pager.component.ts</context>
+          <context context-type="linenumber">22,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.pager.next" datatype="html">
+        <source>Next page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/pager/pager.component.ts</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.bulk.transfersNoCategory" datatype="html">
+        <source>Transfers don&apos;t have a category. Unselect them first.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-actions.service.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.recategorized" datatype="html">
+        <source>Category changed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-actions.service.ts</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.deletedOne" datatype="html">
+        <source>Transaction deleted</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-actions.service.ts</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.deletedMany" datatype="html">
+        <source>Transactions deleted</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-actions.service.ts</context>
+          <context context-type="linenumber">171</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.transferRemoved" datatype="html">
+        <source>Transfer removed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.removed" datatype="html">
+        <source>Transaction removed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.transferUpdated" datatype="html">
+        <source>Transfer updated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.updated" datatype="html">
+        <source>Transaction updated</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transaction-editor.service.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.empty.none" datatype="html">
+        <source> No transactions yet. Add your first one or import a bank statement. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-empty/transactions-empty.component.ts</context>
+          <context context-type="linenumber">18,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.action.add.label" datatype="html">
+        <source>Add transaction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-empty/transactions-empty.component.ts</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/transactions/transactions.component.ts</context>
-          <context context-type="linenumber">6,8</context>
+          <context context-type="linenumber">206</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.empty.import" datatype="html">
+        <source>Import statement</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-empty/transactions-empty.component.ts</context>
+          <context context-type="linenumber">28,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.empty.noMatches" datatype="html">
+        <source>Nothing matches these filters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-empty/transactions-empty.component.ts</context>
+          <context context-type="linenumber">34,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.footer.count" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 transaction} other {<x id="INTERPOLATION"/> transactions}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-footer/transactions-footer.component.ts</context>
+          <context context-type="linenumber">17,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.footer.spent" datatype="html">
+        <source>Spent <x id="INTERPOLATION" equiv-text="{{ totals().expenses | money }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-footer/transactions-footer.component.ts</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.footer.income" datatype="html">
+        <source>Income <x id="INTERPOLATION" equiv-text="{{ totals().income | money }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-footer/transactions-footer.component.ts</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.loading" datatype="html">
+        <source>Loading transactions…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-skeleton/transactions-skeleton.component.ts</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.select.all" datatype="html">
+        <source>Select all transactions on this page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.date" datatype="html">
+        <source>Sort by date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.column.date" datatype="html">
+        <source> Date </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">41,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.merchant" datatype="html">
+        <source>Sort by merchant</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.column.merchant" datatype="html">
+        <source> Merchant/Note </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">55,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.category" datatype="html">
+        <source>Sort by category</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">78,79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.column.category" datatype="html">
+        <source> Category </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">82,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.account" datatype="html">
+        <source>Sort by account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">109,110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.column.account" datatype="html">
+        <source> Account </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">113,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.amount" datatype="html">
+        <source>Sort by amount</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">127,128</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.column.amount" datatype="html">
+        <source> Amount </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">132,134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.column.source" datatype="html">
+        <source>Source</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions-table/transactions-table.component.html</context>
+          <context context-type="linenumber">140,141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.page.title" datatype="html">
+        <source> Transactions
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions.component.html</context>
+          <context context-type="linenumber">2,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.action.add" datatype="html">
+        <source>Add</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/transactions.component.ts</context>
+          <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="transactions.route.title" datatype="html">
         <source>Transactions · Finance Tracker</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/transactions/transactions.routes.ts</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.addedExpense" datatype="html">
+        <source>Expense added · <x id="amount" equiv-text="amount"/> <x id="category" equiv-text="category"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/added-message.utils.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.addedIncome" datatype="html">
+        <source>Income added · <x id="amount" equiv-text="amount"/> <x id="category" equiv-text="category"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/added-message.utils.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.toast.addedTransfer" datatype="html">
+        <source>Transfer added · <x id="amount" equiv-text="amount"/> <x id="accounts" equiv-text="accounts"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/added-message.utils.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.error.oneNotFound" datatype="html">
+        <source>This transaction doesn&apos;t exist. Refresh the list and try again.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/bulk-error.utils.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.error.someNotFound" datatype="html">
+        <source>One or more of the selected transactions don&apos;t exist. Refresh the list and try again.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/bulk-error.utils.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.select.row" datatype="html">
+        <source>Select <x id="title" equiv-text="title"/>, <x id="date" equiv-text="date"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/row-label.utils.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.edit.row" datatype="html">
+        <source>Edit <x id="title" equiv-text="title"/>, <x id="date" equiv-text="date"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/row-label.utils.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.announce.asc" datatype="html">
+        <source>Sorted by <x id="column" equiv-text="column"/>, ascending</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/sort-announcement.utils.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="transactions.sort.announce.desc" datatype="html">
+        <source>Sorted by <x id="column" equiv-text="column"/>, descending</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/transactions/utils/sort-announcement.utils.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.red" datatype="html">
+        <source>Red</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.pink" datatype="html">
+        <source>Pink</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.purple" datatype="html">
+        <source>Purple</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.indigo" datatype="html">
+        <source>Indigo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.blue" datatype="html">
+        <source>Blue</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.cyan" datatype="html">
+        <source>Cyan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.green" datatype="html">
+        <source>Green</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.lime" datatype="html">
+        <source>Lime</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.yellow" datatype="html">
+        <source>Yellow</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.orange" datatype="html">
+        <source>Orange</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.brown" datatype="html">
+        <source>Brown</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="category.color.blueGrey" datatype="html">
+        <source>Blue grey</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/styles/category-palette.constants.ts</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
     </body>

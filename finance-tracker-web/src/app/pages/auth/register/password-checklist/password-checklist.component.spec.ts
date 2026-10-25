@@ -31,4 +31,9 @@ describe('PasswordChecklistComponent', () => {
     await fixture.whenStable();
     expect(items.map((li) => li.classList.contains('met'))).toEqual([true, true, true]);
   });
+
+  it('does not tick "At least one number" for a non-ASCII digit', async () => {
+    const { items } = await render('kasiakasia\u0663');
+    expect(items.map((li) => li.classList.contains('met'))).toEqual([true, true, false]);
+  });
 });

@@ -77,12 +77,15 @@ Design every feature for Kasia: mobile-friendly web, Polish context (PLN, Polish
 - Wrong login → "Email or password is incorrect." (never say which one).
 - Access token short-lived (15 min), refresh token long-lived (14 days). Refresh silently; the user should never be thrown out mid-task. If refresh fails, redirect to login and return to the same page after login.
 
-### Onboarding (first login only, skippable, 3 steps)
+### Onboarding (first login only, 3 steps; steps 2–3 skippable, step 1 required)
 1. **"Where do you keep your money?"** Pre-filled suggestions as toggle chips: Main card, Savings, Cash. User can rename and set the current balance for each (balance optional, default 0). At least one account required.
-2. **"Set a monthly budget"** Show the 5 most common categories (Groceries, Eating out, Transport, Shopping, Entertainment) with empty limit fields and a hint: "Not sure? Start with a guess. You can change it anytime." Skippable.
-3. **"Add your spending"** Two big options: "Import a bank statement (CSV)" and "Add a transaction manually". Third, quieter link: "I'll do it later".
+2. **"Set a monthly budget"** Show the 5 most common categories (Groceries, Eating out, Transport, Shopping, Entertainment) with empty limit fields and a hint: "Not sure? Start with a guess. You can change it anytime." Skippable. Limits are saved for the current month (Europe/Warsaw).
+3. **"Add your spending"** Two big options: "Import a bank statement (CSV)" and "Add a transaction manually". Third, quieter link: "I'll do it later". "Add a transaction manually" completes onboarding and opens the Transactions page with Quick add open.
 
 After onboarding → Dashboard. Store `OnboardingCompletedAt` on the user so it never shows again.
+- Browser tab title "Welcome · Finance Tracker" (the visible heading is each step's title). Progress shows "Step n of 3". Step 1's Continue stays disabled with "Choose at least one to continue." until a chip is selected; Back returns to the previous step without losing input.
+- Going back to step 1 and deselecting a chip whose account was already created archives that account (it appears under Archived accounts) If a newly selected chip takes the name of a deselected, already created account, that account is reused (updated in place) instead.
+- A small "Log out" link is available throughout onboarding.
 
 ---
 
@@ -99,8 +102,10 @@ After onboarding → Dashboard. Store `OnboardingCompletedAt` on the user so it 
 - Fields: Name (required, max 50, unique per user among non-archived), Type (Card / Savings / Cash), Currency (PLN only in MVP, field disabled with hint "More currencies coming soon"), Starting balance.
 - **Starting balance** is explained in the form: "The balance on the day you start tracking. Check your bank app." It can be edited later; editing it changes all computed balances.
 - Balance shown on each account card. If the computed balance differs from the bank, the user fixes it by editing the starting balance or adding a correction transaction (category "Other"). No special reconciliation feature in the MVP.
-- Archive (not delete): the account disappears from pickers and the net worth, but its transactions remain in history and reports, shown with an "Archived" badge. Archived accounts can be restored. If an active account already uses the same name, restore fails with: "An account with this name already exists. Rename it first."
-- Cannot archive the last active account: "You need at least one active account."
+- Archive (not delete): the account disappears from pickers and the net worth, but its transactions remain in history and reports, shown with an "Archived" badge. Archived accounts can be restored. If an active account already uses the same name, restore fails with: "An account with this name already exists. Rename it first." Creating or renaming to a name an active account already uses fails with: "An account with this name already exists."
+- Cannot archive the last active account: "You need at least one active account." (shown as a toast).
+- Adding: the header "Add" action (accessible name "Add account") opens the "Add account" dialog; no separate in-page button except in the empty state. The same dialog edits ("Edit account"). New accounts default to Type Card; a blank starting balance is saved as 0. Buttons: "Cancel", "Save" ("Saving…" while saving). An unreadable amount shows "Enter a valid amount." (frontend-only check).
+- Archiving needs no confirmation dialog: it shows a toast "Account archived" with **Undo** (5 seconds), which restores it. Other toasts: "Account added", "Account updated", "Account restored".
 
 ### Empty state
 Never empty after onboarding (≥1 account is required).
@@ -119,7 +124,8 @@ Never empty after onboarding (≥1 account is required).
 - As a user, I can recategorize several transactions at once.
 
 ### Quick add (the most important interaction in the app)
-- Opens from: floating "+" button on every screen (mobile), "Add" button in the top bar (desktop), keyboard shortcut `N` on desktop.
+- Opens from: the page's "Add" action on Dashboard and Transactions (Dashboard navigates to Transactions with Quick add open) — floating "+" button (mobile), "Add" button in the top bar (desktop), keyboard shortcut `N` (desktop).
+- The "Add" action belongs to the current page: Dashboard and Transactions open Quick add (transaction), Accounts opens the "Add account" dialog, pages without an add action (Settings) show no button and ignore `N`.
 - Field order and defaults:
   1. **Type** toggle: Expense (default) / Income.
   2. **Amount** — focused automatically, numeric keyboard on mobile, accepts both `12,50` and `12.50`.
@@ -127,29 +133,29 @@ Never empty after onboarding (≥1 account is required).
   4. **Merchant / note** — optional, single text field, saved as the transaction's Merchant (the separate Note is edited in the full edit form), autocompletes from past merchants. Choosing a past merchant pre-selects its last-used category if the user hasn't picked one.
   5. **Date** — defaults to today; quick chips "Today", "Yesterday", or a date picker.
   6. **Account** — defaults to the last account used.
-- "Save" closes the dialog and shows a toast "Expense added · −24,00 zł Eating out" with **Undo** (5 seconds).
-- "Save and add another" keeps the dialog open, keeps date and account, clears amount and merchant. Useful after a shopping trip.
+- "Save" closes the dialog and shows a toast "Expense added · −24,00 zł Eating out" with **Undo** (5 seconds). Variants: "Income added · +7 500,00 zł Salary", "Transfer added · 1 000,00 zł mBank card → Savings". Undo deletes it and confirms with "Transaction removed" / "Transfer removed". Edits confirm with "Transaction updated" / "Transfer updated".
+- "Save and add another" keeps the dialog open, keeps type, date and account, clears amount, category and merchant. Useful after a shopping trip.
 - Target: **amount + category + save = 3 taps**.
 
 ### Transactions table
 - Columns: Date, Merchant/Note, Category, Account, Amount, Source.
-- Grouped by day with a daily total in the group header ("Mon, 19 Oct · −86,40 zł") on mobile; flat sortable table on desktop.
-- **Source badge:** "Manual", "Imported" (with tooltip: file name and import date), later "Bank sync".
+- Grouped by day with a daily total in the group header ("Mon, 19 Oct · −86,40 zł") on mobile (the total covers the rows on the current page); flat sortable table on desktop. Rows of archived accounts show an "Archived" badge next to the account.
+- **Source badge:** "Manual", "Imported" (with tooltip: file name and import date; the file name arrives with Phase 4, until then "Imported on {date}"), later "Bank sync".
 - **Inline category change:** click the category chip → dropdown → saved immediately with a small "Saved" confirmation. If the transaction was imported, show the learning prompt (F10).
-- **Filters:** Month (default: current), date range, account, category (multi-select), type, amount range, text search (merchant + note, case- and accent-insensitive: "zabka" finds "Żabka"). Active filters shown as removable chips. Filters are stored in the URL so the back button and links work.
-- **Footer:** "143 transactions · Spent 4 812,30 zł · Income 7 500,00 zł" for the current filter.
-- **Bulk actions:** select rows → "Change category", "Delete". Deleting asks for confirmation with the count and total: "Delete 3 transactions (−212,00 zł)?"
+- **Filters:** Month (default: current), date range, account, category (multi-select), type, amount range, text search (merchant + note, case- and accent-insensitive: "zabka" finds "Żabka"). Active filters shown as removable chips, plus "Clear filters" (keeps month and sort). Filters, including the month, are stored in the URL so the back button and links work. A date range replaces the month (the month selector is dimmed with "Showing the date range. Pick a month to go back to it."); changing the month clears the range.
+- **Footer:** "143 transactions · Spent 4 812,30 zł · Income 7 500,00 zł" for the current filter. The count includes transfers; Spent and Income exclude them. Spent is net of refunds (income recorded in an expense category) and never shown below 0,00 zł.
+- **Bulk actions:** select rows → "Change category", "Delete". Deleting asks for confirmation with the count and total: "Delete 3 transactions (−212,00 zł)?" Changing category has no Undo (not destructive) and shows a toast "Category changed"; a mixed expense/income selection is offered expense categories only (income in them counts as refunds). Delete toasts: "Transaction deleted" / "Transactions deleted".
 - Clicking a row opens the edit dialog (same as Quick add, pre-filled), with Delete at the bottom.
 
 ### Edge cases
 - Future dates: allowed up to tomorrow (time-zone slack). Beyond → "Date can't be in the future."
 - Very old dates: allowed (users may backfill), no lower limit.
 - Amount 0 or negative → "Enter an amount greater than 0." The sign comes from the type, users never type a minus.
-- Deleting an imported transaction: allowed. It won't come back on re-import (tombstone). Tooltip on delete: "This won't be re-imported from the same statement."
+- Deleting an imported transaction: allowed. It won't come back on re-import (tombstone). The delete confirmation adds: "This won't be re-imported from the same statement."
 - Editing the amount or date of an imported transaction is allowed; the original hash stays so the same row isn't imported twice.
 
 ### Empty states
-- No transactions at all: illustration + "No transactions yet. Add your first one or import a bank statement." with both buttons.
+- No transactions at all: illustration + "No transactions yet. Add your first one or import a bank statement." with both buttons ("Add transaction" opens Quick add; "Import statement" is disabled with a "Coming soon" badge until Phase 4).
 - No results for filters: "Nothing matches these filters." + "Clear filters" button.
 
 ---
@@ -187,7 +193,10 @@ Never empty after onboarding (≥1 account is required).
 - **Hide** a default category: disappears from pickers, history kept.
 - **Archive** a custom category with transactions: same as hide. Without transactions: delete outright.
 - **Merge** "Coffee" into "Eating out": moves all transactions, budgets (limits are summed for the same month) and rules, then archives "Coffee". Confirmation shows what will move: "Move 34 transactions and 1 budget to Eating out?"
-- "Other" can't be hidden or merged; it's the fallback for imports.
+- "Other" and "Other income" can't be hidden, merged or deleted; they're the fallbacks for imported expenses and income.
+- Settings → Categories: "Expense categories" / "Income categories" lists (row: icon, name, "N transactions", "⋮" with Rename, Hide/Archive/Delete, "Merge into…"), and a collapsed "Hidden & archived (n)" section with "Hidden"/"Archived" badges, Rename, Restore, and Delete for an archived custom category with no transactions. "Add category" / "Edit category" dialog with Name, Type, Icon (40), Color (12).
+- Toasts: "Category added", "Category updated", "Category hidden" / "Category archived" (with Undo, 5 seconds), "Category restored", "Category deleted"; after a merge "Moved 34 transactions and 1 budget to Eating out" (or "Merged into Eating out" when nothing moved).
+- Delete confirmation: "Delete {name}?" — "Its budgets, rules and alerts are deleted too. This can't be undone." Merge with nothing to move asks "Merge {name} into {target}?".
 
 ---
 
@@ -207,7 +216,7 @@ Never empty after onboarding (≥1 account is required).
 - Edit limit inline: click → number field → Enter saves. Setting 0 or empty removes the budget for that category.
 - **Status and colors:**
   - OK (< 80%) — neutral/green bar.
-  - Warning (80–99%) — amber bar, label "Almost there".
+  - Warning (80–99.99%) — amber bar, label "Almost there".
   - Over (≥ 100%) — red bar, Remaining shows negative: "−45,00 zł over".
 - **Refunds** (income in an expense category, e.g. a returned item in Shopping) reduce Spent. Spent can't go below 0 on display.
 - **Unbudgeted row** at the bottom: "Spending without a budget · 340,00 zł" → click shows those transactions. Gently nudges users to budget everything without forcing it.
@@ -280,7 +289,7 @@ Never empty after onboarding (≥1 account is required).
 2. Dialog: Account (pre-selected), **Bank** (mBank, PKO BP, ING, Revolut), file picker (drag & drop on desktop). Under the bank picker: a collapsible "How do I export this from {bank}?" with 3–4 short steps per bank.
 3. Upload → progress bar → "Processing…" status. User can close the dialog; processing continues and a toast appears when done.
 4. **Result summary:** "Import finished · 143 added · 12 already existed · 2 rows couldn't be read." + "Review imported transactions" (opens Transactions filtered to this import) + list of the unreadable rows with the reason.
-5. Imported transactions get the "Imported" badge. Those categorized as "Other" are highlighted with "Needs category" so the user can fix them quickly.
+5. Imported transactions get the "Imported" badge. Those categorized as "Other" or "Other income" are highlighted with "Needs category" so the user can fix them quickly.
 
 ### Behavior
 - File limits: `.csv` only, max 5 MB. Wrong bank format detected (expected columns missing) → "This doesn't look like an {bank} CSV. Did you choose the right bank?" — nothing imported.
@@ -302,7 +311,7 @@ Never empty after onboarding (≥1 account is required).
 - As a user, I can see and edit the rules.
 
 ### Behavior
-- Order: **user rules** (by priority) → **built-in rules** (Polish merchants, see `PLAN.md`) → "Other".
+- Order: **user rules** (by priority) → **built-in rules** (Polish merchants, see `PLAN.md`) → "Other" (expenses) / "Other income" (income).
 - Rules match the merchant/description, case- and accent-insensitive.
 - **Learning prompt:** when a user changes the category of an imported transaction, a snackbar asks: "Always put **Bolt** in **Transport**?" [Yes] [No]. On Yes:
   - Create a rule with a cleaned-up pattern (strip card numbers, cities, dates, store IDs: "BOLT.EU/O/2610191234 WARSZAWA" → "BOLT").

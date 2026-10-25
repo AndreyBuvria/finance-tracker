@@ -53,3 +53,6 @@ export const CATEGORY_ICONS = [
   // Fallback
   'category',
 ] as const;
+
+/** The neutral icon a new category starts with (the one "Other" uses). */
+export const DEFAULT_CATEGORY_ICON = 'category' satisfies (typeof CATEGORY_ICONS)[number];

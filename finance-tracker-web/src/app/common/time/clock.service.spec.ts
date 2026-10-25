@@ -27,6 +27,20 @@ describe('ClockService', () => {
   });
 });
 
+describe('ClockService.businessToday', () => {
+  it.each([
+    // CEST (UTC+2): 22:30 UTC is already the next day in Warsaw.
+    ['2026-10-19T22:30:00Z', new Date(2026, 9, 20)],
+    ['2026-10-19T21:59:00Z', new Date(2026, 9, 19)],
+    // CET (UTC+1) after the DST change on 25 Oct: the month turns at 23:00 UTC.
+    ['2026-10-31T23:30:00Z', new Date(2026, 10, 1)],
+    ['2026-10-31T22:30:00Z', new Date(2026, 9, 31)],
+  ])('at %s returns the Warsaw date', (now, expected) => {
+    TestBed.configureTestingModule({ providers: [provideFakeClock(now)] });
+    expect(TestBed.inject(ClockService).businessToday()).toEqual(expected);
+  });
+});
+
 describe('FakeClockService', () => {
   it('is used when provided with provideFakeClock', () => {
     TestBed.configureTestingModule({ providers: [provideFakeClock('2026-10-19T15:30:00')] });

@@ -2,9 +2,12 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { AppRoutesEnum } from '@common/routing/app-routes.enum';
 import { AppLayoutComponent } from './app-layout.component';
+import { HeaderAction } from './header-actions/header-action.model';
+import { HeaderActionsService } from './header-actions/header-actions.service';
 import { NavItem } from './navigation.model';
 
 @Component({ template: '' })
@@ -16,7 +19,7 @@ class Blank {}
     <app-layout
       [navItems]="items"
       [userName]="name()"
-      (addRequested)="onAdd()"
+      [shortcutsEnabled]="shortcuts()"
       (logoutRequested)="onLogout()"
     >
       <p class="projected">Page content</p>
@@ -31,13 +34,25 @@ class Host {
     { path: AppRoutesEnum.Settings, label: 'Settings', icon: 'settings' },
   ];
   readonly name = signal('Kasia');
-  readonly onAdd = vi.fn();
+  readonly shortcuts = signal(true);
   readonly onLogout = vi.fn();
 }
 
-async function setup(desktop: boolean) {
+interface SetupOptions {
+  /** Register a primary "Add" (shortcut N) like a page would. Default: true. */
+  withActions?: boolean;
+  openDialogs?: unknown[];
+}
+
+async function setup(
+  desktop: boolean,
+  { withActions = true, openDialogs = [] }: SetupOptions = {},
+) {
+  const onAdd = vi.fn();
+  const onExport = vi.fn();
   TestBed.configureTestingModule({
     providers: [
+      { provide: MatDialog, useValue: { openDialogs } },
       provideRouter([
         { path: 'dashboard', component: Blank },
         { path: 'settings', component: Blank },
@@ -52,10 +67,31 @@ async function setup(desktop: boolean) {
     ],
   });
   await TestBed.inject(Router).navigateByUrl('/dashboard');
+  const actions = TestBed.inject(HeaderActionsService);
+  const unregister = withActions
+    ? actions.register([
+        {
+          id: 'export',
+          label: 'Export',
+          accessibleLabel: 'Export accounts',
+          icon: 'download',
+          handler: onExport,
+        },
+        {
+          id: 'add',
+          label: 'Add',
+          accessibleLabel: 'Add account',
+          icon: 'add',
+          shortcut: 'N',
+          primary: true,
+          handler: onAdd,
+        } satisfies HeaderAction,
+      ])
+    : () => undefined;
   const fixture = TestBed.createComponent(Host);
   await fixture.whenStable();
   const el = fixture.nativeElement as HTMLElement;
-  return { fixture, el, host: fixture.componentInstance };
+  return { fixture, el, host: fixture.componentInstance, onAdd, onExport, unregister };
 }
 
 function press(target: EventTarget, key: string, init: KeyboardEventInit = {}): KeyboardEvent {
@@ -80,70 +116,145 @@ describe('AppLayoutComponent', () => {
   });
 
   describe('desktop', () => {
-    it('shows the navigation rail and the "Add" button with the N hint, no FAB', async () => {
+    it('shows the navigation rail and the page actions, the primary one with its N hint', async () => {
       const { el } = await setup(true);
       expect(el.querySelector('nav.rail')).toBeTruthy();
       expect(el.querySelector('nav.bottom-nav')).toBeNull();
       expect(el.querySelector('.fab')).toBeNull();
-      const add = el.querySelector<HTMLButtonElement>('.add-button');
+      const buttons = el.querySelectorAll<HTMLButtonElement>('.header-action');
+      expect(buttons).toHaveLength(2);
+      const add = el.querySelector<HTMLButtonElement>('.header-action.primary');
       expect(add?.textContent).toContain('Add');
+      expect(add?.getAttribute('aria-label')).toBe('Add account');
       expect(add?.querySelector('kbd')?.textContent).toBe('N');
       expect(add?.getAttribute('aria-keyshortcuts')).toBe('N');
+      expect(buttons[0].querySelector('kbd')).toBeNull();
+      expect(buttons[0].getAttribute('aria-keyshortcuts')).toBeNull();
     });
 
-    it('requests Quick add from the "Add" button', async () => {
-      const { el, host } = await setup(true);
-      el.querySelector<HTMLButtonElement>('.add-button')?.click();
-      expect(host.onAdd).toHaveBeenCalledTimes(1);
+    it('calls the handler of the pressed action', async () => {
+      const { el, onAdd, onExport } = await setup(true);
+      el.querySelector<HTMLButtonElement>('.header-action.primary')?.click();
+      expect(onAdd).toHaveBeenCalledTimes(1);
+      expect(onExport).not.toHaveBeenCalled();
+      el.querySelectorAll<HTMLButtonElement>('.header-action')[0].click();
+      expect(onExport).toHaveBeenCalledTimes(1);
     });
 
-    it('requests Quick add with the N shortcut', async () => {
-      const { host } = await setup(true);
+    it('routes the N shortcut to the primary action', async () => {
+      const { onAdd } = await setup(true);
       const event = press(document.body, 'n');
-      expect(host.onAdd).toHaveBeenCalledTimes(1);
+      expect(onAdd).toHaveBeenCalledTimes(1);
       expect(event.defaultPrevented).toBe(true);
       press(document.body, 'N', { shiftKey: true });
-      expect(host.onAdd).toHaveBeenCalledTimes(2);
+      expect(onAdd).toHaveBeenCalledTimes(2);
     });
 
     it('ignores N while typing, with modifiers, on repeat or inside overlays', async () => {
-      const { host } = await setup(true);
+      const { onAdd } = await setup(true);
       const input = document.createElement('input');
+      const textarea = document.createElement('textarea');
+      const editable = document.createElement('div');
+      editable.setAttribute('contenteditable', 'true');
       const overlay = document.createElement('div');
       overlay.className = 'cdk-overlay-container';
       const insideOverlay = document.createElement('button');
       overlay.appendChild(insideOverlay);
-      document.body.append(input, overlay);
+      document.body.append(input, textarea, editable, overlay);
 
       press(input, 'n');
+      press(textarea, 'n');
+      press(editable, 'n');
       press(document.body, 'n', { ctrlKey: true });
       press(document.body, 'n', { metaKey: true });
+      press(document.body, 'n', { altKey: true });
       press(document.body, 'n', { repeat: true });
       press(insideOverlay, 'n');
       press(document.body, 'm');
 
-      expect(host.onAdd).not.toHaveBeenCalled();
-      input.remove();
-      overlay.remove();
+      expect(onAdd).not.toHaveBeenCalled();
+      [input, textarea, editable, overlay].forEach((node) => node.remove());
+    });
+
+    it('ignores N while a dialog is open', async () => {
+      const { onAdd } = await setup(true, { openDialogs: [{}] });
+      const event = press(document.body, 'n');
+      expect(onAdd).not.toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it('shows no action and ignores N when the page registered none', async () => {
+      const { el, onAdd } = await setup(true, { withActions: false });
+      expect(el.querySelector('.header-action')).toBeNull();
+      const event = press(document.body, 'n');
+      expect(onAdd).not.toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it('ignores N and hides its hint when the user turned shortcuts off', async () => {
+      const { el, fixture, host, onAdd } = await setup(true);
+      host.shortcuts.set(false);
+      await fixture.whenStable();
+      const add = el.querySelector<HTMLButtonElement>('.header-action.primary')!;
+      expect(add.querySelector('kbd')).toBeNull();
+      expect(add.hasAttribute('aria-keyshortcuts')).toBe(false);
+      const event = press(document.body, 'n');
+      expect(onAdd).not.toHaveBeenCalled();
+      expect(event.defaultPrevented).toBe(false);
+
+      // The button itself still works.
+      add.click();
+      expect(onAdd).toHaveBeenCalledTimes(1);
+
+      host.shortcuts.set(true);
+      await fixture.whenStable();
+      expect(add.querySelector('kbd')?.textContent).toBe('N');
+      press(document.body, 'n');
+      expect(onAdd).toHaveBeenCalledTimes(2);
+    });
+
+    it('removes the buttons when the page unregisters its actions', async () => {
+      const { el, fixture, unregister, onAdd } = await setup(true);
+      unregister();
+      await fixture.whenStable();
+      expect(el.querySelector('.header-action')).toBeNull();
+      press(document.body, 'n');
+      expect(onAdd).not.toHaveBeenCalled();
     });
   });
 
   describe('mobile', () => {
-    it('shows bottom navigation and the floating "+" button, no "Add" button', async () => {
+    it('shows bottom navigation and the floating "+" for the primary action', async () => {
       const { el } = await setup(false);
       expect(el.querySelector('nav.bottom-nav')).toBeTruthy();
       expect(el.querySelector('nav.rail')).toBeNull();
-      expect(el.querySelector('.add-button')).toBeNull();
-      expect(el.querySelector('.fab')?.getAttribute('aria-label')).toBe('Add transaction');
+      expect(el.querySelector('.header-action.primary')).toBeNull();
+      const fab = el.querySelector('.fab');
+      expect(fab?.getAttribute('aria-label')).toBe('Add account');
+      expect(fab?.querySelector('mat-icon')?.textContent).toBe('add');
       expect(el.querySelectorAll('nav.bottom-nav a')).toHaveLength(4);
     });
 
-    it('requests Quick add from the floating button but not from the N key', async () => {
-      const { el, host } = await setup(false);
+    it('shows other actions as labelled icon buttons in the top bar', async () => {
+      const { el, onExport } = await setup(false);
+      const buttons = el.querySelectorAll<HTMLButtonElement>('header .header-action');
+      expect(buttons).toHaveLength(1);
+      expect(buttons[0].getAttribute('aria-label')).toBe('Export accounts');
+      buttons[0].click();
+      expect(onExport).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls the primary handler from the floating button but not from the N key', async () => {
+      const { el, onAdd } = await setup(false);
       press(document.body, 'n');
-      expect(host.onAdd).not.toHaveBeenCalled();
+      expect(onAdd).not.toHaveBeenCalled();
       el.querySelector<HTMLButtonElement>('.fab')?.click();
-      expect(host.onAdd).toHaveBeenCalledTimes(1);
+      expect(onAdd).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows no floating button when the page has no primary action', async () => {
+      const { el } = await setup(false, { withActions: false });
+      expect(el.querySelector('.fab')).toBeNull();
     });
   });
 

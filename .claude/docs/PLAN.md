@@ -54,8 +54,8 @@ One git repository (monorepo) with the backend and frontend in separate top-leve
   /finance-tracker-web             # frontend (Angular) — rules in its CLAUDE.md
     /src/app
       /common                      # shared code by domain: services, API clients, models, pipes, locale/time, date (e.g. month-select)
-      /infrastructure              # shared UI building blocks: layout, cards, empty states
-      /pages/<page>                # one folder per page; its feature-specific components live inside
+      /infrastructure              # shared UI building blocks: layout (+ header-actions service), cards, empty states
+      /pages/<page>                # one folder per page; its feature-specific components live inside (e.g. transactions' quick-add dialog)
 ```
 
 Infrastructure as code (post-MVP) goes in an `/infra` folder in the same repo.
@@ -75,7 +75,7 @@ Infrastructure as code (post-MVP) goes in an `/infra` folder in the same repo.
 | Entity | Fields | Constraints |
 | --- | --- | --- |
 | User | Id, Email, PasswordHash, DisplayName, DefaultCurrency, CreatedAt, OnboardingCompletedAt? | Identity. UserName = Email; email unique (`RequireUniqueEmail`), so concurrent duplicate registrations fail (409) |
-| RefreshToken | Id, UserId, TokenHash, CreatedAt, ExpiresAt, RevokedAt?, ReplacedByTokenId? | Unique (TokenHash). Rotated on every refresh; reuse of a revoked token revokes the whole chain |
+| RefreshToken | Id, UserId, TokenHash, CreatedAt, ExpiresAt, RevokedAt?, ReplacedByTokenId? | Unique (TokenHash). Rotated on every refresh; reuse of a revoked token revokes the whole chain, except within the ~10 s grace window (see §7 Auth contract) |
 | Account | Id, UserId, Name, Type (Card/Savings/Cash), Currency, InitialBalance, IsArchived | Unique (UserId, Name) among non-archived, case-insensitive |
 | Category | Id, UserId, Name, Type (Expense/Income), Icon (Material Symbols Rounded name from the fixed set), Color (hex `#RRGGBB` from the fixed 12-color palette), SystemKey? (snake_case, e.g. `eating_out`), IsArchived | Defaults are **copied to each user on registration**; `SystemKey` (e.g. `groceries`, `other`) marks a default and survives renames. Unique (UserId, Type, Name) among non-archived, case-insensitive |
 | Transaction | Id, UserId, AccountId, CategoryId?, Type (Expense/Income/Transfer), TransferDirection? (Out/In), Amount, Date, Merchant, Note, Source (Manual/Csv/OpenBanking), ExternalHash?, ImportBatchId?, TransferPairId? | Index (UserId, Date); unique (AccountId, ExternalHash); `TransferDirection` set only for transfers; `CategoryId` required for Expense/Income, null for Transfer |
@@ -113,12 +113,12 @@ The frontend copies are `finance-tracker-web/src/styles/category-palette.constan
 ### Transactions
 - Amount > 0, max 2 decimals.
 - Date ≤ today + 1 day.
-- Expense → expense category; Income → income category; Transfer → no category.
-- Account and category must belong to the user and not be archived.
+- Expense → expense category; Income → income or expense category (income in an expense category is a **refund**: it lowers Spent); Transfer → no category.
+- Account and category must belong to the user. Newly chosen ones must be active; an archived account or category a transaction already uses may stay when the transaction is edited.
 - Deleting an imported transaction writes its hash to `DeletedImportHash`.
 
 ### Transfers
-- `POST /transfers` creates two rows with the same `TransferPairId` in one DB transaction: `TransferDirection = Out` on account A, `In` on account B. From ≠ To. Editing/deleting one affects both.
+- `POST /transfers` creates two rows with the same `TransferPairId` in one DB transaction: `TransferDirection = Out` on account A, `In` on account B. From ≠ To. Editing/deleting one affects both: `DELETE /transactions/{id}` and bulk delete on a transfer row remove the whole pair; editing goes through `PUT /transfers/{transferPairId}`.
 - Transfers affect balances but are **excluded** from income, spending, budgets and charts.
 
 ### Balances
@@ -129,7 +129,14 @@ The frontend copies are `finance-tracker-web/src/styles/category-palette.constan
 - System defaults (`SystemKey` set) can be renamed and hidden (archived), not deleted.
 - A custom category with transactions can only be archived or merged; without transactions it can be deleted. Deleting it also deletes its budgets, rules and alerts.
 - Merge moves transactions, budgets (limits summed for the same month) and rules, then archives the source.
-- "Other" (`SystemKey = other`) can't be hidden or merged.
+- "Other" (`other`) and "Other income" (`other_income`) are the fallbacks: they can't be hidden, merged or deleted (`isProtected`).
+- Type can change only for a custom category with no transactions, budgets or rules; a default's type never changes.
+- Merge deletes the source's alerts (they describe the old category); the target's status is recalculated once alert logic exists (Phase 2). An archived source can be merged; a fallback can be a merge target.
+- Hidden (archived) categories keep their budgets, but those budgets are excluded from the Budgets table, Total and daily allowance.
+- Built-in import rules whose target category is hidden or merged away fall back to "Other" / "Other income".
+
+### Dates
+- "Today" is the Europe/Warsaw calendar date (from `TimeProvider`), for date validation, the 90-day top-categories window, months and the daily allowance.
 
 ### Budgets
 - One limit per category per month. "Copy from last month" copies all limits.
@@ -148,7 +155,7 @@ The frontend copies are `finance-tracker-web/src/styles/category-palette.constan
 3. S3 event triggers Lambda → batch Processing.
 4. Parse with the bank's mapping (handle Windows-1250 and UTF-8, `;` and `,` separators, Polish decimal comma).
 5. `ExternalHash` = SHA-256(AccountId + Date + Amount + normalized description + occurrence index of identical rows that day). Skip if it exists in Transactions or `DeletedImportHash`.
-6. Categorize: user `CategoryRules` by Priority → built-in rules → "Other".
+6. Categorize: user `CategoryRules` by Priority → built-in rules → "Other" (expenses) / "Other income" (income).
 7. Insert all rows in **one DB transaction**. On error: batch Failed + message, nothing saved (retry is safe).
 8. Batch Done with RowsTotal / RowsImported / RowsSkipped. Frontend polls `GET /imports/{id}`.
 
@@ -183,11 +190,70 @@ All under `/api`, JWT required except register/login/refresh.
 
 - `POST /auth/register` `{ displayName, email, password }` → **201** `AuthTokens`; **409** ProblemDetails for a duplicate email; **400** validation ProblemDetails.
 - `POST /auth/login` `{ email, password }` → **200** `AuthTokens`; **401** ProblemDetails for a wrong email or password (never says which).
-- `POST /auth/refresh` `{ refreshToken }` → **200** `AuthTokens` (refresh token rotated); **401** when invalid, expired or revoked.
-- `POST /auth/logout` `{ refreshToken }` (JWT required) → **204**, revokes the token.
-- `GET /me` → **200** `{ id, email, displayName, onboardingCompletedAt: string | null }`.
+- `POST /auth/refresh` `{ refreshToken }` → **200** `AuthTokens` (refresh token rotated); **401** when invalid, expired or revoked; **400** when the body is missing entirely.
+  - **Reuse grace window (~10 s):** presenting a token that was rotated within the last ~10 seconds returns a fresh access token plus the chain's current refresh token (rotated tokens are derived server-side from their predecessor, so the chain stays a single line) instead of counting as reuse, so two tabs refreshing at once don't log the user out. Reuse after the window revokes the whole chain.
+  - The SPA shares one in-flight refresh within a tab and lets only one tab refresh at a time (Web Locks; the grace window covers browsers without it).
+- `POST /auth/logout` `{ refreshToken }` (JWT required) → **204**, revokes the caller's own token; also 204 (no-op) for an unknown, revoked or another user's token.
+- `GET /me` → **200** `{ id, email, displayName, onboardingCompletedAt: string | null }`; **401** if the token's user no longer exists.
+- `POST /me/onboarding/complete` → **204**; idempotent, keeps the first completion time; **409** "Add at least one account first." when the user has no active account.
+- Login takes the same time for an unknown email as for a wrong password (dummy hash check).
+- Field limits: display name 100, email 256, password 8–128 with at least one letter and one ASCII digit (0–9).
 - `AuthTokens` = `{ accessToken, expiresIn /* seconds */, refreshToken }`. The refresh token is returned in the body; the SPA keeps it in `localStorage` (MVP decision; httpOnly cookie is a possible later hardening).
 - Errors are RFC 7807 ProblemDetails; validation errors carry `errors` keyed by field name.
+
+### Accounts contract (agreed)
+
+- `Account` = `{ id, name, type: "Card" | "Savings" | "Cash", currency: "PLN", initialBalance, balance, isArchived }`. `balance` is computed (initial balance + income − expenses ± transfers), never stored. Enums are sent as names.
+- `GET /accounts?includeArchived=false` → **200** `{ items: Account[], netWorth }`. Active accounts first, then archived, each by name (case-insensitive). `netWorth` sums active accounts only, even with `includeArchived=true`.
+- `POST /accounts` `{ name, type, currency?, initialBalance? }` → **201** `Account`; **400** validation; **409** "An account with this name already exists." Currency defaults to PLN (others rejected: "Only PLN is supported for now."); initial balance defaults to 0 and may be negative.
+- `PUT /accounts/{id}` (same body) → **200** `Account`. Full replace: omitted `initialBalance`/`currency` reset to their defaults, so the client always sends the current values. Archived accounts can be edited (e.g. renamed before restore). **409** duplicate active name; **404** unknown or another user's account.
+- `DELETE /accounts/{id}` → **204** archives (idempotent); **409** "You need at least one active account."; **404**.
+- `POST /accounts/{id}/restore` → **204** (idempotent); **409** "An account with this name already exists. Rename it first."; **404**.
+- Validation messages: "Enter an account name.", "Name can be at most 50 characters.", "Choose an account type." (also for an unknown type value), "Only PLN is supported for now.", "Enter an amount with at most 2 decimal places.", "Enter a smaller amount."
+
+### Categories contract (agreed)
+
+- `Category` = `{ id, name, type: "Expense" | "Income", icon, color /* lowercase #rrggbb */, systemKey: string | null, isArchived, isProtected, transactionCount, budgetCount }`. Counts cover all dates/months (for the delete-or-archive choice and the merge confirmation text).
+- `GET /categories?includeArchived=false&type=` → **200** `{ items: Category[] }`. Active first, then archived; expense before income; then by name (case-insensitive).
+- `GET /categories/top?limit=8&type=` → **200** `{ items: Category[] }`. Active only, ranked by transactions in the last 90 days including today; ties by seeded default order, then name; unused categories fill the rest. `limit` 1–50 ("Limit must be between 1 and 50.").
+- `POST /categories` `{ name, type, icon, color }` → **201** `Category`; **400** validation; **409** "A category with this name already exists." (same type, active, case-insensitive). Color accepted in any case, stored lowercase.
+- `PUT /categories/{id}` (same body, full replace) → **200** `Category`. Archived categories can be edited. **409** duplicate name; **409** "The type of a default category can't be changed."; **409** "This category is already in use, so its type can't be changed."; **404**. The frontend matches the two type-lock texts to place the error on the Type field, so reword them only together with the frontend (or switch to a stable problem `type`).
+- `DELETE /categories/{id}` → **204** (with its budgets, rules and alerts); **409** "This category has transactions. Archive it or merge it into another category instead."; **409** "Default categories can't be deleted. Hide them instead."; **409** "This category can't be deleted. It collects transactions that don't fit anywhere else."; **404**.
+- `POST /categories/{id}/archive` → **204** (idempotent); **409** "This category can't be hidden. It collects transactions that don't fit anywhere else."; **404**.
+- `POST /categories/{id}/restore` → **204** (idempotent); **409** "A category with this name already exists. Rename it first."; **404**.
+- `POST /categories/{id}/merge` `{ targetCategoryId }` → **200** `{ transactionsMoved, budgetsMoved, rulesMoved, target: Category }`; **400** on `targetCategoryId`: "Choose a category to merge into.", "Choose a different category.", "Choose an active category.", "Choose a category of the same type."; **409** "This category can't be merged. It collects transactions that don't fit anywhere else."; **404** unknown or another user's source/target.
+- Validation messages: "Enter a category name.", "Name can be at most 30 characters.", "Choose a category type.", "Choose an icon.", "Choose a color."
+- Merge also returns **409** "Merging would make a monthly budget too large. Lower one of the limits first." when a same-month sum would exceed the maximum amount.
+
+### Transactions contract (agreed)
+
+- `Transaction` = `{ id, type: "Expense" | "Income" | "Transfer", amount, date, merchant, note, source: "Manual" | "Csv" | "OpenBanking", account: { id, name, isArchived }, category: { id, name, type, icon, color, systemKey, isArchived } | null, transfer: { transferPairId, fromAccount, toAccount } | null, import: { batchId, importedAt } | null, needsCategory }`. Amounts are positive; `type` gives the sign. A transfer is listed as **one row** (its Out side) with `transfer` set and `category` null. `needsCategory` = not Manual and category is "Other" or "Other income".
+- `GET /transactions?from&to&accountId&categoryId&type&minAmount&maxAmount&q&page=1&pageSize=50&sort=-date` → **200** `{ items, page, pageSize, totalCount, totalPages, totals: { income, expenses, net } }`.
+  - Filters are optional and combined with AND; `categoryId` may repeat (multi-select); `accountId` also matches a transfer whose other side is that account. No default month: the client sends `from`/`to`.
+  - `q`: merchant and note, case- and accent-insensitive, `%`/`_` literal, max 100 characters.
+  - `sort`: `date | amount | merchant | category | account`, `-` prefix = descending; ties broken by id; amount sorts unsigned.
+  - `pageSize` 1–200. `totalCount` and `totals` cover the whole filtered set; transfers count as rows but add no money. `expenses` = expenses − refunds, floored at 0 (never negative); `income` = income in income categories only; `net` = `income` − `expenses` as returned (the three footer numbers always add up).
+  - Decimals in the query string use a dot; unreadable values → 400 "Enter a valid value." on that field.
+- `GET /transactions/merchants?q=&limit=10` → **200** `{ items: [{ merchant, lastUsedOn, lastCategory | null }] }`. Expenses and income only; grouped ignoring letter case (most recent spelling shown); prefix matches first, then most recent; `lastCategory` = newest still-active category. `limit` 1–20 ("Limit must be between 1 and 20.").
+- `POST /transactions` `{ type, amount, date, accountId, categoryId, merchant?, note? }` → **201** `Transaction`; **400** validation; **404** unknown or another user's account/category. Merchant/note trimmed; blank = none.
+- `PUT /transactions/{id}` (same body, full replace) → **200**. Imported rows keep source and hash. **409** "This transaction is part of a transfer. Edit or delete the transfer instead." for a transfer row; **404**.
+- `DELETE /transactions/{id}` → **204**; a transfer row deletes the whole pair; imported rows leave a `DeletedImportHash` tombstone; **404**.
+- `POST /transactions/bulk` `{ action: "Delete" | "Recategorize", transactionIds (1–500), categoryId? }` → **200** `{ affectedCount }`, all or nothing. Delete removes transfer pairs whole (counted once). **404** (any id unknown or another user's) "One or more of the selected transactions don't exist. Refresh the list and try again."
+- Validation messages: "Choose a transaction type.", "Choose Expense or Income. Record transfers as a transfer.", "Enter an amount greater than 0.", "Enter an amount with at most 2 decimal places.", "Enter a smaller amount.", "Choose a date.", "Date can't be in the future.", "Choose an account.", "This account is archived. Choose an active account.", "Choose a category.", "This category is hidden. Choose an active category.", "Choose an expense category.", "Merchant can be at most 200 characters.", "Note can be at most 500 characters."; list: "End date can't be before start date.", "Enter an amount of 0 or more.", "Maximum amount can't be less than minimum amount.", "Choose a transaction type." (unknown `type`), "Page must be 1 or more.", "Page size must be between 1 and 200.", "Sort by date, amount, merchant, category or account.", "Search can be at most 100 characters."; bulk: "Choose an action.", "Select at least one transaction.", "Select at most 500 transactions at once.", "Transfers don't have a category. Unselect them first.", "Select only expenses or only income to change their category."
+
+### Transfers contract (agreed)
+
+- `POST /transfers` `{ fromAccountId, toAccountId, amount, date, note? }` → **201** `Transaction` (the Out row, with `transfer`). Two rows sharing `TransferPairId` in one DB transaction. Messages: "Choose two different accounts." (on `toAccountId`), "Choose the account to move money from.", "Choose the account to move money to.", plus the amount/date/note/archived-account messages. **404** another user's account.
+- `PUT /transfers/{transferPairId}` (same body) → **200**; both sides updated together; an unchanged archived account may stay. **404** unknown/another user's pair or a plain transaction id.
+- `DELETE /transfers/{transferPairId}` → **204**; removes both sides (tombstones for imported sides). **404**.
+
+### Budgets contract (Phase 1: set/remove one limit)
+
+- `PUT /budgets/{categoryId}?month=YYYY-MM` `{ limitAmount }` → **200** `Budget` = `{ categoryId, month: "YYYY-MM", limitAmount }` (creates or replaces the limit for that category and month).
+- `limitAmount` of `0` or `null` (or omitted, `{}`) removes the budget → **204** (also 204 when there was none). The client sends an empty field as `null`; a request with no body is a 400. On an income category even a removal is 400 "Budgets can only be set for expense categories." (it can never hold a budget).
+- Rules: expense categories only; the category must be active to set a limit (removing is allowed for a hidden one); past, current and future months are all allowed. Writes take the user's category lock (same as merge, which sums budgets).
+- **404** unknown or another user's category.
+- Validation messages: "Choose a month." (missing), "Enter a month as YYYY-MM." (unreadable), "Enter an amount of 0 or more.", "Enter an amount with at most 2 decimal places.", "Enter a smaller amount.", "Budgets can only be set for expense categories.", "This category is hidden. Choose an active category."
 
 ## 8. Screens (Angular)
 
@@ -195,7 +261,7 @@ All under `/api`, JWT required except register/login/refresh.
 2. **Transactions** — table: Date, Merchant/note, Category (inline edit), Account, Amount (red/green), Source badge. Filters in URL query params, server-side paging (50) and sorting, bulk actions, footer totals. Quick-add dialog: amount focused first, last-used account preselected.
 3. **Budgets** — Category, Limit (inline edit), Spent, Remaining, Usage bar, Status; Copy from last month; Unbudgeted row; row click → filtered Transactions.
 4. **Accounts** — cards with balances; add/edit/archive/restore; Import CSV per account; import history.
-5. **Settings** — categories (add/rename/hide/archive/merge), rules, and a toggle to disable single-key keyboard shortcuts (WCAG 2.1.4).
+5. **Settings** — categories (add/rename/hide/archive/merge), rules, and a toggle to disable single-key keyboard shortcuts (WCAG 2.1.4; stored per user on the device and kept across logouts: "Keyboard shortcuts" / "Single-key shortcuts").
 6. **Auth** — login, register; JWT interceptor; route guards.
 
 ## 9. Phases and tasks
@@ -206,16 +272,18 @@ All under `/api`, JWT required except register/login/refresh.
 Backend (`finance-tracker-api`):
 - [x] Solution + project structure from §3; Docker Compose with Postgres
 - [x] Domain entities + EF Core configuration + initial migration (incl. `unaccent`, `pg_trgm`)
-- [ ] Identity + JWT auth (register, login, refresh with rotation, logout); per-user default categories seeded on registration; `GET /me`, onboarding complete
-- [ ] Accounts CRUD + archive/restore + computed balances
-- [ ] Categories CRUD (hide/archive, restore, delete, merge, top used)
-- [ ] Transactions CRUD with filters, paging, sorting, totals, merchant autocomplete; transfers (create/edit/delete pair)
-- [ ] Minimal budgets: `PUT /budgets/{categoryId}` (needed by onboarding step 2)
-- [ ] Integration tests (Testcontainers): user isolation — user A gets 404 on user B's data
+- [x] Identity + JWT auth (register, login, refresh with rotation, logout); per-user default categories seeded on registration; `GET /me`, onboarding complete
+- [x] Accounts CRUD + archive/restore + computed balances
+- [x] Categories CRUD (hide/archive, restore, delete, merge, top used)
+- [x] Transactions CRUD with filters, paging, sorting, totals, merchant autocomplete; transfers (create/edit/delete pair)
+- [x] Minimal budgets: `PUT /budgets/{categoryId}` (needed by onboarding step 2)
+- [x] Integration tests (Testcontainers): user isolation — user A gets 404 on user B's data
 
 Frontend (`finance-tracker-web`):
-- [ ] Angular: auth pages, layout, Accounts, Transactions table, Quick-add dialog (FEATURES.md F3)
-- [ ] Onboarding flow, 3 steps (FEATURES.md F1); CSV import option shown as "Coming soon" until Phase 4
+- [x] Angular: auth pages, layout, Accounts, Transactions table, Quick-add dialog (FEATURES.md F3)
+- [x] Settings toggle to disable single-key shortcuts (WCAG 2.1.4); the layout's shortcut handling reads it (build with the Settings page)
+- [x] Onboarding flow, 3 steps (FEATURES.md F1); CSV import option shown as "Coming soon" until Phase 4
+- [x] Settings → Categories (FEATURES.md F5, DESIGN.md screen 7): list by type, add/rename custom (name, type, icon, color), hide/restore, delete or archive, merge with confirmation; Other/Other income protected
 
 ### Phase 2 — Budgets and dashboard
 **Done when:** the dashboard shows "left to spend" and budget status per category.
@@ -230,10 +298,11 @@ Frontend (`finance-tracker-web`):
 **Done when:** the app is live on a public URL and each half deploys on every push to `main` that changes it.
 
 - [ ] AWS Budgets alert at $5–10 (do first)
-- [ ] RDS PostgreSQL (smallest instance), credentials in Secrets Manager
+- [ ] RDS PostgreSQL (smallest instance), credentials in Secrets Manager; database collation must fold Polish letters in `lower()` (e.g. en_US.UTF-8 / ICU), not C/POSIX
 - [ ] API on Elastic Beanstalk; config from Secrets Manager / Parameter Store
 - [ ] Angular on S3 + CloudFront with HTTPS; CORS configured
 - [ ] CloudWatch logs (structured logging with Serilog)
+- [ ] Auth hardening: login rate limiting / lockout; scheduled cleanup of expired and revoked refresh tokens
 - [ ] GitHub Actions with path filters: build + test on PR; deploy on `main` (`finance-tracker-api/**` → Beanstalk + Lambda; `finance-tracker-web/**` → S3 + CloudFront invalidation)
 
 ### Phase 4 — CSV import pipeline

@@ -1,0 +1,20 @@
+.account {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 16px 16px 8px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+
+  legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 4px;
+    font: var(--mat-sys-title-small);
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}

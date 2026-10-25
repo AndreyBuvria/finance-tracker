@@ -1,4 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BUSINESS_TIME_ZONE } from './time.constants';
+
+const BUSINESS_DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
+  timeZone: BUSINESS_TIME_ZONE,
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+});
 
 /**
  * The only place in the app allowed to read the current date/time.
@@ -17,5 +25,16 @@ export class ClockService {
   today(): Date {
     const now = this.now();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+
+  /**
+   * Today's calendar date in Europe/Warsaw (PLAN.md §6 "Dates"), at local midnight, whatever the
+   * browser's time zone. Use it for business dates such as the default month.
+   */
+  businessToday(): Date {
+    const parts = BUSINESS_DATE_FORMAT.formatToParts(this.now());
+    const part = (type: Intl.DateTimeFormatPartTypes) =>
+      Number(parts.find((p) => p.type === type)?.value);
+    return new Date(part('year'), part('month') - 1, part('day'));
   }
 }

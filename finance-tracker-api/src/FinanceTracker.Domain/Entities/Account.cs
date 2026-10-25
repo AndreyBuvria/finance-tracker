@@ -19,7 +19,7 @@ public sealed class Account
 
     public AccountType Type { get; set; }
 
-    /// <summary>ISO 4217 code. Only PLN is supported in the MVP.</summary>
+    /// <summary>ISO 4217 code. Only PLN (<see cref="Constants.Money.Pln"/>) is supported in the MVP.</summary>
     public required string Currency { get; set; }
 
     public decimal InitialBalance { get; set; }

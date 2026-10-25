@@ -24,3 +24,6 @@ export const CATEGORY_PALETTE = [
   { hex: '#6d4c41', onColor: ON_DARK, label: $localize`:@@category.color.brown:Brown` },
   { hex: '#546e7a', onColor: ON_DARK, label: $localize`:@@category.color.blueGrey:Blue grey` },
 ] as const satisfies readonly CategoryColor[];
+
+/** The neutral color a new category starts with (blue grey, as "Other"). */
+export const DEFAULT_CATEGORY_COLOR = '#546e7a' satisfies (typeof CATEGORY_PALETTE)[number]['hex'];

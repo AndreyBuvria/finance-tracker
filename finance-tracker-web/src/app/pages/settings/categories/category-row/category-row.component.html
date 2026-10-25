@@ -1,0 +1,116 @@
+<div class="row">
+  <span
+    class="icon"
+    aria-hidden="true"
+    [style.background-color]="category().color"
+    [style.color]="onColor()"
+  >
+    <mat-icon>{{ category().icon }}</mat-icon>
+  </span>
+  <span class="text">
+    <span class="name">{{ category().name }}</span>
+    @let count = category().transactionCount;
+    <span class="count" i18n="@@settings.categories.count.transactions">{count, plural,
+      =1 {1 transaction}
+      other {{{ count }} transactions}
+    }</span>
+  </span>
+
+  @if (category().isArchived) {
+    <span class="badge">
+      @if (isDefault()) {
+        <ng-container i18n="@@settings.categories.badge.hidden">Hidden</ng-container>
+      } @else {
+        <ng-container i18n="@@common.badge.archived">Archived</ng-container>
+      }
+    </span>
+    <button
+      matButton
+      type="button"
+      [attr.aria-label]="renameLabel()"
+      [disabled]="busy()"
+      (click)="renameRequested.emit(category())"
+    >
+      <span i18n="@@settings.categories.action.rename">Rename</span>
+    </button>
+    @if (canDelete()) {
+      <button
+        matButton
+        type="button"
+        class="delete"
+        [attr.aria-label]="deleteLabel()"
+        [disabled]="busy()"
+        (click)="deleteRequested.emit(category())"
+      >
+        <span i18n="@@settings.categories.action.delete">Delete</span>
+      </button>
+    }
+    <button
+      matButton
+      type="button"
+      class="restore"
+      [id]="actionsId()"
+      [attr.aria-label]="restoreLabel()"
+      [disabled]="busy()"
+      (click)="restoreRequested.emit(category())"
+    >
+      <mat-icon aria-hidden="true">unarchive</mat-icon>
+      <span i18n="@@settings.categories.action.restore">Restore</span>
+    </button>
+  } @else {
+    @if (category().isProtected) {
+      <!-- Focusable, so keyboard users get the tooltip too; its text is also the name. -->
+      <span
+        class="lock"
+        role="img"
+        tabindex="0"
+        aria-label="Used as the fallback category"
+        i18n-aria-label="@@settings.categories.row.fallback"
+        matTooltip="Used as the fallback category"
+        i18n-matTooltip="@@settings.categories.row.fallback"
+      >
+        <mat-icon aria-hidden="true">lock</mat-icon>
+      </span>
+    }
+    <button
+      mat-icon-button
+      type="button"
+      class="menu-button"
+      [id]="actionsId()"
+      [matMenuTriggerFor]="menu"
+      [attr.aria-label]="menuLabel()"
+      [disabled]="busy()"
+    >
+      <mat-icon aria-hidden="true">more_vert</mat-icon>
+    </button>
+  }
+</div>
+
+<mat-menu #menu="matMenu" xPosition="before">
+  <button mat-menu-item type="button" (click)="renameRequested.emit(category())">
+    <mat-icon aria-hidden="true">edit</mat-icon>
+    <span i18n="@@settings.categories.action.rename">Rename</span>
+  </button>
+  @if (!category().isProtected) {
+    @if (isDefault()) {
+      <button mat-menu-item type="button" (click)="hideRequested.emit(category())">
+        <mat-icon aria-hidden="true">visibility_off</mat-icon>
+        <span i18n="@@settings.categories.action.hide">Hide</span>
+      </button>
+    } @else if (canDelete()) {
+      <button mat-menu-item type="button" (click)="deleteRequested.emit(category())">
+        <mat-icon aria-hidden="true">delete</mat-icon>
+        <span i18n="@@settings.categories.action.delete">Delete</span>
+      </button>
+    } @else {
+      <button mat-menu-item type="button" (click)="hideRequested.emit(category())">
+        <mat-icon aria-hidden="true">archive</mat-icon>
+        <span i18n="@@settings.categories.action.archive">Archive</span>
+      </button>
+    }
+    <button mat-menu-item type="button" (click)="mergeRequested.emit(category())">
+      <mat-icon aria-hidden="true">merge</mat-icon>
+      <span i18n="@@settings.categories.action.merge">Merge into…</span>
+    </button>
+  }
+</mat-menu>

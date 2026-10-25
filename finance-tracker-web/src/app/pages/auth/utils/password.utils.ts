@@ -1,23 +1,25 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { PasswordChecks, PasswordRule } from '../common/password.model';
+import { PASSWORD_MIN_LENGTH } from '../common/auth-limits.constants';
+import { PasswordChecks } from '../common/password.model';
 
-/** Password requirements (FEATURES.md F1): ≥ 8 characters, ≥ 1 letter, ≥ 1 number. */
-export const PASSWORD_MIN_LENGTH = 8;
-
-/** Which requirements `password` meets. Letters include Polish and other non-ASCII letters. */
+/**
+ * Which requirements `password` meets (FEATURES.md F1), with the same rules as the API:
+ * letters include Polish and other non-ASCII letters, but only ASCII digits 0–9 count as a number.
+ */
 export function checkPassword(password: string): PasswordChecks {
   return {
     minLength: password.length >= PASSWORD_MIN_LENGTH,
     letter: /\p{L}/u.test(password),
-    number: /\p{Nd}/u.test(password),
+    number: /[0-9]/.test(password),
   };
 }
 
 /**
- * Form validator: `{ passwordRules: { unmet: PasswordRule[] } }` while any requirement is unmet.
- * An empty value is left to `Validators.required`.
+ * Form validator: `{ passwordLetterAndNumber: true }` while the password lacks a letter or an
+ * ASCII digit. An empty value is left to `Validators.required`; length is checked by
+ * `Validators.minLength`/`maxLength`.
  */
-export const passwordRulesValidator: ValidatorFn = (
+export const passwordLetterAndNumberValidator: ValidatorFn = (
   control: AbstractControl<string>,
 ): ValidationErrors | null => {
   const value = control.value ?? '';
@@ -25,6 +27,5 @@ export const passwordRulesValidator: ValidatorFn = (
     return null;
   }
   const checks = checkPassword(value);
-  const unmet = (Object.keys(checks) as PasswordRule[]).filter((rule) => !checks[rule]);
-  return unmet.length ? { passwordRules: { unmet } } : null;
+  return checks.letter && checks.number ? null : { passwordLetterAndNumber: true };
 };

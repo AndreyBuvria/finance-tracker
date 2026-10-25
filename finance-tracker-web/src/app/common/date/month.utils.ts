@@ -7,3 +7,8 @@ export function startOfMonth(date: Date): Date {
 export function addMonths(date: Date, delta: number): Date {
   return new Date(date.getFullYear(), date.getMonth() + delta, 1);
 }
+
+/** Last day of the month of `date`, at local midnight. */
+export function endOfMonth(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+}

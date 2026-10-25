@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+.top-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.month-group.inactive app-month-select {
+  opacity: 0.6;
+}
+
+.month-hint {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.search {
+  flex: 1 1 260px;
+}
+
+.filters-toggle {
+  height: 48px;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+
+  &[hidden] {
+    display: none;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.range {
+  grid-column: span 2;
+}
+
+@media (max-width: 599px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .range {
+    grid-column: auto;
+  }
+}

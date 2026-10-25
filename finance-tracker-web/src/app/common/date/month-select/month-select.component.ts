@@ -10,12 +10,7 @@ import { addMonths } from '../month.utils';
   selector: 'app-month-select',
   imports: [DatePipe, MatButtonModule, MatIconModule],
   template: `
-    <div
-      class="month-select"
-      role="group"
-      aria-label="Month"
-      i18n-aria-label="@@monthSelect.label"
-    >
+    <div class="month-select" role="group" aria-label="Month" i18n-aria-label="@@monthSelect.label">
       <span class="month" aria-live="polite">{{ month() | date: monthFormat }}</span>
       <button
         mat-icon-button

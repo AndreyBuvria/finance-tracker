@@ -38,6 +38,11 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             .HasDbFunction(typeof(PostgresFunctions).GetMethod(nameof(PostgresFunctions.Unaccent))!)
             .HasName(PostgresFunctions.UnaccentFunctionName);
 
+        modelBuilder
+            .HasDbFunction(typeof(PostgresFunctions).GetMethod(nameof(PostgresFunctions.Lower))!)
+            .HasName("lower")
+            .IsBuiltIn();
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

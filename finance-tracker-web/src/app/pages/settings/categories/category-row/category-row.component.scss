@@ -1,0 +1,57 @@
+.row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  min-height: 56px;
+  padding: 4px 0 4px 4px;
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.text {
+  display: grid;
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  font: var(--mat-sys-body-large);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.lock {
+  display: inline-flex;
+  padding: 8px;
+  border-radius: 50%;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: var(--mat-sys-corner-small);
+  background: var(--mat-sys-surface-container-highest);
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+}

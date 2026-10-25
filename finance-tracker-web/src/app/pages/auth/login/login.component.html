@@ -8,8 +8,8 @@
       </p>
     }
     @case ('generic') {
-      <p class="form-error" role="alert" i18n="@@common.error.generic">
-        Something went wrong. Try again.
+      <p class="form-error" role="alert">
+        <ng-container i18n="@@common.error.generic">Something went wrong. Try again.</ng-container>
       </p>
     }
   }
@@ -48,7 +48,7 @@
         }}</mat-icon>
       </button>
       @if (form.controls.password.hasError('required')) {
-        <mat-error i18n="@@auth.login.password.required">Enter your password.</mat-error>
+        <mat-error i18n="@@auth.field.password.required">Enter your password.</mat-error>
       }
     </mat-form-field>
 

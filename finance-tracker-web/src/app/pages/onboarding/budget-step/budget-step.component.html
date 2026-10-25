@@ -1,0 +1,78 @@
+<p class="hint">
+  <ng-container i18n="@@onboarding.budget.hint"
+    >Not sure? Start with a guess. You can change it anytime.</ng-container
+  >
+</p>
+
+<!-- Loading first: while a retry reloads, the resource still reports the previous error. -->
+@if (budgets.rows.isLoading()) {
+  <div role="status">
+    <span class="visually-hidden" i18n="@@onboarding.budget.loading">Loading categories…</span>
+  </div>
+  <div class="skeleton" aria-hidden="true">
+    @for (bone of [1, 2, 3, 4, 5]; track bone) {
+      <div class="skeleton-bone field-bone"></div>
+    }
+  </div>
+} @else if (budgets.rows.error()) {
+  <app-load-error [errorId]="loadErrorId()" (retry)="budgets.rows.reload()" />
+} @else {
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    @if (error()) {
+      <p class="form-error" role="alert">
+        <ng-container i18n="@@common.error.generic">Something went wrong. Try again.</ng-container>
+      </p>
+    }
+
+    @for (row of rows(); track row.category.id) {
+      @let limit = form.controls[row.key];
+      <mat-form-field subscriptSizing="dynamic">
+        <span
+          matIconPrefix
+          class="category-icon"
+          [style.background-color]="row.category.color"
+          [style.color]="onColor(row.category.color)"
+          aria-hidden="true"
+        >
+          <mat-icon>{{ row.category.icon }}</mat-icon>
+        </span>
+        <mat-label>{{ row.category.name }}</mat-label>
+        <input matInput [formControlName]="row.key" inputmode="decimal" autocomplete="off" />
+        <span matTextSuffix>&nbsp;zł</span>
+        @if (limit.hasError('amountInvalid')) {
+          <mat-error i18n="@@common.amount.invalid">Enter a valid amount.</mat-error>
+        } @else if (limit.hasError('amountNegative')) {
+          <mat-error i18n="@@onboarding.budget.negative">Enter an amount of 0 or more.</mat-error>
+        } @else if (limit.hasError('amountDecimals')) {
+          <mat-error i18n="@@common.amount.tooManyDecimals"
+            >Enter an amount with at most 2 decimal places.</mat-error
+          >
+        } @else if (limit.hasError('amountTooLarge')) {
+          <mat-error i18n="@@common.amount.tooLarge">Enter a smaller amount.</mat-error>
+        } @else if (limit.hasError('server')) {
+          <mat-error>{{ limit.getError('server') }}</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <div class="actions">
+      <button matButton type="button" (click)="back.emit()">
+        <span i18n="@@onboarding.action.back">Back</span>
+      </button>
+      <button
+        matButton="filled"
+        type="submit"
+        class="continue"
+        disabledInteractive
+        [disabled]="saving()"
+      >
+        @if (saving()) {
+          <mat-progress-spinner mode="indeterminate" diameter="20" aria-hidden="true" />
+          <span i18n="@@common.action.saving">Saving…</span>
+        } @else {
+          <span i18n="@@onboarding.action.continue">Continue</span>
+        }
+      </button>
+    </div>
+  </form>
+}

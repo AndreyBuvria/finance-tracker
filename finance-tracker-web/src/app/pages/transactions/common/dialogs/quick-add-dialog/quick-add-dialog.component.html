@@ -1,0 +1,176 @@
+<div class="title-row">
+  <h2 mat-dialog-title>
+    @if (editing) {
+      <ng-container i18n="@@transactions.quickAdd.editTitle">Edit transaction</ng-container>
+    } @else {
+      <ng-container i18n="@@transactions.quickAdd.addTitle">Add transaction</ng-container>
+    }
+  </h2>
+  <button
+    mat-icon-button
+    type="button"
+    mat-dialog-close
+    aria-label="Close"
+    i18n-aria-label="@@common.action.close"
+  >
+    <mat-icon aria-hidden="true">close</mat-icon>
+  </button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <mat-dialog-content>
+    @if (error(); as formError) {
+      <p class="form-error" role="alert">
+        @if (formError === 'generic') {
+          <ng-container i18n="@@common.error.generic"
+            >Something went wrong. Try again.</ng-container
+          >
+        } @else {
+          {{ formError.message }}
+        }
+      </p>
+    }
+
+    <mat-button-toggle-group
+      class="type"
+      formControlName="type"
+      aria-label="Transaction type"
+      i18n-aria-label="@@transactions.quickAdd.type"
+      hideSingleSelectionIndicator
+    >
+      @for (type of types; track type) {
+        <mat-button-toggle
+          [value]="type"
+          [disabled]="
+            !!editing && (type === typeEnum.Transfer) !== (editing.type === typeEnum.Transfer)
+          "
+          >{{ typeLabels[type] }}</mat-button-toggle
+        >
+      }
+    </mat-button-toggle-group>
+
+    <mat-form-field class="amount" subscriptSizing="dynamic">
+      <mat-label i18n="@@transactions.quickAdd.amount">Amount</mat-label>
+      <input
+        matInput
+        class="amount-input"
+        formControlName="amount"
+        inputmode="decimal"
+        autocomplete="off"
+        placeholder="0,00"
+        required
+      />
+      <span matTextSuffix>&nbsp;zł</span>
+      @let amount = form.controls.amount;
+      @if (amount.hasError('amountInvalid')) {
+        <mat-error i18n="@@common.amount.invalid">Enter a valid amount.</mat-error>
+      } @else if (amount.hasError('amountNotPositive')) {
+        <mat-error i18n="@@transactions.quickAdd.amount.notPositive"
+          >Enter an amount greater than 0.</mat-error
+        >
+      } @else if (amount.hasError('amountDecimals')) {
+        <mat-error i18n="@@common.amount.tooManyDecimals"
+          >Enter an amount with at most 2 decimal places.</mat-error
+        >
+      } @else if (amount.hasError('amountTooLarge')) {
+        <mat-error i18n="@@common.amount.tooLarge">Enter a smaller amount.</mat-error>
+      } @else if (amount.hasError('server')) {
+        <mat-error>{{ amount.getError('server') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <app-quick-add-load-state [loading]="loading()" [failed]="loadFailed()" (retry)="retryLoad()" />
+    @if (ready()) {
+      @if (isTransfer()) {
+        <app-transfer-accounts
+          [from]="form.controls.fromAccountId"
+          [to]="form.controls.toAccountId"
+          [accounts]="lists.accountOptions()"
+        />
+      } @else {
+        <app-category-grid
+          [control]="form.controls.categoryId"
+          [top]="lists.topTiles()"
+          [groups]="lists.categoryGroups()"
+          [current]="editing?.category ?? null"
+        />
+        <app-merchant-field
+          [control]="form.controls.merchant"
+          (suggestionChosen)="useMerchant($event)"
+        />
+      }
+    }
+
+    <app-date-field [control]="form.controls.date" [today]="today" />
+
+    @if (!isTransfer() && ready()) {
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label i18n="@@transactions.quickAdd.account">Account</mat-label>
+        <mat-select formControlName="accountId">
+          @for (account of lists.accountOptions(); track account.id) {
+            <mat-option [value]="account.id">{{ account.name }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.accountId.hasError('required')) {
+          <mat-error i18n="@@transactions.quickAdd.account.required">Choose an account.</mat-error>
+        } @else if (form.controls.accountId.hasError('server')) {
+          <mat-error>{{ form.controls.accountId.getError('server') }}</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    @if (showNote()) {
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label i18n="@@transactions.quickAdd.note">Note</mat-label>
+        <textarea matInput formControlName="note" rows="2"></textarea>
+        @if (form.controls.note.hasError('maxlength')) {
+          <mat-error i18n="@@transactions.quickAdd.note.tooLong"
+            >Note can be at most {{ noteMaxLength }} characters.</mat-error
+          >
+        } @else if (form.controls.note.hasError('server')) {
+          <mat-error>{{ form.controls.note.getError('server') }}</mat-error>
+        }
+      </mat-form-field>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    @if (editing) {
+      <button
+        matButton
+        type="button"
+        class="delete"
+        disabledInteractive
+        [disabled]="busy()"
+        (click)="delete()"
+      >
+        <span i18n="@@transactions.bulk.delete">Delete</span>
+      </button>
+    } @else {
+      <button
+        matButton="outlined"
+        type="button"
+        class="add-another"
+        disabledInteractive
+        [disabled]="saveDisabled()"
+        (click)="submit(true)"
+      >
+        <span i18n="@@transactions.quickAdd.saveAndAddAnother">Save and add another</span>
+      </button>
+    }
+    <button
+      matButton="filled"
+      type="submit"
+      class="submit"
+      disabledInteractive
+      [disabled]="saveDisabled()"
+    >
+      @if (submitting()) {
+        <mat-progress-spinner mode="indeterminate" diameter="20" aria-hidden="true" />
+        <span i18n="@@common.action.saving">Saving…</span>
+      } @else {
+        <span i18n="@@common.action.save">Save</span>
+      }
+    </button>
+  </mat-dialog-actions>
+</form>

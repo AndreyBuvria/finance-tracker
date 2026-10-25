@@ -2,8 +2,11 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using FinanceTracker.Application.Me;
+using FinanceTracker.Infrastructure.Persistence;
 using FinanceTracker.IntegrationTests.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceTracker.IntegrationTests.Me;
 
@@ -55,6 +58,26 @@ public sealed class MeEndpointsTests(ApiFactory factory) : IClassFixture<ApiFact
     }
 
     [Fact]
+    public async Task GetMe_UserDeletedAfterTokenWasIssued_ReturnsUnauthorized()
+    {
+        using var anonymous = factory.CreateClient();
+        var user = await anonymous.RegisterUserAsync();
+        using var client = factory.CreateClientWithToken(user.Tokens.AccessToken);
+
+        await using (var scope = factory.Services.CreateAsyncScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await db.Users.Where(u => u.Email == user.Email).ExecuteDeleteAsync(CancellationToken);
+        }
+
+        var response = await client.GetAsync("/api/me", CancellationToken);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(CancellationToken);
+        problem!.Detail.Should().Be("Your session has expired. Log in again.");
+    }
+
+    [Fact]
     public async Task GetMe_TwoUsers_EachSeesOnlyOwnProfile()
     {
         using var anonymous = factory.CreateClient();
@@ -78,6 +101,7 @@ public sealed class MeEndpointsTests(ApiFactory factory) : IClassFixture<ApiFact
         using var anonymous = factory.CreateClient();
         var user = await anonymous.RegisterUserAsync();
         using var client = factory.CreateClientWithToken(user.Tokens.AccessToken);
+        await client.CreateAccountAsync();
         var completedAt = factory.Time.GetUtcNow();
 
         var first = await client.PostAsync("/api/me/onboarding/complete", null, CancellationToken);
@@ -98,12 +122,45 @@ public sealed class MeEndpointsTests(ApiFactory factory) : IClassFixture<ApiFact
         var userB = await anonymous.RegisterUserAsync();
         using var clientA = factory.CreateClientWithToken(userA.Tokens.AccessToken);
         using var clientB = factory.CreateClientWithToken(userB.Tokens.AccessToken);
+        await clientA.CreateAccountAsync();
 
         (await clientA.PostAsync("/api/me/onboarding/complete", null, CancellationToken))
             .StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var meB = await clientB.GetFromJsonAsync<MeResponse>("/api/me", CancellationToken);
         meB!.OnboardingCompletedAt.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task CompleteOnboarding_NoActiveAccount_ReturnsConflictAndStaysIncomplete()
+    {
+        using var anonymous = factory.CreateClient();
+        var user = await anonymous.RegisterUserAsync();
+        using var client = factory.CreateClientWithToken(user.Tokens.AccessToken);
+
+        var response = await client.PostAsync("/api/me/onboarding/complete", null, CancellationToken);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        response.Content.Headers.ContentType?.MediaType.Should().Be("application/problem+json");
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(CancellationToken);
+        problem!.Detail.Should().Be("Add at least one account first.");
+        var me = await client.GetFromJsonAsync<MeResponse>("/api/me", CancellationToken);
+        me!.OnboardingCompletedAt.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task CompleteOnboarding_OtherUserHasAccount_ReturnsConflict()
+    {
+        using var anonymous = factory.CreateClient();
+        var userA = await anonymous.RegisterUserAsync();
+        var userB = await anonymous.RegisterUserAsync();
+        using var clientA = factory.CreateClientWithToken(userA.Tokens.AccessToken);
+        using var clientB = factory.CreateClientWithToken(userB.Tokens.AccessToken);
+        await clientB.CreateAccountAsync();
+
+        var response = await clientA.PostAsync("/api/me/onboarding/complete", null, CancellationToken);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
 
     [Fact]

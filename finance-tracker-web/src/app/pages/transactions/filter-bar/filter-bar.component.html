@@ -1,0 +1,100 @@
+<div class="top-row">
+  <div class="month-group" [class.inactive]="rangeActive()">
+    <app-month-select [month]="month()" (monthChange)="selectMonth($event)" />
+    @if (rangeActive()) {
+      <p class="month-hint" i18n="@@transactions.filter.month.rangeHint">
+        Showing the date range. Pick a month to go back to it.
+      </p>
+      <button matButton type="button" class="use-month" (click)="selectMonth(month())">
+        <span i18n="@@transactions.filter.month.use">Show {{ month() | date: monthFormat }}</span>
+      </button>
+    }
+  </div>
+
+  <mat-form-field class="search" subscriptSizing="dynamic">
+    <mat-label i18n="@@transactions.filter.search">Search merchant or note</mat-label>
+    <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+    <input matInput type="search" autocomplete="off" [formControl]="form.controls.q" />
+    @if (form.controls.q.value) {
+      <button
+        matIconSuffix
+        mat-icon-button
+        type="button"
+        aria-label="Clear search"
+        i18n-aria-label="@@transactions.filter.search.clear"
+        (click)="clearSearch()"
+      >
+        <mat-icon aria-hidden="true">close</mat-icon>
+      </button>
+    }
+    @if (form.controls.q.hasError('maxlength')) {
+      <mat-error i18n="@@transactions.filter.search.tooLong"
+        >Search can be at most {{ searchMaxLength }} characters.</mat-error
+      >
+    }
+  </mat-form-field>
+
+  @if (!isDesktop()) {
+    <button
+      matButton="outlined"
+      type="button"
+      class="filters-toggle"
+      aria-controls="transaction-filters"
+      [attr.aria-expanded]="expanded()"
+      (click)="expanded.set(!expanded())"
+    >
+      <mat-icon aria-hidden="true">tune</mat-icon>
+      <span i18n="@@transactions.filter.toggle">Filters</span>
+    </button>
+  }
+</div>
+
+<div
+  id="transaction-filters"
+  class="filters"
+  [formGroup]="form"
+  [hidden]="!isDesktop() && !expanded()"
+>
+  <mat-form-field class="range" formGroupName="range" subscriptSizing="dynamic">
+    <mat-label i18n="@@transactions.filter.dateRange">Date range</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input
+        matStartDate
+        formControlName="start"
+        placeholder="Start date"
+        i18n-placeholder="@@transactions.filter.dateRange.start"
+      />
+      <input
+        matEndDate
+        formControlName="end"
+        placeholder="End date"
+        i18n-placeholder="@@transactions.filter.dateRange.end"
+      />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-date-range-picker #picker />
+    @if (form.controls.range.controls.end.hasError('matEndDateInvalid')) {
+      <mat-error i18n="@@transactions.filter.dateRange.reversed"
+        >End date can't be before start date.</mat-error
+      >
+    } @else if (form.controls.range.invalid) {
+      <mat-error i18n="@@transactions.filter.dateRange.invalid">Enter a valid date.</mat-error>
+    }
+  </mat-form-field>
+
+  <app-account-filter-select [control]="form.controls.accountId" [accounts]="accounts()" />
+
+  <app-category-filter-select [control]="form.controls.categoryIds" [categories]="categories()" />
+
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label i18n="@@transactions.filter.type">Type</mat-label>
+    <mat-select formControlName="type">
+      <mat-option value="" i18n="@@transactions.filter.type.all">All types</mat-option>
+      @for (type of types; track type) {
+        <mat-option [value]="type">{{ typeLabels[type] }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <app-amount-range [group]="form.controls.amount" />
+</div>

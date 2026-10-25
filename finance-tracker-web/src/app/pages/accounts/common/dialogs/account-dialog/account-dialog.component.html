@@ -1,0 +1,122 @@
+<h2 mat-dialog-title>
+  @if (account) {
+    <ng-container i18n="@@accounts.dialog.editTitle">Edit account</ng-container>
+  } @else {
+    <ng-container i18n="@@accounts.dialog.addTitle">Add account</ng-container>
+  }
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <mat-dialog-content>
+    @if (error(); as formError) {
+      <p class="form-error" role="alert">
+        @if (formError === 'generic') {
+          <ng-container i18n="@@common.error.generic"
+            >Something went wrong. Try again.</ng-container
+          >
+        } @else {
+          {{ formError.message }}
+        }
+      </p>
+    }
+
+    <mat-form-field>
+      <mat-label i18n="@@accounts.field.name">Name</mat-label>
+      <input matInput formControlName="name" autocomplete="off" required />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error i18n="@@accounts.field.name.required">Enter an account name.</mat-error>
+      } @else if (form.controls.name.hasError('maxlength')) {
+        <mat-error i18n="@@accounts.field.name.tooLong"
+          >Name can be at most {{ nameMaxLength }} characters.</mat-error
+        >
+      } @else if (form.controls.name.hasError('duplicate')) {
+        <mat-error i18n="@@accounts.field.name.duplicate"
+          >An account with this name already exists.</mat-error
+        >
+      } @else if (form.controls.name.hasError('server')) {
+        <mat-error>{{ form.controls.name.getError('server') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="type-field">
+      <span id="account-type-label" class="field-label" i18n="@@accounts.field.type">Type</span>
+      <mat-button-toggle-group
+        formControlName="type"
+        aria-labelledby="account-type-label"
+        [attr.aria-describedby]="
+          form.controls.type.invalid && form.controls.type.touched ? 'account-type-error' : null
+        "
+        hideSingleSelectionIndicator
+      >
+        @for (option of typeOptions; track option.type) {
+          <mat-button-toggle [value]="option.type">
+            <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
+            {{ option.label }}
+          </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+      @if (form.controls.type.invalid && form.controls.type.touched) {
+        <p id="account-type-error" class="field-error">
+          @if (form.controls.type.hasError('server')) {
+            {{ form.controls.type.getError('server') }}
+          } @else {
+            <ng-container i18n="@@accounts.field.type.required"
+              >Choose an account type.</ng-container
+            >
+          }
+        </p>
+      }
+    </div>
+
+    <mat-form-field>
+      <mat-label i18n="@@accounts.field.currency">Currency</mat-label>
+      <input matInput formControlName="currency" />
+      <mat-hint i18n="@@accounts.field.currency.hint">More currencies coming soon</mat-hint>
+    </mat-form-field>
+
+    <!-- Dynamic subscript: the hint is long and wraps on narrow screens. -->
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label i18n="@@accounts.field.initialBalance">Starting balance</mat-label>
+      <input
+        matInput
+        formControlName="initialBalance"
+        inputmode="decimal"
+        autocomplete="off"
+        placeholder="0,00"
+      />
+      <span matTextSuffix>&nbsp;zł</span>
+      <mat-hint i18n="@@accounts.field.initialBalance.hint"
+        >The balance on the day you start tracking. Check your bank app.</mat-hint
+      >
+      @if (form.controls.initialBalance.hasError('amountInvalid')) {
+        <mat-error i18n="@@common.amount.invalid">Enter a valid amount.</mat-error>
+      } @else if (form.controls.initialBalance.hasError('amountDecimals')) {
+        <mat-error i18n="@@common.amount.tooManyDecimals"
+          >Enter an amount with at most 2 decimal places.</mat-error
+        >
+      } @else if (form.controls.initialBalance.hasError('amountTooLarge')) {
+        <mat-error i18n="@@common.amount.tooLarge">Enter a smaller amount.</mat-error>
+      } @else if (form.controls.initialBalance.hasError('server')) {
+        <mat-error>{{ form.controls.initialBalance.getError('server') }}</mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button matButton type="button" mat-dialog-close i18n="@@common.action.cancel">Cancel</button>
+    <button
+      matButton="filled"
+      type="submit"
+      class="submit"
+      disabledInteractive
+      [disabled]="submitting()"
+    >
+      @if (submitting()) {
+        <mat-progress-spinner mode="indeterminate" diameter="20" aria-hidden="true" />
+        <span i18n="@@common.action.saving">Saving…</span>
+      } @else {
+        <span i18n="@@common.action.save">Save</span>
+      }
+    </button>
+  </mat-dialog-actions>
+</form>

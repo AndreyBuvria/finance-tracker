@@ -1,0 +1,39 @@
+form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-error {
+  margin: 0;
+  color: var(--mat-sys-error);
+}
+
+.hint {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-medium);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.skeleton {
+  display: grid;
+  gap: 16px;
+
+  .chips {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.chip-bone {
+  width: 112px;
+  height: 32px;
+}
+
+.field-bone {
+  height: 56px;
+}

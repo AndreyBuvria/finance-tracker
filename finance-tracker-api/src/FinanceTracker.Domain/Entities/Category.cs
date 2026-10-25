@@ -13,8 +13,11 @@ public sealed class Category
     public const int ColorLength = 7;
     public const int SystemKeyMaxLength = 50;
 
-    /// <summary>System key of the fallback category that can't be hidden or merged.</summary>
+    /// <summary>System key of the expense fallback ("Other"): imports put uncategorized expenses here.</summary>
     public const string OtherSystemKey = "other";
+
+    /// <summary>System key of the income fallback ("Other income"): imports put uncategorized income here.</summary>
+    public const string OtherIncomeSystemKey = "other_income";
 
     public Guid Id { get; set; }
 
@@ -34,4 +37,11 @@ public sealed class Category
     public string? SystemKey { get; set; }
 
     public bool IsArchived { get; set; }
+
+    /// <summary>
+    /// Whether the system key marks a fallback category ("Other" / "Other income"). Fallbacks must always be
+    /// active, so they can't be hidden, merged away or deleted.
+    /// </summary>
+    public static bool IsFallbackKey(string? systemKey) =>
+        systemKey is OtherSystemKey or OtherIncomeSystemKey;
 }

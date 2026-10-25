@@ -1,0 +1,37 @@
+mat-dialog-content {
+  display: grid;
+  gap: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-error {
+  margin: 0;
+  color: var(--mat-sys-error);
+}
+
+.question {
+  min-height: 1.5em;
+  margin: 0;
+  font: var(--mat-sys-body-large);
+}
+
+.option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  border-radius: 50%;
+  vertical-align: middle;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    font-size: 18px;
+  }
+}

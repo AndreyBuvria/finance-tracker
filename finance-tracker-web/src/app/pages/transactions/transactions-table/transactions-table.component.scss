@@ -1,0 +1,76 @@
+:host {
+  display: block;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  background: transparent;
+}
+
+.select-cell {
+  width: 48px;
+  padding-inline-end: 0;
+}
+
+.date-cell {
+  white-space: nowrap;
+}
+
+.merchant-cell {
+  max-width: 280px;
+}
+
+.row-link {
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.row-link,
+.note {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.amount-cell {
+  text-align: end;
+}
+
+.transfer-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--app-color-transfer);
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+tr.selected {
+  background: var(--mat-sys-secondary-container);
+}
+
+tr.clickable {
+  cursor: pointer;
+
+  &:hover {
+    background: var(--mat-sys-surface-container-low);
+  }
+}

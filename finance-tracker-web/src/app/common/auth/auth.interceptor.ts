@@ -12,7 +12,8 @@ import { TokenStorageService } from './token-storage.service';
  * For API requests (except the auth endpoints):
  * - adds `Authorization: Bearer <access token>`; refreshes first if the access token is missing
  *   or expired but a refresh token exists (e.g. after a reload);
- * - on 401, refreshes once and retries; concurrent requests share one refresh;
+ * - on 401, refreshes once and retries; concurrent requests share one refresh, and tabs refresh
+ *   one at a time (see `AuthService.refresh`);
  * - if the server rejects the refresh, the session is gone: redirect to
  *   `/auth/login?returnUrl=<current page>`. Network errors/5xx during refresh keep the session
  *   (the user is never thrown out because the API is briefly unreachable).

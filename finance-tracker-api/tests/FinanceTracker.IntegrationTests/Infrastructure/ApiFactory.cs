@@ -12,8 +12,9 @@ namespace FinanceTracker.IntegrationTests.Infrastructure;
 /// <summary>
 /// Hosts the API in memory against a throwaway PostgreSQL container, with a fake clock so "now"
 /// is deterministic and token expiry can be tested by advancing <see cref="Time"/>.
+/// The default clock is 21 Oct 2026 10:00 UTC (12:00 in Warsaw, same calendar day).
 /// </summary>
-public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     /// <summary>Test-only signing key; it never leaves the test process.</summary>
     private const string _testSigningKey = "integration-tests-only-jwt-signing-key-0123456789";
@@ -22,7 +23,14 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         .WithDatabase("finance_tracker_tests")
         .Build();
 
-    public FakeTimeProvider Time { get; } = new(new DateTimeOffset(2026, 10, 21, 10, 0, 0, TimeSpan.Zero));
+    public ApiFactory()
+        : this(new DateTimeOffset(2026, 10, 21, 10, 0, 0, TimeSpan.Zero))
+    {
+    }
+
+    protected ApiFactory(DateTimeOffset utcNow) => Time = new FakeTimeProvider(utcNow);
+
+    public FakeTimeProvider Time { get; }
 
     public async ValueTask InitializeAsync() => await _postgres.StartAsync();
 

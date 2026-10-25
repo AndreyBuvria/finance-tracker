@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>
+  @if (category) {
+    <ng-container i18n="@@settings.categories.dialog.editTitle">Edit category</ng-container>
+  } @else {
+    <ng-container i18n="@@settings.categories.dialog.addTitle">Add category</ng-container>
+  }
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <mat-dialog-content>
+    @if (error()) {
+      <p class="form-error" role="alert">
+        <ng-container i18n="@@common.error.generic">Something went wrong. Try again.</ng-container>
+      </p>
+    }
+
+    <mat-form-field>
+      <mat-label i18n="@@settings.categories.field.name">Name</mat-label>
+      <input matInput formControlName="name" autocomplete="off" required />
+      @let name = form.controls.name;
+      @if (name.hasError('required')) {
+        <mat-error i18n="@@settings.categories.field.name.required"
+          >Enter a category name.</mat-error
+        >
+      } @else if (name.hasError('maxlength')) {
+        <mat-error i18n="@@settings.categories.field.name.tooLong"
+          >Name can be at most {{ nameMaxLength }} characters.</mat-error
+        >
+      } @else if (name.hasError('server')) {
+        <mat-error>{{ name.getError('server') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <app-category-type-field [control]="form.controls.type" [lock]="typeLock" />
+
+    <app-icon-picker
+      [class.invalid]="!!pickerErrors().icon"
+      [control]="form.controls.icon"
+      [describedBy]="pickerErrors().icon ? 'category-icon-error' : null"
+    />
+    @if (pickerErrors().icon; as iconError) {
+      <p id="category-icon-error" class="field-error">
+        @if (iconError === 'required') {
+          <ng-container i18n="@@settings.categories.field.icon.required"
+            >Choose an icon.</ng-container
+          >
+        } @else {
+          {{ iconError }}
+        }
+      </p>
+    }
+
+    <app-color-picker
+      [class.invalid]="!!pickerErrors().color"
+      [control]="form.controls.color"
+      [describedBy]="pickerErrors().color ? 'category-color-error' : null"
+    />
+    @if (pickerErrors().color; as colorError) {
+      <p id="category-color-error" class="field-error">
+        @if (colorError === 'required') {
+          <ng-container i18n="@@settings.categories.field.color.required"
+            >Choose a color.</ng-container
+          >
+        } @else {
+          {{ colorError }}
+        }
+      </p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button matButton type="button" mat-dialog-close>
+      <span i18n="@@common.action.cancel">Cancel</span>
+    </button>
+    <button
+      matButton="filled"
+      type="submit"
+      class="submit"
+      disabledInteractive
+      [disabled]="submitting()"
+    >
+      @if (submitting()) {
+        <mat-progress-spinner mode="indeterminate" diameter="20" aria-hidden="true" />
+        <span i18n="@@common.action.saving">Saving…</span>
+      } @else {
+        <span i18n="@@common.action.save">Save</span>
+      }
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -10,6 +10,16 @@ public interface IRefreshTokenRepository
     /// <summary>Finds a token by its hash (read-only, not tracked).</summary>
     Task<RefreshToken?> FindByHashAsync(string tokenHash, CancellationToken cancellationToken);
 
+    /// <summary>Finds a token by its ID (read-only, not tracked).</summary>
+    Task<RefreshToken?> FindByIdAsync(Guid tokenId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Takes a database lock, held until the current transaction ends, that serializes refresh-token
+    /// rotation and reuse revocation for one user across all API instances. Must be called inside a
+    /// transaction (<see cref="IUnitOfWork.BeginTransactionAsync"/>).
+    /// </summary>
+    Task LockUserTokensAsync(Guid userId, CancellationToken cancellationToken);
+
     /// <summary>
     /// Revokes the token only if it is still unrevoked, optionally linking its replacement.
     /// Returns false when another request revoked it first.

@@ -1,4 +1,4 @@
-import { addMonths, startOfMonth } from './month.utils';
+import { addMonths, endOfMonth, startOfMonth } from './month.utils';
 
 describe('month utils', () => {
   it('returns the first day of the month at midnight', () => {
@@ -13,5 +13,11 @@ describe('month utils', () => {
 
   it('never overflows into the following month from a long month', () => {
     expect(addMonths(new Date(2026, 0, 31), 1)).toEqual(new Date(2026, 1, 1));
+  });
+
+  it('returns the last day of the month, also in February and December', () => {
+    expect(endOfMonth(new Date(2026, 9, 19))).toEqual(new Date(2026, 9, 31));
+    expect(endOfMonth(new Date(2028, 1, 1))).toEqual(new Date(2028, 1, 29));
+    expect(endOfMonth(new Date(2026, 11, 5))).toEqual(new Date(2026, 11, 31));
   });
 });

@@ -1,0 +1,53 @@
+<fieldset class="account" [formGroup]="group()">
+  <legend>
+    <mat-icon aria-hidden="true">{{ suggestion().icon }}</mat-icon>
+    {{ suggestion().label }}
+  </legend>
+
+  <mat-form-field>
+    <mat-label i18n="@@accounts.field.name">Name</mat-label>
+    <input matInput formControlName="name" autocomplete="off" required />
+    @let name = errors().name;
+    @if (name['required']) {
+      <mat-error i18n="@@accounts.field.name.required">Enter an account name.</mat-error>
+    } @else if (name['maxlength']) {
+      <mat-error i18n="@@accounts.field.name.tooLong"
+        >Name can be at most {{ nameMaxLength }} characters.</mat-error
+      >
+    } @else if (name['duplicate']) {
+      <mat-error i18n="@@accounts.field.name.duplicate"
+        >An account with this name already exists.</mat-error
+      >
+    } @else if (name['server']) {
+      <mat-error>{{ name['server'] }}</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Dynamic subscript: the hint is long and wraps on narrow screens. -->
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label i18n="@@onboarding.accounts.balance">Current balance</mat-label>
+    <input
+      matInput
+      formControlName="initialBalance"
+      inputmode="decimal"
+      autocomplete="off"
+      placeholder="0,00"
+    />
+    <span matTextSuffix>&nbsp;zł</span>
+    <mat-hint i18n="@@accounts.field.initialBalance.hint"
+      >The balance on the day you start tracking. Check your bank app.</mat-hint
+    >
+    @let balance = errors().balance;
+    @if (balance['amountInvalid']) {
+      <mat-error i18n="@@common.amount.invalid">Enter a valid amount.</mat-error>
+    } @else if (balance['amountDecimals']) {
+      <mat-error i18n="@@common.amount.tooManyDecimals"
+        >Enter an amount with at most 2 decimal places.</mat-error
+      >
+    } @else if (balance['amountTooLarge']) {
+      <mat-error i18n="@@common.amount.tooLarge">Enter a smaller amount.</mat-error>
+    } @else if (balance['server']) {
+      <mat-error>{{ balance['server'] }}</mat-error>
+    }
+  </mat-form-field>
+</fieldset>

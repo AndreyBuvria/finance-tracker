@@ -1,12 +1,17 @@
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ClockService } from '@common/time/clock.service';
 import { MonthSelectComponent } from '@common/date/month-select/month-select.component';
 import { startOfMonth } from '@common/date/month.utils';
+import { AppRoutesEnum } from '@common/routing/app-routes.enum';
+import { ADD_INTENT_PARAM, ADD_INTENT_VALUE } from '@common/routing/route-intents.constants';
+import { registerHeaderActions } from '@infrastructure/layout/header-actions/header-actions.service';
 
 /**
  * Dashboard placeholder (DESIGN.md "APP SHELL"): month selector and an empty-state card.
- * The full dashboard is Phase 2.
+ * The full dashboard is Phase 2. Its primary "Add" action (shortcut `N`) opens Quick add on the
+ * Transactions page (`/transactions?add=1`, FEATURES.md F3).
  */
 @Component({
   selector: 'app-dashboard',
@@ -55,5 +60,24 @@ export class DashboardComponent {
   private readonly clock = inject(ClockService);
 
   /** First day of the selected month; defaults to the current month. */
-  readonly month = signal(startOfMonth(this.clock.today()));
+  readonly month = signal(startOfMonth(this.clock.businessToday()));
+
+  private readonly router = inject(Router);
+
+  constructor() {
+    registerHeaderActions([
+      {
+        id: 'add-transaction',
+        label: $localize`:@@dashboard.action.add:Add`,
+        accessibleLabel: $localize`:@@dashboard.action.add.label:Add transaction`,
+        icon: 'add',
+        shortcut: 'N',
+        primary: true,
+        handler: () =>
+          void this.router.navigate([AppRoutesEnum.Transactions], {
+            queryParams: { [ADD_INTENT_PARAM]: ADD_INTENT_VALUE },
+          }),
+      },
+    ]);
+  }
 }

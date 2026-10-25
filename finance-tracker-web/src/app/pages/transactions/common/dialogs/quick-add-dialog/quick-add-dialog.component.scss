@@ -1,0 +1,63 @@
+// A flex column filling the dialog, so on the mobile full-screen sheet the content scrolls and the
+// actions stay pinned to the bottom (also with the on-screen keyboard open).
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline-end: 12px;
+}
+
+mat-dialog-content {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 16px;
+  min-height: 0;
+  overflow: auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.type {
+  width: 100%;
+
+  mat-button-toggle {
+    flex: 1;
+  }
+}
+
+.amount {
+  font: var(--mat-sys-headline-small);
+}
+
+.form-error {
+  margin: 0;
+  color: var(--mat-sys-error);
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.delete {
+  margin-inline-end: auto;
+  --mat-button-text-label-text-color: var(--mat-sys-error);
+}

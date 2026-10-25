@@ -1,0 +1,23 @@
+// Account card grid (DESIGN.md "Accounts"): 1 column on mobile, 2 on tablets, 3 on desktop.
+// Shared by the page, the archived section and the loading skeleton.
+.account-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+// `display: grid` would override the `hidden` attribute (collapsed archived section).
+.account-grid[hidden] {
+  display: none;
+}

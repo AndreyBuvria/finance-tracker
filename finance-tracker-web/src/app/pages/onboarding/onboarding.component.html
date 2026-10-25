@@ -1,0 +1,67 @@
+<main class="onboarding">
+  <div class="top-bar">
+    <span class="app-name" i18n="@@app.name">Finance Tracker</span>
+    <div class="top-actions">
+      @if (step() === 2) {
+        <button matButton type="button" class="skip" (click)="goTo(3)">
+          <span i18n="@@onboarding.action.skip">Skip</span>
+        </button>
+      }
+      <button
+        type="button"
+        class="logout"
+        [attr.aria-disabled]="loggingOut() || null"
+        (click)="logout()"
+      >
+        <span i18n="@@onboarding.action.logout">Log out</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="progress">
+    <ol class="dots" aria-hidden="true">
+      @for (n of stepNumbers; track n) {
+        <li class="dot" [class.done]="n < step()" [class.current]="n === step()"></li>
+      }
+    </ol>
+    <p class="step-count" i18n="@@onboarding.progress">Step {{ step() }} of {{ stepCount }}</p>
+  </div>
+
+  <h1 #heading id="onboarding-heading" tabindex="-1">
+    @switch (step()) {
+      @case (1) {
+        <ng-container i18n="@@onboarding.accounts.title"
+          >Where do you keep your money?</ng-container
+        >
+      }
+      @case (2) {
+        <ng-container i18n="@@onboarding.budget.title">Set a monthly budget</ng-container>
+      }
+      @case (3) {
+        <ng-container i18n="@@onboarding.spending.title">Add your spending</ng-container>
+      }
+    }
+  </h1>
+
+  @switch (step()) {
+    @case (1) {
+      <app-accounts-step
+        labelledBy="onboarding-heading"
+        [notice]="accountsNotice()"
+        (continued)="accountsSaved()"
+      />
+    }
+    @case (2) {
+      <app-budget-step (continued)="goTo(3)" (back)="goTo(1)" />
+    }
+    @case (3) {
+      <app-spending-step
+        [busy]="completing()"
+        [error]="completeFailed()"
+        (addManually)="finish('addTransaction')"
+        (later)="finish('dashboard')"
+        (back)="goTo(2)"
+      />
+    }
+  }
+</main>

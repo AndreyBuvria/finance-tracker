@@ -6,8 +6,10 @@
   [homePath]="homePath()"
   [settingsPath]="settingsPath()"
   [userName]="userName()"
-  [showAddButton]="isDesktop()"
-  (addRequested)="addRequested.emit()"
+  [actions]="topBarActions()"
+  [actionStyle]="isDesktop() ? 'full' : 'icon'"
+  [showShortcuts]="shortcutsEnabled()"
+  (actionTriggered)="run($event)"
   (logoutRequested)="logoutRequested.emit()"
 />
 
@@ -21,15 +23,16 @@
 </div>
 
 @if (!isDesktop()) {
-  <button
-    mat-fab
-    type="button"
-    class="fab"
-    aria-label="Add transaction"
-    i18n-aria-label="@@shell.fab.label"
-    (click)="addRequested.emit()"
-  >
-    <mat-icon aria-hidden="true">add</mat-icon>
-  </button>
+  @if (fabAction(); as action) {
+    <button
+      mat-fab
+      type="button"
+      class="fab"
+      [attr.aria-label]="action.accessibleLabel ?? action.label"
+      (click)="run(action)"
+    >
+      <mat-icon aria-hidden="true">{{ action.icon }}</mat-icon>
+    </button>
+  }
   <app-navigation variant="bottom" [items]="navItems()" />
 }

@@ -1,0 +1,82 @@
+<!-- Loading first: while a retry reloads, the resource still reports the previous error. -->
+@if (accounts.existing.isLoading()) {
+  <div role="status">
+    <span class="visually-hidden" i18n="@@accounts.loading">Loading accounts…</span>
+  </div>
+  <div class="skeleton" aria-hidden="true">
+    <div class="chips">
+      @for (bone of [1, 2, 3]; track bone) {
+        <div class="skeleton-bone chip-bone"></div>
+      }
+    </div>
+    <div class="skeleton-bone field-bone"></div>
+  </div>
+} @else if (accounts.existing.error()) {
+  <app-load-error [errorId]="loadErrorId()" (retry)="accounts.existing.reload()" />
+} @else {
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    @if (notice(); as message) {
+      <p class="form-error" role="alert">{{ message }}</p>
+    }
+    @if (error(); as formError) {
+      <p class="form-error" role="alert">
+        @if (formError === 'generic') {
+          <ng-container i18n="@@common.error.generic"
+            >Something went wrong. Try again.</ng-container
+          >
+        } @else {
+          {{ formError.message }}
+        }
+      </p>
+    }
+
+    <mat-chip-listbox
+      formControlName="selected"
+      multiple
+      required
+      class="suggestions"
+      [attr.aria-labelledby]="labelledBy()"
+      [attr.aria-describedby]="noneSelected() ? 'accounts-required' : null"
+    >
+      @for (suggestion of accounts.suggestions; track suggestion.key) {
+        <mat-chip-option [value]="suggestion.key">
+          <mat-icon matChipAvatar aria-hidden="true">{{ suggestion.icon }}</mat-icon>
+          {{ suggestion.label }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
+
+    @for (suggestion of selectedSuggestions(); track suggestion.key) {
+      <app-account-suggestion-fields
+        [suggestion]="suggestion"
+        [group]="form.controls[suggestion.key]"
+      />
+    }
+
+    @if (noneSelected()) {
+      <p id="accounts-required" class="hint">
+        <ng-container i18n="@@onboarding.accounts.required"
+          >Choose at least one to continue.</ng-container
+        >
+      </p>
+    }
+
+    <div class="actions">
+      <button
+        matButton="filled"
+        type="submit"
+        class="continue"
+        disabledInteractive
+        [disabled]="saving() || noneSelected()"
+        [attr.aria-describedby]="noneSelected() ? 'accounts-required' : null"
+      >
+        @if (saving()) {
+          <mat-progress-spinner mode="indeterminate" diameter="20" aria-hidden="true" />
+          <span i18n="@@common.action.saving">Saving…</span>
+        } @else {
+          <span i18n="@@onboarding.action.continue">Continue</span>
+        }
+      </button>
+    </div>
+  </form>
+}

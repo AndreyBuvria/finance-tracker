@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
 import { authGuard, guestGuard } from '@common/auth/auth.guard';
+import { onboardingCompletedGuard, onboardingPendingGuard } from '@common/auth/onboarding.guard';
 import { AppRoutesEnum } from '@common/routing/app-routes.enum';
 import { routeSegment } from '@common/routing/app-routes.utils';
 
 /**
  * Every page is lazy-loaded. Authenticated pages share the app layout and require a session;
- * auth pages redirect to the dashboard when already logged in.
+ * auth pages redirect to the dashboard when already logged in. Until onboarding is finished, the
+ * app pages send the user to onboarding; afterwards onboarding sends them to the dashboard.
  */
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: routeSegment(AppRoutesEnum.Dashboard) },
@@ -16,13 +18,13 @@ export const routes: Routes = [
   },
   {
     path: routeSegment(AppRoutesEnum.Onboarding),
-    canActivate: [authGuard],
+    canActivate: [authGuard, onboardingPendingGuard],
     loadChildren: () =>
       import('@pages/onboarding/onboarding.routes').then((m) => m.ONBOARDING_ROUTES),
   },
   {
     path: '',
-    canActivate: [authGuard],
+    canActivate: [authGuard, onboardingCompletedGuard],
     canActivateChild: [authGuard],
     loadComponent: () =>
       import('./authenticated-layout.component').then((m) => m.AuthenticatedLayoutComponent),

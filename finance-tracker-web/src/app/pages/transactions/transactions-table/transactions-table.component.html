@@ -1,0 +1,154 @@
+<table
+  mat-table
+  [dataSource]="rows()"
+  [trackBy]="trackById"
+  matSort
+  matSortDisableClear
+  [matSortActive]="activeSort().field"
+  [matSortDirection]="activeSort().direction"
+  (matSortChange)="onSort($event)"
+>
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef class="select-cell">
+      <mat-checkbox
+        aria-label="Select all transactions on this page"
+        i18n-aria-label="@@transactions.select.all"
+        [checked]="allSelected()"
+        [indeterminate]="someSelected()"
+        (change)="allToggled.emit()"
+      />
+    </th>
+    <td mat-cell *matCellDef="let value" class="select-cell">
+      @let t = row(value);
+      <mat-checkbox
+        [aria-label]="selectLabel(t)"
+        [checked]="selectedIds().has(t.id)"
+        (change)="toggled.emit(t.id)"
+      />
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      [mat-sort-header]="fields.Date"
+      start="desc"
+      sortActionDescription="Sort by date"
+      i18n-sortActionDescription="@@transactions.sort.date"
+      i18n="@@transactions.column.date"
+    >
+      Date
+    </th>
+    <td mat-cell *matCellDef="let value" class="date-cell">{{ row(value).date | date }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="merchant">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      [mat-sort-header]="fields.Merchant"
+      sortActionDescription="Sort by merchant"
+      i18n-sortActionDescription="@@transactions.sort.merchant"
+      i18n="@@transactions.column.merchant"
+    >
+      Merchant/Note
+    </th>
+    <td mat-cell *matCellDef="let value" class="merchant-cell">
+      @let t = row(value);
+      <button
+        type="button"
+        class="row-link"
+        [attr.aria-label]="editLabel(t)"
+        (click)="editRequested.emit(t)"
+      >
+        {{ title(t) }}
+      </button>
+      @if (t.merchant && t.note) {
+        <span class="note">{{ t.note }}</span>
+      }
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="category">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      [mat-sort-header]="fields.Category"
+      sortActionDescription="Sort by category"
+      i18n-sortActionDescription="@@transactions.sort.category"
+      i18n="@@transactions.column.category"
+    >
+      Category
+    </th>
+    <td mat-cell *matCellDef="let value">
+      @let t = row(value);
+      @if (t.category; as category) {
+        <app-category-chip
+          [category]="category"
+          [groups]="choices()[t.type] ?? []"
+          [busy]="savingIds().has(t.id)"
+          [saved]="savedId() === t.id"
+          [needsCategory]="t.needsCategory"
+          (categoryChosen)="changeCategory(t, $event)"
+        />
+      } @else {
+        <span class="transfer-label">
+          <mat-icon aria-hidden="true">sync_alt</mat-icon>
+          <span i18n="@@transactions.type.transfer">Transfer</span>
+        </span>
+      }
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="account">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      [mat-sort-header]="fields.Account"
+      sortActionDescription="Sort by account"
+      i18n-sortActionDescription="@@transactions.sort.account"
+      i18n="@@transactions.column.account"
+    >
+      Account
+    </th>
+    <td mat-cell *matCellDef="let value">
+      <app-account-label [transaction]="row(value)" />
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="amount">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      [mat-sort-header]="fields.Amount"
+      start="desc"
+      arrowPosition="before"
+      sortActionDescription="Sort by amount"
+      i18n-sortActionDescription="@@transactions.sort.amount"
+      class="amount-cell"
+      i18n="@@transactions.column.amount"
+    >
+      Amount
+    </th>
+    <td mat-cell *matCellDef="let value" class="amount-cell">
+      <app-transaction-amount [type]="row(value).type" [amount]="row(value).amount" />
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="source">
+    <th mat-header-cell *matHeaderCellDef i18n="@@transactions.column.source">Source</th>
+    <td mat-cell *matCellDef="let value">
+      <app-source-badge [source]="row(value).source" [importInfo]="row(value).import" />
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr
+    mat-row
+    *matRowDef="let value; columns: columns"
+    class="clickable"
+    [class.selected]="selectedIds().has(row(value).id)"
+    (click)="onRowClick($event, row(value))"
+  ></tr>
+</table>

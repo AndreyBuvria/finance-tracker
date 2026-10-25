@@ -81,8 +81,59 @@ describe('RegisterComponent', () => {
     expect(errors).toEqual([
       'Enter your name.',
       'Enter a valid email address.',
-      "Your password doesn't meet all the requirements.",
+      'Password must be at least 8 characters.',
     ]);
+  });
+
+  it('uses the API wording for empty fields', async () => {
+    const { el, submit } = await setup();
+    await submit();
+    expect(auth.register).not.toHaveBeenCalled();
+    const errors = Array.from(el.querySelectorAll('mat-error')).map((e) => e.textContent?.trim());
+    expect(errors).toEqual(['Enter your name.', 'Enter your email.', 'Enter your password.']);
+  });
+
+  it('asks for a letter and an ASCII digit in the password', async () => {
+    const { el, type, submit } = await setup();
+    await type('displayName', 'Kasia');
+    await type('email', 'kasia@example.com');
+    await type('password', 'kasiakasia\u0663');
+    await submit();
+    expect(auth.register).not.toHaveBeenCalled();
+    expect(el.querySelector('mat-error')?.textContent?.trim()).toBe(
+      'Password must include at least one letter and one number.',
+    );
+  });
+
+  it('enforces the API field limits without truncating input', async () => {
+    const { el, input, type, submit } = await setup();
+    const longName = 'K'.repeat(101);
+    const longEmail = `${'k'.repeat(245)}@example.com`; // 257 characters
+    const longPassword = `kasia2026${'x'.repeat(120)}`; // 129 characters
+    await type('displayName', longName);
+    await type('email', longEmail);
+    await type('password', longPassword);
+    expect(input('displayName').value).toBe(longName);
+    expect(input('displayName').hasAttribute('maxlength')).toBe(false);
+    expect(input('email').hasAttribute('maxlength')).toBe(false);
+    expect(input('password').hasAttribute('maxlength')).toBe(false);
+    await submit();
+    expect(auth.register).not.toHaveBeenCalled();
+    const errors = Array.from(el.querySelectorAll('mat-error')).map((e) => e.textContent?.trim());
+    expect(errors).toEqual([
+      'Name can be at most 100 characters.',
+      'Email can be at most 256 characters.',
+      'Password can be at most 128 characters.',
+    ]);
+  });
+
+  it('accepts a name and password exactly at the limits (name measured without surrounding spaces)', async () => {
+    const { type, submit } = await setup();
+    await type('displayName', ` ${'K'.repeat(100)} `);
+    await type('email', 'kasia@example.com');
+    await type('password', `kasia2026${'x'.repeat(119)}`); // 128 characters
+    await submit();
+    expect(auth.register).toHaveBeenCalledTimes(1);
   });
 
   it('does not accept a whitespace-only display name', async () => {
@@ -104,7 +155,7 @@ describe('RegisterComponent', () => {
     expect(el.querySelector('mat-error')?.textContent?.trim()).toBe('Enter your name.');
   });
 
-  it('registers with a trimmed name, shows a loading state and goes to the dashboard', async () => {
+  it('registers with a trimmed name, shows a loading state and starts onboarding', async () => {
     const { el, fillValid, submit, navigate, harness } = await setup();
     await fillValid();
     await submit();
@@ -119,7 +170,7 @@ describe('RegisterComponent', () => {
 
     register$.next();
     await harness.fixture.whenStable();
-    expect(navigate).toHaveBeenCalledWith('/dashboard');
+    expect(navigate).toHaveBeenCalledWith('/onboarding');
   });
 
   it('keeps focus on the submit button while sending and ignores a second submit', async () => {
@@ -161,7 +212,7 @@ describe('RegisterComponent', () => {
     register$.error(
       new HttpErrorResponse({
         status: 400,
-        error: { errors: { Email: ['Email is not allowed.'] } },
+        error: { errors: { email: ['Email is not allowed.'] } },
       }),
     );
     await harness.fixture.whenStable();

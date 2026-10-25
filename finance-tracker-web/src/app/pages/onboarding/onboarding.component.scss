@@ -1,0 +1,100 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  background: var(--mat-sys-surface);
+}
+
+.onboarding {
+  display: grid;
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// A small, quiet text link (FEATURES.md F1): it ends the session, so it is a button.
+.logout {
+  min-height: 48px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover:not([aria-disabled='true']) {
+    color: var(--mat-sys-on-surface);
+  }
+}
+
+.app-name {
+  color: var(--mat-sys-primary);
+  font: var(--mat-sys-title-medium);
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Done and current dots differ by shape too (wider current dot), not by color only.
+.dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--mat-sys-outline);
+  border-radius: 5px;
+
+  &.done {
+    border-color: var(--mat-sys-primary);
+    background: var(--mat-sys-primary);
+  }
+
+  &.current {
+    width: 28px;
+    border-color: var(--mat-sys-primary);
+    background: var(--mat-sys-primary);
+  }
+}
+
+.step-count {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+}
+
+h1 {
+  margin: 8px 0 0;
+  font: var(--mat-sys-headline-small);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--mat-sys-primary);
+    outline-offset: 2px;
+  }
+}

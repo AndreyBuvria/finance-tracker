@@ -13,6 +13,22 @@ internal sealed class RefreshTokenRepository(AppDbContext dbContext) : IRefreshT
             .AsNoTracking()
             .SingleOrDefaultAsync(t => t.TokenHash == tokenHash, cancellationToken);
 
+    public Task<RefreshToken?> FindByIdAsync(Guid tokenId, CancellationToken cancellationToken) =>
+        dbContext.RefreshTokens
+            .AsNoTracking()
+            .SingleOrDefaultAsync(t => t.Id == tokenId, cancellationToken);
+
+    public Task LockUserTokensAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        // Transaction-scoped advisory lock keyed by the user: released automatically on commit/rollback,
+        // shared by every API instance, and it doesn't block writes to the user's row. A hash collision
+        // with another user only serializes two unrelated refreshes briefly.
+        var lockKey = $"refresh-tokens:{userId}";
+        return dbContext.Database.ExecuteSqlAsync(
+            $"SELECT pg_advisory_xact_lock(hashtextextended({lockKey}, 0))",
+            cancellationToken);
+    }
+
     public async Task<bool> TryRevokeAsync(
         Guid tokenId,
         DateTimeOffset revokedAt,

@@ -1,0 +1,64 @@
+<section class="categories" aria-labelledby="categories-heading">
+  <div class="section-head">
+    <h2 id="categories-heading" i18n="@@settings.categories.heading">Categories</h2>
+    <button matButton="tonal" type="button" class="add" (click)="actions.edit()">
+      <mat-icon aria-hidden="true">add</mat-icon>
+      <span i18n="@@settings.categories.action.add">Add category</span>
+    </button>
+  </div>
+
+  <!-- Loading first: while a retry reloads, the resource still reports the previous error. -->
+  @if (list.categories.isLoading()) {
+    <div role="status">
+      <span class="visually-hidden" i18n="@@settings.categories.loading">Loading categories…</span>
+    </div>
+    <div class="skeleton" aria-hidden="true">
+      @for (bone of [1, 2, 3, 4, 5, 6]; track bone) {
+        <div class="bone-row">
+          <div class="skeleton-bone circle"></div>
+          <div class="skeleton-bone line"></div>
+        </div>
+      }
+    </div>
+  } @else if (list.categories.error()) {
+    <app-load-error [errorId]="loadErrorId()" (retry)="list.categories.reload()" />
+  } @else {
+    @for (group of list.groups(); track group.type) {
+      <h3 class="list-heading" tabindex="-1" [id]="headingId(group.type)">
+        @if (group.type === categoryType.Expense) {
+          <ng-container i18n="@@settings.categories.expenseHeading"
+            >Expense categories</ng-container
+          >
+        } @else {
+          <ng-container i18n="@@settings.categories.incomeHeading">Income categories</ng-container>
+        }
+      </h3>
+      @if (group.categories.length > 0) {
+        <ul class="list" [attr.aria-labelledby]="headingId(group.type)">
+          @for (category of group.categories; track category.id) {
+            <li>
+              <app-category-row
+                [category]="category"
+                [busy]="actions.busy()"
+                (renameRequested)="actions.edit($event)"
+                (hideRequested)="actions.hide($event)"
+                (deleteRequested)="actions.delete($event)"
+                (mergeRequested)="actions.merge($event)"
+              />
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="empty" i18n="@@settings.categories.empty">No categories here yet.</p>
+      }
+    }
+
+    <app-hidden-categories
+      [categories]="list.hidden()"
+      [busy]="actions.busy()"
+      (renameRequested)="actions.edit($event)"
+      (restoreRequested)="actions.restore($event)"
+      (deleteRequested)="actions.delete($event)"
+    />
+  }
+</section>

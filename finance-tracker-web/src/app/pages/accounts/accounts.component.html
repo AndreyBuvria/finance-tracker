@@ -1,0 +1,42 @@
+<h1 i18n="@@accounts.page.title">Accounts</h1>
+
+@if (accounts.hasValue()) {
+  <p class="net-worth">
+    <span i18n="@@accounts.netWorth">Net worth</span>
+    <span aria-hidden="true"> · </span>
+    <strong class="amount">{{ accounts.value().netWorth | money }}</strong>
+  </p>
+
+  @if (active().length > 0) {
+    <ul class="account-grid" aria-label="Active accounts" i18n-aria-label="@@accounts.active.label">
+      @for (account of active(); track account.id) {
+        <li>
+          <app-account-card
+            [account]="account"
+            [busy]="busy()"
+            (editRequested)="openDialog($event)"
+            (archiveRequested)="archive($event)"
+          />
+        </li>
+      }
+    </ul>
+  } @else {
+    <!-- FEATURES.md F2: never empty after onboarding; just in case, offer the way out. -->
+    <button matButton="tonal" type="button" class="add-first" (click)="openDialog()">
+      <mat-icon aria-hidden="true">add</mat-icon>
+      <span i18n="@@accounts.action.add.label">Add account</span>
+    </button>
+  }
+
+  <app-archived-accounts
+    [accounts]="archived()"
+    [busy]="busy()"
+    (editRequested)="openDialog($event)"
+    (restoreRequested)="restore($event)"
+  />
+} @else if (!accounts.isLoading() && accounts.error()) {
+  <!-- Not while a retry reloads: the resource still reports the previous error then. -->
+  <app-load-error [errorId]="loadErrorId()" (retry)="accounts.reload()" />
+} @else {
+  <app-accounts-skeleton />
+}

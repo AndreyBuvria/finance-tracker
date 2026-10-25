@@ -25,7 +25,7 @@ public static class DefaultCategories
         new("subscriptions", "Subscriptions", CategoryType.Expense, "subscriptions", CategoryPalette.Indigo),
         new(Category.OtherSystemKey, "Other", CategoryType.Expense, "category", CategoryPalette.BlueGrey),
         new("salary", "Salary", CategoryType.Income, "payments", CategoryPalette.Cyan),
-        new("other_income", "Other income", CategoryType.Income, "savings", CategoryPalette.Lime),
+        new(Category.OtherIncomeSystemKey, "Other income", CategoryType.Income, "savings", CategoryPalette.Lime),
     ];
 
     /// <summary>Creates the user's own copies of all default categories.</summary>

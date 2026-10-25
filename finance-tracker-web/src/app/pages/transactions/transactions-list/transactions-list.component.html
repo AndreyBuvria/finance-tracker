@@ -1,0 +1,72 @@
+@for (group of groups(); track group.date) {
+  <section class="day">
+    @if (group.heading) {
+      @let total = dayTotal(group);
+      <h2 class="day-header">
+        <span>{{ group.date | date: dayFormat }}</span>
+        <span aria-hidden="true"> · </span>
+        <span class="day-total">{{ total.amount | money: total.kind }}</span>
+      </h2>
+    }
+    <ul class="cards">
+      @for (t of group.items; track t.id) {
+        <!-- Mouse shortcut only: keyboard users open the edit dialog with the title button. -->
+        <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+        <li
+          class="card"
+          [class.selected]="selectedIds().has(t.id)"
+          (click)="onCardClick($event, t)"
+        >
+          <mat-checkbox
+            class="select"
+            [aria-label]="selectLabel(t)"
+            [checked]="selectedIds().has(t.id)"
+            (change)="toggled.emit(t.id)"
+          />
+          <div class="main">
+            <p class="title">
+              <button
+                type="button"
+                class="row-link"
+                [attr.aria-label]="editLabel(t)"
+                (click)="editRequested.emit(t)"
+              >
+                @if (t.transfer) {
+                  <mat-icon class="transfer-icon" aria-hidden="true">sync_alt</mat-icon>
+                  <app-account-label [transaction]="t" />
+                } @else {
+                  <span class="title-text">{{ title(t) }}</span>
+                }
+              </button>
+            </p>
+            @if (t.note && (t.transfer || t.note !== title(t))) {
+              <p class="note">{{ t.note }}</p>
+            }
+            <div class="meta">
+              @if (t.category; as category) {
+                <app-category-chip
+                  [category]="category"
+                  [groups]="choices()[t.type] ?? []"
+                  [busy]="savingIds().has(t.id)"
+                  [saved]="savedId() === t.id"
+                  [needsCategory]="t.needsCategory"
+                  (categoryChosen)="changeCategory(t, $event)"
+                />
+              } @else {
+                <span class="transfer-label" i18n="@@transactions.type.transfer">Transfer</span>
+              }
+              @if (!t.transfer) {
+                <app-account-label [transaction]="t" />
+              }
+              @if (!group.heading) {
+                <span class="date">{{ t.date | date }}</span>
+              }
+              <app-source-badge [source]="t.source" [importInfo]="t.import" />
+            </div>
+          </div>
+          <app-transaction-amount class="amount" [type]="t.type" [amount]="t.amount" />
+        </li>
+      }
+    </ul>
+  </section>
+}

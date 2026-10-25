@@ -1,0 +1,62 @@
+<article class="card" [attr.aria-labelledby]="'account-name-' + account().id">
+  <div class="top">
+    <span class="type-icon" aria-hidden="true">
+      <mat-icon>{{ typeOption().icon }}</mat-icon>
+    </span>
+    <p
+      class="name"
+      role="heading"
+      [attr.aria-level]="headingLevel()"
+      [id]="'account-name-' + account().id"
+    >
+      {{ account().name }}
+    </p>
+    <button
+      mat-icon-button
+      type="button"
+      class="menu-button"
+      [matMenuTriggerFor]="menu"
+      [attr.aria-label]="menuLabel()"
+      [disabled]="busy()"
+    >
+      <mat-icon aria-hidden="true">more_vert</mat-icon>
+    </button>
+  </div>
+
+  <p class="balance">
+    <span class="visually-hidden" i18n="@@accounts.card.balance">Balance</span>
+    {{ account().balance | money }}
+  </p>
+
+  <div class="bottom">
+    <span class="type-label">{{ typeOption().label }}</span>
+    @if (account().isArchived) {
+      <span class="badge" i18n="@@common.badge.archived">Archived</span>
+      <span class="spacer"></span>
+      <button
+        matButton
+        type="button"
+        class="restore-button"
+        [attr.aria-label]="restoreLabel()"
+        [disabled]="busy()"
+        (click)="restoreRequested.emit(account())"
+      >
+        <mat-icon aria-hidden="true">unarchive</mat-icon>
+        <span i18n="@@accounts.card.restore">Restore</span>
+      </button>
+    }
+  </div>
+</article>
+
+<mat-menu #menu="matMenu" xPosition="before">
+  <button mat-menu-item type="button" (click)="editRequested.emit(account())">
+    <mat-icon aria-hidden="true">edit</mat-icon>
+    <span i18n="@@accounts.card.edit">Edit</span>
+  </button>
+  @if (!account().isArchived) {
+    <button mat-menu-item type="button" (click)="archiveRequested.emit(account())">
+      <mat-icon aria-hidden="true">archive</mat-icon>
+      <span i18n="@@accounts.card.archive">Archive</span>
+    </button>
+  }
+</mat-menu>

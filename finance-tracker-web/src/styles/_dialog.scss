@@ -1,0 +1,20 @@
+// Dialogs shown as a full-screen bottom sheet on mobile (DESIGN.md "Quick add dialog"):
+// open them with `panelClass: 'app-sheet-dialog'` below the desktop breakpoint. The dialog's own
+// component fills the sheet; it lays itself out as a column with scrolling content and the
+// actions pinned to the bottom. `100dvh` (set by the opener) shrinks with the on-screen keyboard.
+.app-sheet-dialog {
+  .mat-mdc-dialog-surface {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--mat-sys-corner-extra-large) var(--mat-sys-corner-extra-large) 0 0;
+
+    > * {
+      flex: 1;
+      min-height: 0;
+    }
+  }
+
+  .mat-mdc-dialog-content {
+    max-height: none;
+  }
+}

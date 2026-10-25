@@ -33,10 +33,11 @@ Design a responsive web app UI for "Finance Tracker", a personal budgeting app f
 
   APP SHELL
   - Desktop: left navigation rail/drawer (Dashboard, Transactions, Accounts, Settings). Top bar with
-  the app name, a primary "Add" button with an "N" shortcut hint, and a user avatar menu (Settings,
-  Log out).
+  the app name, the current page's primary "Add" button with an "N" shortcut hint (Dashboard and
+  Transactions: add a transaction; Accounts: add an account; Settings: none), and a user avatar menu
+  (Settings, Log out).
   - Mobile: top app bar plus bottom navigation (Dashboard, Transactions, Accounts, Settings). A
-  floating "+" action button on every screen.
+  floating "+" action button for the current page's "Add" action (hidden on Settings).
   - Dashboard is a later phase: show it as a simple placeholder page with the month selector
   "October 2026 ‹ ›" and an empty-state card "Add your first transaction to see your month."
 
@@ -53,14 +54,16 @@ Design a responsive web app UI for "Finance Tracker", a personal budgeting app f
   - Error state for a duplicate email: "An account with this email already exists. Log in instead?"
   (with a link).
 
-  3. Onboarding (3 steps, stepper or progress dots, "Skip" in the top corner)
+  3. Onboarding (3 steps, progress dots with "Step n of 3", "Skip" in the top corner on step 2, a
+  small "Log out" link in the top bar)
   - Step 1 "Where do you keep your money?": toggle chips "Main card", "Savings", "Cash". Each
   selected chip expands to an editable name plus an optional current balance (default 0). Hint: "The
   balance on the day you start tracking. Check your bank app." At least one account is required, so
   Continue stays disabled until one is selected.
   - Step 2 "Set a monthly budget": 5 rows (Groceries, Eating out, Transport, Shopping,
   Entertainment), each with a category icon and an empty "zł" limit field. Hint: "Not sure? Start
-  with a guess. You can change it anytime." Buttons: Continue, Skip.
+  with a guess. You can change it anytime." Buttons: Back, Continue; "Skip" in the top corner (step 2
+  only: step 1 is required, step 3 has "I'll do it later").
   - Step 3 "Add your spending": two large option cards, "Import a bank statement (CSV)" (with a
   "Coming soon" badge, disabled) and "Add a transaction manually", plus a quieter text link "I'll do
   it later".

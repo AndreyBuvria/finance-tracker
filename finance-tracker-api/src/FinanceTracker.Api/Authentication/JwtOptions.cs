@@ -14,6 +14,12 @@ public sealed class JwtOptions
     /// <summary>HS256 needs a key of at least 256 bits.</summary>
     public const int MinSigningKeyBytes = 32;
 
+    /// <summary>
+    /// The key docker-compose.yml falls back to when <c>JWT_SIGNING_KEY</c> isn't set. It is public, so it
+    /// is accepted only in the Development and Testing environments.
+    /// </summary>
+    public const string LocalDevelopmentSigningKey = "local-dev-only-jwt-signing-key-do-not-use-in-production";
+
     public string Issuer { get; set; } = string.Empty;
 
     public string Audience { get; set; } = string.Empty;
@@ -24,6 +30,12 @@ public sealed class JwtOptions
 
     public TimeSpan RefreshTokenLifetime { get; set; } = TimeSpan.FromDays(14);
 
+    /// <summary>
+    /// How long a refresh token that was just rotated can still be presented as a benign concurrent
+    /// refresh (e.g. two tabs at once) instead of counting as token reuse. PLAN.md §7: about 10 seconds.
+    /// </summary>
+    public TimeSpan RefreshTokenReuseGraceWindow { get; set; } = TimeSpan.FromSeconds(10);
+
     public byte[] SigningKeyBytes => Encoding.UTF8.GetBytes(SigningKey);
 
     public bool IsValid =>
@@ -31,5 +43,7 @@ public sealed class JwtOptions
         && !string.IsNullOrWhiteSpace(Audience)
         && SigningKeyBytes.Length >= MinSigningKeyBytes
         && AccessTokenLifetime > TimeSpan.Zero
-        && RefreshTokenLifetime > AccessTokenLifetime;
+        && RefreshTokenLifetime > AccessTokenLifetime
+        && RefreshTokenReuseGraceWindow >= TimeSpan.Zero
+        && RefreshTokenReuseGraceWindow < AccessTokenLifetime;
 }

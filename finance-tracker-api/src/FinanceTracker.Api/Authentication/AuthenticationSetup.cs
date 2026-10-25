@@ -18,12 +18,8 @@ public static class AuthenticationSetup
     {
         services.AddOptions<JwtOptions>()
             .BindConfiguration(JwtOptions.SectionName)
-            .Validate(
-                o => o.IsValid,
-                $"'{JwtOptions.SectionName}' settings are invalid. Issuer and Audience are required, and " +
-                $"SigningKey must be at least {JwtOptions.MinSigningKeyBytes} bytes (set it with user-secrets " +
-                "or the Jwt__SigningKey environment variable).")
             .ValidateOnStart();
+        services.AddSingleton<IValidateOptions<JwtOptions>, JwtOptionsValidator>();
 
         services.AddSingleton<IAuthTokenIssuer, JwtAuthTokenIssuer>();
 

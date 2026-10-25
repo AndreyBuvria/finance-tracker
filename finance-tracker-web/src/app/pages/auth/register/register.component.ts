@@ -14,9 +14,16 @@ import { finalize } from 'rxjs';
 import { AuthCardComponent } from '../common/auth-card/auth-card.component';
 import { PasswordChecklistComponent } from './password-checklist/password-checklist.component';
 import { PreventWhitespaceDirective } from '../common/prevent-whitespace/prevent-whitespace.directive';
-import { notBlankValidator } from '../utils/not-blank.utils';
-import { passwordRulesValidator } from '../utils/password.utils';
-import { validationErrors } from '../utils/problem-details.utils';
+import {
+  DISPLAY_NAME_MAX_LENGTH,
+  EMAIL_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from '../common/auth-limits.constants';
+import { notBlankValidator } from '@common/forms/not-blank.utils';
+import { passwordLetterAndNumberValidator } from '../utils/password.utils';
+import { validationErrors } from '@common/http/problem-details.utils';
+import { trimmedMaxLengthValidator } from '@common/forms/trimmed-max-length.utils';
 
 type RegisterError = 'duplicateEmail' | 'generic';
 
@@ -46,10 +53,20 @@ export class RegisterComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
+  // Messages and their order match the API validators (PLAN.md §7 "Auth contract (agreed)").
+  // No `maxlength` attributes: the browser would silently cut pasted text instead of explaining.
   readonly form = inject(NonNullableFormBuilder).group({
-    displayName: ['', notBlankValidator],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, passwordRulesValidator]],
+    displayName: ['', [notBlankValidator, trimmedMaxLengthValidator(DISPLAY_NAME_MAX_LENGTH)]],
+    email: ['', [Validators.required, Validators.maxLength(EMAIL_MAX_LENGTH), Validators.email]],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(PASSWORD_MIN_LENGTH),
+        Validators.maxLength(PASSWORD_MAX_LENGTH),
+        passwordLetterAndNumberValidator,
+      ],
+    ],
   });
 
   /** Drives the live checklist while typing. */
@@ -80,8 +97,8 @@ export class RegisterComponent {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        // Onboarding (first login) is a separate task; until then new users land on the dashboard.
-        next: () => void this.router.navigateByUrl(AppRoutesEnum.Dashboard),
+        // A new user always starts with onboarding (FEATURES.md F1).
+        next: () => void this.router.navigateByUrl(AppRoutesEnum.Onboarding),
         error: (error: unknown) => this.handleError(error, request.email),
       });
   }

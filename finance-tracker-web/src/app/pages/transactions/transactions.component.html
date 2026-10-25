@@ -1,0 +1,100 @@
+<h1 #heading id="transactions-heading" tabindex="-1" i18n="@@transactions.page.title">
+  Transactions
+</h1>
+
+<app-filter-bar
+  [filters]="filters()"
+  [accounts]="accountList()"
+  [categories]="categoryList()"
+  (filtersChange)="update($event)"
+/>
+<app-filter-chips
+  [filters]="filters()"
+  [accounts]="accountList()"
+  [categories]="categoryList()"
+  (removed)="update($event)"
+  (cleared)="clearFilters()"
+/>
+
+<div class="content">
+  @if (page(); as data) {
+    @if (data.totalCount === 0) {
+      @if (emptyKind(); as kind) {
+        <app-transactions-empty
+          [kind]="kind"
+          [canClear]="activeFilters()"
+          (cleared)="clearFilters()"
+          (addRequested)="editor.openQuickAdd(true)"
+        />
+      } @else if (!anyTransactions.isLoading() && anyTransactions.error()) {
+        <!-- Not while a retry reloads: the resource still reports the previous error then. -->
+        <app-load-error [errorId]="emptyCheckErrorId()" (retry)="anyTransactions.reload()" />
+      } @else {
+        <app-transactions-skeleton />
+      }
+    } @else {
+      @if (selectedRows().length > 0) {
+        <app-bulk-bar
+          class="bulk-bar"
+          [count]="selectedRows().length"
+          [groups]="bulkChoices()"
+          [busy]="actions.busy()"
+          (categoryChosen)="actions.recategorizeSelected($event)"
+          (blocked)="actions.explainTransfers()"
+          (deleteRequested)="actions.deleteSelected()"
+        />
+      }
+      <div
+        #results
+        tabindex="-1"
+        role="region"
+        aria-labelledby="transactions-heading"
+        class="results"
+        [class.loading]="transactions.isLoading()"
+        [attr.aria-busy]="transactions.isLoading()"
+      >
+        @if (isDesktop()) {
+          <app-transactions-table
+            [rows]="data.items"
+            [sort]="filters().sort"
+            [selectedIds]="selectedIds()"
+            [choices]="choices()"
+            [savingIds]="actions.savingIds()"
+            [savedId]="actions.savedId()"
+            (sortChange)="changeSort($event)"
+            (toggled)="toggle($event)"
+            (allToggled)="toggleAll()"
+            (categoryChanged)="actions.changeCategory($event)"
+            (editRequested)="editor.openEdit($event)"
+          />
+        } @else {
+          <app-transactions-list
+            [rows]="data.items"
+            [grouped]="sortedByDate()"
+            [selectedIds]="selectedIds()"
+            [choices]="choices()"
+            [savingIds]="actions.savingIds()"
+            [savedId]="actions.savedId()"
+            (toggled)="toggle($event)"
+            (categoryChanged)="actions.changeCategory($event)"
+            (editRequested)="editor.openEdit($event)"
+          />
+        }
+      </div>
+      @if (data.totalPages > 1) {
+        <app-pager
+          class="pager"
+          [page]="data.page"
+          [totalPages]="data.totalPages"
+          (pageChange)="changePage($event)"
+        />
+      }
+      <app-transactions-footer class="footer" [count]="data.totalCount" [totals]="data.totals" />
+    }
+  } @else if (!transactions.isLoading() && transactions.error()) {
+    <!-- Not while a retry reloads: the resource still reports the previous error then. -->
+    <app-load-error [errorId]="loadErrorId()" (retry)="transactions.reload()" />
+  } @else {
+    <app-transactions-skeleton />
+  }
+</div>

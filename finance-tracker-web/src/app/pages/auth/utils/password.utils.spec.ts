@@ -1,5 +1,5 @@
 import { FormControl } from '@angular/forms';
-import { checkPassword, passwordRulesValidator } from './password.utils';
+import { checkPassword, passwordLetterAndNumberValidator } from './password.utils';
 
 describe('checkPassword', () => {
   it.each([
@@ -18,18 +18,28 @@ describe('checkPassword', () => {
     expect(checkPassword('a234567').minLength).toBe(false);
     expect(checkPassword('a2345678').minLength).toBe(true);
   });
+
+  it('counts only ASCII digits 0–9 as a number, like the API', () => {
+    // Arabic-Indic three, Devanagari five, fullwidth seven: all Unicode decimal digits.
+    expect(checkPassword('hasło٣५７').number).toBe(false);
+    expect(checkPassword('hasło0').number).toBe(true);
+    expect(checkPassword('hasło9').number).toBe(true);
+  });
 });
 
-describe('passwordRulesValidator', () => {
-  const validate = (value: string) => passwordRulesValidator(new FormControl(value));
+describe('passwordLetterAndNumberValidator', () => {
+  const validate = (value: string) => passwordLetterAndNumberValidator(new FormControl(value));
 
-  it('passes a password that meets every requirement', () => {
+  it('passes a password with a letter and an ASCII digit', () => {
     expect(validate('kasia2026')).toBeNull();
+    // Length is not this validator's job.
+    expect(validate('k1')).toBeNull();
   });
 
-  it('lists the unmet requirements', () => {
-    expect(validate('kasia')).toEqual({ passwordRules: { unmet: ['minLength', 'number'] } });
-    expect(validate('20261019')).toEqual({ passwordRules: { unmet: ['letter'] } });
+  it('fails without a letter or without an ASCII digit', () => {
+    expect(validate('kasiakasia')).toEqual({ passwordLetterAndNumber: true });
+    expect(validate('20261019')).toEqual({ passwordLetterAndNumber: true });
+    expect(validate('kasia٣٣٣')).toEqual({ passwordLetterAndNumber: true });
   });
 
   it('leaves an empty value to Validators.required', () => {

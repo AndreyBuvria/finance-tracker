@@ -65,7 +65,11 @@ A feature mirrors the app-level layout: its own `common/` and `utils/` folders, 
   - Selector/dropdown components are named `<name>-select.component.ts` (e.g. `month-select.component.ts`, class `MonthSelectComponent`).
   - Files with plain functions/helpers use `.utils.ts` (`money.utils.ts`, tested in `money.utils.spec.ts`).
   - Test helpers and fakes follow the same rule (e.g. `fake-clock.service.ts` if it is a service double).
-- **Feature used across pages** (e.g. the Quick-add dialog opened from the layout on every screen): if the case doesn't fit these rules, ask before choosing where it lives.
+- **Header actions.** The layout only renders structure; it never knows what an action does. A `HeaderActionsService` in `infrastructure/layout/` holds the current page's actions (label, icon, optional keyboard shortcut, handler). The layout renders them (top-bar buttons on desktop, the floating "+" for the primary action on mobile) and calls the handler; it also routes the `N` shortcut to the primary action. Each page registers its own actions on init and they are cleared when the page is destroyed. Pages without actions register none, so no button shows.
+- **Dialogs are per purpose and live in their feature.** One dialog component per entity (transaction quick add, account dialog), not one component switching fields by type. Each lives in its feature under `pages/` (e.g. `pages/transactions/common/dialogs/quick-add-dialog/`, also reused pre-filled for edit; the account dialog in `pages/accounts/`). The feature injects `HeaderActionsService` to register and handle its own actions. Another feature that needs the dialog (Dashboard "Add", onboarding "Add a transaction manually") navigates to that feature's route with an intent query param (e.g. `/transactions?add=1`) instead of importing it; the owning page opens the dialog and removes the param.
+- **Feature dialogs** live in the feature's `common/dialogs/<name>/` even when only one page of the feature uses them (e.g. `pages/settings/common/dialogs/category-dialog/`).
+- **Datepicker labels:** `provideLocalizedDatepickerIntl()` (`common/locale/`) is added to the providers of each lazy route that uses a datepicker, not app-wide (app-wide pulls the datepicker into the initial bundle and breaks the budget).
+- **Feature used across pages:** if a case doesn't fit these rules, ask before choosing where it lives.
 
 ## Angular frontend conventions
 

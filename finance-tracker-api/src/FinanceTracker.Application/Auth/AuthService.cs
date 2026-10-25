@@ -20,6 +20,9 @@ public sealed partial class AuthService(
     IValidator<LogoutRequest> logoutValidator,
     ILogger<AuthService> logger)
 {
+    /// <summary>Upper bound on rotations followed for one grace-window replay.</summary>
+    private const int _maxGraceChainSteps = 5;
+
     public static readonly Error DuplicateEmail = Error.Conflict(
         "Email already registered",
         "An account with this email already exists. Log in instead?");
@@ -90,8 +93,24 @@ public sealed partial class AuthService(
     }
 
     /// <summary>
-    /// Exchanges an active refresh token for a new token pair and revokes the old one. Presenting a
-    /// token that was already revoked is treated as theft: every token rotated from it is revoked too.
+    /// Exchanges an active refresh token for a new token pair and revokes the old one (rotation).
+    /// <para>
+    /// Grace window: a token rotated less than <see cref="IAuthTokenIssuer.RefreshTokenReuseGraceWindow"/>
+    /// ago is a benign concurrent refresh (two tabs, a retried request). Its successor is derived from the
+    /// presented token (<see cref="IAuthTokenIssuer.DeriveSuccessorRefreshToken"/>), so instead of forking
+    /// the chain the request gets a fresh access token plus the chain's current refresh token; every caller
+    /// ends up with the same, still valid token. The window is measured from the original rotation time,
+    /// so repeated replays don't extend it.
+    /// </para>
+    /// <para>
+    /// Any other revoked token (logged out, revoked by reuse detection, or rotated longer ago than the
+    /// window) is treated as theft: every token rotated from it is revoked too.
+    /// </para>
+    /// <para>
+    /// All decisions run under a per-user database lock and re-read the token after taking it, so rotation
+    /// and reuse revocation never interleave: a rotation can't slip a new token past a concurrent reuse
+    /// revocation of the same chain, and a reuse-revoked chain can't be rotated afterwards.
+    /// </para>
     /// </summary>
     public async Task<Result<AuthTokens>> RefreshAsync(RefreshRequest request, CancellationToken cancellationToken)
     {
@@ -100,7 +119,20 @@ public sealed partial class AuthService(
             return SessionExpired;
         }
 
-        var stored = await refreshTokens.FindByHashAsync(RefreshTokenCodec.Hash(request.RefreshToken), cancellationToken);
+        var tokenHash = RefreshTokenCodec.Hash(request.RefreshToken);
+
+        // Unknown tokens are rejected before any lock is taken.
+        var candidate = await refreshTokens.FindByHashAsync(tokenHash, cancellationToken);
+        if (candidate is null)
+        {
+            return SessionExpired;
+        }
+
+        await using var transaction = await unitOfWork.BeginTransactionAsync(cancellationToken);
+        await refreshTokens.LockUserTokensAsync(candidate.UserId, cancellationToken);
+
+        // Re-read under the lock: a concurrent refresh may have rotated or revoked it meanwhile.
+        var stored = await refreshTokens.FindByHashAsync(tokenHash, cancellationToken);
         if (stored is null)
         {
             return SessionExpired;
@@ -108,24 +140,90 @@ public sealed partial class AuthService(
 
         var now = timeProvider.GetUtcNow();
 
-        if (stored.IsRevoked)
+        if (!stored.IsRevoked)
         {
-            await refreshTokens.RevokeDescendantsAsync(stored.Id, now, cancellationToken);
-            LogTokenReuse(stored.UserId, stored.Id);
-            return SessionExpired;
+            return stored.IsExpired(now)
+                ? SessionExpired
+                : await RotateAsync(stored, request.RefreshToken, now, transaction, cancellationToken);
         }
 
-        if (stored.IsExpired(now))
+        var successor = await FindGraceSuccessorAsync(stored, request.RefreshToken, now, cancellationToken);
+        if (successor is not null)
         {
-            return SessionExpired;
+            // Nothing was written; the chain is unchanged.
+            await transaction.CommitAsync(cancellationToken);
+            LogGraceRefresh(stored.UserId, stored.Id);
+            return IssueTokens(stored.UserId, now, successor);
+        }
+
+        await refreshTokens.RevokeDescendantsAsync(stored.Id, now, cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        LogTokenReuse(stored.UserId, stored.Id);
+        return SessionExpired;
+    }
+
+    /// <summary>
+    /// Revokes the caller's refresh token. Unknown, foreign or already revoked tokens are ignored, except a
+    /// token rotated within the grace window: it could still be replayed for the chain's current token, so
+    /// that token (and anything rotated from it) is revoked too. Runs under the same per-user lock as
+    /// refresh, so a concurrent refresh can't leave an active token behind in the logged-out chain.
+    /// </summary>
+    public async Task<Result> LogoutAsync(Guid userId, LogoutRequest request, CancellationToken cancellationToken)
+    {
+        var validation = await logoutValidator.ValidateAsync(request, cancellationToken);
+        if (!validation.IsValid)
+        {
+            return validation.ToError();
+        }
+
+        var tokenHash = RefreshTokenCodec.Hash(request.RefreshToken);
+        var candidate = await refreshTokens.FindByHashAsync(tokenHash, cancellationToken);
+        if (candidate is null || candidate.UserId != userId)
+        {
+            return Result.Success();
         }
 
         await using var transaction = await unitOfWork.BeginTransactionAsync(cancellationToken);
+        await refreshTokens.LockUserTokensAsync(userId, cancellationToken);
 
-        var tokens = StageNewTokens(stored.UserId, now, out var newTokenId);
+        var stored = await refreshTokens.FindByHashAsync(tokenHash, cancellationToken);
+        if (stored is null)
+        {
+            return Result.Success();
+        }
+
+        var now = timeProvider.GetUtcNow();
+        if (!stored.IsRevoked)
+        {
+            await refreshTokens.TryRevokeAsync(stored.Id, now, null, cancellationToken);
+        }
+        else if (stored is { ReplacedByTokenId: not null, RevokedAt: { } rotatedAt }
+            && now - rotatedAt < tokenIssuer.RefreshTokenReuseGraceWindow)
+        {
+            await refreshTokens.RevokeDescendantsAsync(stored.Id, now, cancellationToken);
+        }
+
+        await transaction.CommitAsync(cancellationToken);
+        return Result.Success();
+    }
+
+    private async Task<Result<AuthTokens>> RotateAsync(
+        RefreshToken stored,
+        string rawToken,
+        DateTimeOffset now,
+        IUnitOfWorkTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        var tokens = StageNewTokens(
+            stored.UserId,
+            now,
+            tokenIssuer.DeriveSuccessorRefreshToken(rawToken),
+            out var newTokenId);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // A concurrent refresh with the same token won the race; this request must not get a second pair.
+        // Refresh and logout both hold the per-user lock, so nothing should have revoked the token since it
+        // was re-read. The conditional revoke is a last guard: if it did happen, no new pair is issued and
+        // the staged token is rolled back with the transaction.
         if (!await refreshTokens.TryRevokeAsync(stored.Id, now, newTokenId, cancellationToken))
         {
             return SessionExpired;
@@ -135,27 +233,53 @@ public sealed partial class AuthService(
         return tokens;
     }
 
-    /// <summary>Revokes the caller's refresh token. Unknown, foreign or already revoked tokens are ignored.</summary>
-    public async Task<Result> LogoutAsync(Guid userId, LogoutRequest request, CancellationToken cancellationToken)
+    /// <summary>
+    /// Follows the rotation chain from a revoked token while each step was a rotation inside the grace
+    /// window and returns the raw value of the active token at its end, or null when the replay is not
+    /// benign (logged out, reuse-revoked, rotated too long ago, expired, or not derived by this server).
+    /// </summary>
+    private async Task<string?> FindGraceSuccessorAsync(
+        RefreshToken revoked,
+        string rawToken,
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
     {
-        var validation = await logoutValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
+        var graceWindow = tokenIssuer.RefreshTokenReuseGraceWindow;
+        var current = revoked;
+        var currentRaw = rawToken;
+
+        for (var step = 0; step < _maxGraceChainSteps; step++)
         {
-            return validation.ToError();
+            if (current.RevokedAt is not { } revokedAt)
+            {
+                return current.IsExpired(now) ? null : currentRaw;
+            }
+
+            // ReplacedByTokenId is set only by rotation; logout and reuse revocation leave it empty.
+            if (current.ReplacedByTokenId is not { } nextId || now - revokedAt >= graceWindow)
+            {
+                return null;
+            }
+
+            var nextRaw = tokenIssuer.DeriveSuccessorRefreshToken(currentRaw);
+            var next = await refreshTokens.FindByIdAsync(nextId, cancellationToken);
+            if (next is null || next.TokenHash != RefreshTokenCodec.Hash(nextRaw))
+            {
+                return null;
+            }
+
+            current = next;
+            currentRaw = nextRaw;
         }
 
-        var stored = await refreshTokens.FindByHashAsync(RefreshTokenCodec.Hash(request.RefreshToken), cancellationToken);
-        if (stored is { IsRevoked: false } && stored.UserId == userId)
-        {
-            await refreshTokens.TryRevokeAsync(stored.Id, timeProvider.GetUtcNow(), null, cancellationToken);
-        }
-
-        return Result.Success();
+        return null;
     }
 
-    private AuthTokens StageNewTokens(Guid userId, DateTimeOffset now, out Guid refreshTokenId)
+    private AuthTokens StageNewTokens(Guid userId, DateTimeOffset now, out Guid refreshTokenId) =>
+        StageNewTokens(userId, now, RefreshTokenCodec.Generate(), out refreshTokenId);
+
+    private AuthTokens StageNewTokens(Guid userId, DateTimeOffset now, string rawRefreshToken, out Guid refreshTokenId)
     {
-        var rawRefreshToken = RefreshTokenCodec.Generate();
         var refreshToken = new RefreshToken
         {
             Id = Guid.CreateVersion7(now),
@@ -167,11 +291,14 @@ public sealed partial class AuthService(
         refreshTokens.Add(refreshToken);
         refreshTokenId = refreshToken.Id;
 
-        return new AuthTokens(
+        return IssueTokens(userId, now, rawRefreshToken);
+    }
+
+    private AuthTokens IssueTokens(Guid userId, DateTimeOffset now, string rawRefreshToken) =>
+        new(
             tokenIssuer.IssueAccessToken(userId, now),
             (int)tokenIssuer.AccessTokenLifetime.TotalSeconds,
             rawRefreshToken);
-    }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "User {UserId} registered")]
     private partial void LogRegistered(Guid userId);
@@ -180,4 +307,9 @@ public sealed partial class AuthService(
         Level = LogLevel.Warning,
         Message = "Revoked refresh token {TokenId} of user {UserId} was presented again; revoked its rotation chain")]
     private partial void LogTokenReuse(Guid userId, Guid tokenId);
+
+    [LoggerMessage(
+        Level = LogLevel.Information,
+        Message = "Refresh token {TokenId} of user {UserId} was replayed within the reuse grace window")]
+    private partial void LogGraceRefresh(Guid userId, Guid tokenId);
 }

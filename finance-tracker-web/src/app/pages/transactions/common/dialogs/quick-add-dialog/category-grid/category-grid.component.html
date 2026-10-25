@@ -1,0 +1,74 @@
+<ng-template #tileTemplate let-tile>
+  <button
+    type="button"
+    class="tile"
+    [class.selected]="state().value === tile.id"
+    [attr.aria-pressed]="state().value === tile.id"
+    [attr.aria-describedby]="state().showError ? ids.error : null"
+    (click)="select(tile)"
+  >
+    <span
+      class="icon"
+      [style.background-color]="tile.color"
+      [style.color]="onColor(tile)"
+      aria-hidden="true"
+    >
+      <mat-icon>{{ tile.icon }}</mat-icon>
+    </span>
+    <span class="name">{{ tile.name }}</span>
+  </button>
+</ng-template>
+
+<div class="grid" role="group" [attr.aria-labelledby]="ids.label">
+  <span class="label" [id]="ids.label" i18n="@@transactions.quickAdd.category">Category</span>
+  <div class="tiles">
+    @for (tile of tiles(); track tile.id) {
+      <ng-container
+        [ngTemplateOutlet]="tileTemplate"
+        [ngTemplateOutletContext]="{ $implicit: tile }"
+      />
+    }
+    <button
+      type="button"
+      class="tile more"
+      [attr.aria-controls]="ids.all"
+      [attr.aria-expanded]="expanded()"
+      (click)="expanded.set(!expanded())"
+    >
+      <span class="icon" aria-hidden="true">
+        <mat-icon>{{ expanded() ? 'expand_less' : 'more_horiz' }}</mat-icon>
+      </span>
+      <span class="name" i18n="@@transactions.quickAdd.category.more">More</span>
+    </button>
+  </div>
+
+  <div class="all" [id]="ids.all" [hidden]="!expanded()">
+    @for (group of groups(); track group.label) {
+      <div role="group" [attr.aria-label]="group.label">
+        @if (groups().length > 1) {
+          <p class="group-label" aria-hidden="true">{{ group.label }}</p>
+        }
+        <div class="tiles">
+          @for (tile of group.categories; track tile.id) {
+            <ng-container
+              [ngTemplateOutlet]="tileTemplate"
+              [ngTemplateOutletContext]="{ $implicit: tile }"
+            />
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (state().showError) {
+    <p class="error" role="alert" [id]="ids.error">
+      @if (serverError(); as message) {
+        {{ message }}
+      } @else {
+        <ng-container i18n="@@transactions.quickAdd.category.required"
+          >Choose a category.</ng-container
+        >
+      }
+    </p>
+  }
+</div>

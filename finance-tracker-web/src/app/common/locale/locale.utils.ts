@@ -15,7 +15,11 @@ import { MondayFirstAdapter } from './monday-first.adapter';
 registerLocaleData(localeEnGb, UI_LOCALE);
 registerLocaleData(localePl, MONEY_LOCALE);
 
-/** UI locale (en-GB), default date format, Monday-first Material date adapter. */
+/**
+ * UI locale (en-GB), default date format, Monday-first Material date adapter. Routes with a
+ * datepicker also add `provideLocalizedDatepickerIntl()` (kept out of here: importing the datepicker
+ * would put it in the initial bundle).
+ */
 export function provideAppLocale(): EnvironmentProviders {
   return makeEnvironmentProviders([
     { provide: LOCALE_ID, useValue: UI_LOCALE },

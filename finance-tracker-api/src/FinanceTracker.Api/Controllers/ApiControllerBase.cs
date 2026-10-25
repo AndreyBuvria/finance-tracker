@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace FinanceTracker.Api.Controllers;
 
 [ApiController]
-[Produces("application/json")]
+[ProducesJson]
 public abstract class ApiControllerBase : ControllerBase
 {
     /// <summary>The signed-in user's ID, taken from the access token (never from the request).</summary>
