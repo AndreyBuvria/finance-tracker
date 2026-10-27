@@ -13,6 +13,8 @@ public static class BudgetRules
     public const string LimitTooLarge = TransactionRules.AmountTooLarge;
     public const string ExpenseCategoryOnly = "Budgets can only be set for expense categories.";
     public const string CategoryArchived = TransactionRules.CategoryArchived;
+    public const string CopySameMonth = "Choose a different month to copy to.";
+    public const string NothingToCopy = "There are no budgets to copy from that month.";
 }
 
 public sealed class SetBudgetCommandValidator : AbstractValidator<SetBudgetCommand>
@@ -29,4 +31,27 @@ public sealed class SetBudgetCommandValidator : AbstractValidator<SetBudgetComma
             .WithMessage(BudgetRules.LimitTooManyDecimals)
             .Must(limit => limit is null || limit <= Money.MaxAmount).WithMessage(BudgetRules.LimitTooLarge);
     }
+}
+
+public sealed class BudgetMonthQueryValidator : AbstractValidator<BudgetMonthQuery>
+{
+    public BudgetMonthQueryValidator() => RuleFor(q => q.Month).ValidMonth();
+}
+
+public sealed class CopyBudgetsQueryValidator : AbstractValidator<CopyBudgetsQuery>
+{
+    public CopyBudgetsQueryValidator()
+    {
+        RuleFor(q => q.From).ValidMonth();
+
+        // Compared only when both months are readable; an unreadable "from" has its own error.
+        RuleFor(q => q.To)
+            .ValidMonth()
+            .Must((query, to) => !IsSameMonth(query.From, to)).WithMessage(BudgetRules.CopySameMonth);
+    }
+
+    private static bool IsSameMonth(string? from, string? to) =>
+        CalendarMonth.TryParse(from, out var fromMonth)
+        && CalendarMonth.TryParse(to, out var toMonth)
+        && fromMonth == toMonth;
 }

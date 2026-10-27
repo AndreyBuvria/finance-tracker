@@ -1,4 +1,5 @@
 using FinanceTracker.Application.Accounts;
+using FinanceTracker.Application.Alerts;
 using FinanceTracker.Application.Auth;
 using FinanceTracker.Application.Budgets;
 using FinanceTracker.Application.Categories;
@@ -19,7 +20,10 @@ public static class DependencyInjection
         services.AddSingleton<BusinessClock>();
 
         services.AddScoped<AccountService>();
+        services.AddScoped<AlertService>();
         services.AddScoped<AuthService>();
+        services.AddScoped<BudgetAlertDetector>();
+        services.AddScoped<BudgetCalculator>();
         services.AddScoped<BudgetService>();
         services.AddScoped<CategoryService>();
         services.AddScoped<MeService>();

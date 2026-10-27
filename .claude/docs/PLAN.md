@@ -83,7 +83,7 @@ Infrastructure as code (post-MVP) goes in an `/infra` folder in the same repo.
 | CategoryRule | Id, UserId, Pattern, MatchType (Contains/StartsWith), CategoryId, Priority | |
 | ImportBatch | Id, UserId, AccountId, FileKey, OriginalFileName (added in Phase 4, shown in import history), BankFormat, Status (Pending/Processing/Done/Failed), RowsTotal, RowsImported, RowsSkipped, Error, CreatedAt | |
 | DeletedImportHash | AccountId, ExternalHash | Tombstone so re-import doesn't restore deleted rows |
-| Alert | Id, UserId, CategoryId, Month, Level (Warning/Over), CreatedAt, ReadAt? | Unique (UserId, CategoryId, Month, Level) |
+| Alert | Id, UserId, CategoryId, Month, Level (Warning/Over), Percent (int), Amount (remaining for Warning, over-amount for Over), DaysLeft (int), CreatedAt, ReadAt? | Unique (UserId, CategoryId, Month, Level). Percent/Amount/DaysLeft are a snapshot taken when the alert is created, so its text never changes |
 
 **Category colors** (fixed palette, stored as hex): `#c62828` red, `#ad1457` pink, `#7b1fa2` purple, `#3949ab` indigo, `#1565c0` blue, `#00838f` cyan, `#2e7d32` green, `#c0ca33` lime, `#fbc02d` yellow, `#ef6c00` orange, `#6d4c41` brown, `#546e7a` blue grey.
 
@@ -144,10 +144,22 @@ The frontend copies are `finance-tracker-web/src/styles/category-palette.constan
 - Remaining = Limit − Spent; Usage = Spent / Limit.
 - Status: **OK** < 80%, **Warning** 80–99.99%, **Over** ≥ 100%.
 - Daily allowance = max(total Remaining, 0) / days left in month (including today), current month only. Total Remaining = Σ (Limit − Spent) over budgeted categories, where over-budget categories contribute a **negative** value (e.g. Groceries +100 zł, Eating out −50 zł → 50 zł).
-- Spending in categories without a budget = "Unbudgeted".
+- Spending in categories without a budget = "Unbudgeted". Spending in hidden categories also counts as Unbudgeted (their budgets are excluded), so all expense spending appears on the Budgets page. (Per-category flooring means the Budgets sum can differ from the Transactions footer, which floors once, when refunds exceed a category's expenses.)
+- Spent per category is floored at 0 before summing; Total Remaining may be negative.
+- Overall status (hero card, totals) = total Spent ÷ total Limit with the same thresholds. Daily allowance: the API returns 2 decimals rounded down; the UI shows it rounded down to whole złoty ("~45 zł/day").
+- Copy from last month copies only categories that have no limit in the target month and skips hidden categories. Nothing to copy → 409.
 
 ### Alerts
 - After creating/updating/importing expenses, recompute affected categories. Create an `Alert` only when status crosses a threshold; at most one per (category, month, level).
+- Checked in the same DB transaction as the change (under the category lock), for every expense-affecting write: create, update, delete, bulk recategorize/delete, merge (target), import. Affected = old and new category of each changed row.
+- Only the current month (Europe/Warsaw) can get alerts, whatever the source; changes to other months never create alerts. Changing or copying a limit never creates alerts.
+- Crossing = status before the change vs after it. OK → Warning creates Warning; OK/Warning → Over creates only Over. A category without a budget never alerts. The unique index stops repeats.
+
+### Dashboard
+- Month-based figures use the selected month; net of refunds; transfers excluded.
+- "Spent vs last month": for the current month compare day 1..today with the same days of the previous month (capped at its length); for past months compare whole months. No percentage when the previous amount is 0. Future month: no comparison.
+- Net worth is always today's (sum of active account balances), whatever month is selected.
+- Spending by category: top 6 categories by Spent plus "Everything else". Last 6 months end at the selected month; the current month is marked partial.
 
 ### CSV import
 1. `POST /imports` with accountId + bankFormat → creates `ImportBatch` (Pending), returns pre-signed S3 PUT URL + batchId.
@@ -255,11 +267,42 @@ All under `/api`, JWT required except register/login/refresh.
 - **404** unknown or another user's category.
 - Validation messages: "Choose a month." (missing), "Enter a month as YYYY-MM." (unreadable), "Enter an amount of 0 or more.", "Enter an amount with at most 2 decimal places.", "Enter a smaller amount.", "Budgets can only be set for expense categories.", "This category is hidden. Choose an active category."
 
+### Budgets contract (Phase 2: list and copy)
+
+- `GET /budgets?month=YYYY-MM` → **200** `{ month, period: "Past" | "Current" | "Future", daysLeft /* current month only, incl. today; else null */, items, unbudgeted, totals }`.
+  - `items`: active expense categories with a limit that month, sorted by name: `{ category: { id, name, icon, color }, limitAmount, spent, remaining, usage /* spent ÷ limit, truncated to 4 decimals so it never disagrees with status */, status: "Ok" | "Warning" | "Over" }`.
+  - `unbudgeted`: `{ total, items: [{ category: { id, name, icon, color, isArchived }, spent }] }` — every active expense category without a limit (spent may be 0, sorted by spent desc then name) plus hidden expense categories with spent > 0, all in one order.
+  - `totals` (budgeted categories only; the Total row shows these, Unbudgeted is shown separately): `{ limit, spent, remaining, usage, status, dailyAllowance /* current month only, max(remaining,0) ÷ daysLeft, 2 decimals rounded down; else null */ }`, or `null` when there are no budgeted items.
+  - Same month validation messages as PUT. Future months show real spending if any exists (e.g. a transaction dated tomorrow on the last day of the month). Hidden categories never alert.
+- The list also returns `canCopyFromPreviousMonth` (the previous month has at least one limit that copy would create), so the empty state can offer "Copy from October" only when it works.
+- `POST /budgets/copy?from=YYYY-MM&to=YYYY-MM` → **200** `{ copied }`. The UI shows its own month-specific text on 409 ("No budgets in October to copy."). Copies limits of active expense categories that have no limit in `to`; takes the category lock. **409** "There are no budgets to copy from that month." when nothing qualifies. **400** on `to`: "Choose a different month to copy to." when equal; month messages as above.
+
+### Alerts contract
+
+- `Alert` = `{ id, level: "Warning" | "Over", month: "YYYY-MM", category: { id, name, icon, color }, percent, amount, daysLeft, createdAt, readAt }`.
+- `GET /alerts?unreadOnly=false&limit=20` → **200** `{ items /* newest first */, unreadCount }`. `limit` 1–50 ("Limit must be between 1 and 50.").
+- `POST /alerts/{id}/read` → **204** (idempotent; keeps the first read time); **404** unknown or another user's.
+- `POST /alerts/read-all` → **204**.
+- Text is built on the client from the snapshot: Warning "{Category} is at {percent}% — {amount} left for {daysLeft} days."; Over "{Category} is over budget by {amount}."
+
+### Dashboard contract
+
+- `GET /dashboard?month=YYYY-MM` → **200** (one call):
+  - `month`, `period`, `hasAnyTransactions` (any transaction ever, for the empty state).
+  - `leftToSpend`: the Budgets `totals` plus `daysLeft`, or `null` when the month has no budgets.
+  - `spent`: `{ amount, previousAmount, changePercent /* integer, null when previousAmount is 0 or month is future */, previousMonth: "YYYY-MM" }`.
+  - `income` (income categories only), `netWorth` (today).
+  - `budgets`: `{ items /* Budgets items, top 5 by usage desc */, count }`.
+  - `spendingByCategory`: `{ items: [{ category, amount }] /* top 6 */, otherAmount }`.
+  - `lastSixMonths`: `[{ month, spent, isPartial }]`, oldest first, ending at the selected month.
+  - `recentTransactions`: the 5 newest `Transaction`s dated in the selected month (same shape as the list).
+  - `alerts`: `{ unreadCount, latest: Alert | null }`.
+
 ## 8. Screens (Angular)
 
-1. **Dashboard** — month selector; cards: Left to spend (+ daily allowance), Spent this month (± % vs last month), Income, Net worth; budget progress bars sorted by usage, colored by status; donut by category; bar chart last 6 months; last 5 transactions; alerts banner; Quick add button.
+1. **Dashboard** — month selector; alerts bell with unread count in the top bar (all pages); cards: Left to spend (+ daily allowance), Spent this month (± % vs last month), Income, Net worth; budget progress bars sorted by usage, colored by status; donut by category; bar chart last 6 months; last 5 transactions; alerts banner; Quick add button.
 2. **Transactions** — table: Date, Merchant/note, Category (inline edit), Account, Amount (red/green), Source badge. Filters in URL query params, server-side paging (50) and sorting, bulk actions, footer totals. Quick-add dialog: amount focused first, last-used account preselected.
-3. **Budgets** — Category, Limit (inline edit), Spent, Remaining, Usage bar, Status; Copy from last month; Unbudgeted row; row click → filtered Transactions.
+3. **Budgets** — Category, Limit (inline edit), Spent, Remaining, Usage bar, Status; Copy from last month; collapsible "Spending without a budget" section with "Set limit"; row click → filtered Transactions. In the navigation between Transactions and Accounts; its "Add" action opens "Set a limit".
 4. **Accounts** — cards with balances; add/edit/archive/restore; Import CSV per account; import history.
 5. **Settings** — categories (add/rename/hide/archive/merge), rules, and a toggle to disable single-key keyboard shortcuts (WCAG 2.1.4; stored per user on the device and kept across logouts: "Keyboard shortcuts" / "Single-key shortcuts").
 6. **Auth** — login, register; JWT interceptor; route guards.
@@ -288,11 +331,12 @@ Frontend (`finance-tracker-web`):
 ### Phase 2 — Budgets and dashboard
 **Done when:** the dashboard shows "left to spend" and budget status per category.
 
-- [ ] Budgets endpoints: list with calculations, copy from last month
-- [ ] Budget calculation service (spent, refunds, remaining, status, daily allowance, unbudgeted)
-- [ ] Alerts on threshold crossing
+- [x] Budgets endpoints: list with calculations, copy from last month
+- [x] Budget calculation service (spent, refunds, remaining, status, daily allowance, unbudgeted)
+- [x] Alerts on threshold crossing
 - [ ] Dashboard endpoint (single call)
-- [ ] Angular: Dashboard with charts, Budgets table, alerts banner
+- [ ] Angular: Budgets page (+ navigation item)
+- [ ] Angular: Dashboard with charts (custom SVG donut and bars, each with a screen-reader table), alerts bell and banner
 
 ### Phase 3 — Deploy to AWS
 **Done when:** the app is live on a public URL and each half deploys on every push to `main` that changes it.

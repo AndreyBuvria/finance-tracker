@@ -75,6 +75,20 @@ public sealed class WarsawTodayTests(WarsawAfterMidnightApiFactory factory)
         top!.Items.Select(c => c.SystemKey).Should().Equal("shopping", "groceries");
     }
 
+    [Fact]
+    public async Task ListBudgets_DaysLeftAndDailyAllowance_UseWarsawDate()
+    {
+        using var client = await factory.CreateSignedInClientAsync();
+        var groceries = (await client.GetCategoriesAsync())["groceries"].Id;
+        await client.SetBudgetAsync(groceries, "2026-10", 100m);
+
+        var budgets = await client.GetBudgetsAsync("2026-10");
+
+        // 22–31 Oct in Warsaw is 10 days (the UTC date would give 11): 100 ÷ 10.
+        budgets.DaysLeft.Should().Be(10);
+        budgets.Totals!.DailyAllowance.Should().Be(10m);
+    }
+
     private static Transaction Expense(Guid userId, Guid accountId, Guid categoryId, DateOnly date) =>
         new()
         {

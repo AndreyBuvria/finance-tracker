@@ -219,7 +219,9 @@ Never empty after onboarding (≥1 account is required).
   - Warning (80–99.99%) — amber bar, label "Almost there".
   - Over (≥ 100%) — red bar, Remaining shows negative: "−45,00 zł over".
 - **Refunds** (income in an expense category, e.g. a returned item in Shopping) reduce Spent. Spent can't go below 0 on display.
-- **Unbudgeted row** at the bottom: "Spending without a budget · 340,00 zł" → click shows those transactions. Gently nudges users to budget everything without forcing it.
+- **Unbudgeted section** at the bottom, collapsed: "Spending without a budget · 340,00 zł". Expanded, it lists active expense categories without a limit (with what was spent and a "Set limit" action) and hidden categories that had spending; clicking a category opens its transactions. Gently nudges users to budget everything without forcing it.
+- **Copy from last month** copies only categories that don't have a limit yet this month and skips hidden ones; toast "Copied 5 budgets from October". Nothing to copy: "No budgets in October to copy."
+- The page's "Add" action (and `N`) opens "Set a limit": pick an expense category without a limit, enter the amount.
 - **Total row:** sum of limits, sum of spent, total remaining.
 - Clicking a category row → Transactions filtered by that category and month.
 - Past months are read-only for limits? **No** — editable, but show a hint "Editing a past month" so changes are deliberate.
@@ -237,12 +239,12 @@ Never empty after onboarding (≥1 account is required).
 **Why:** The one screen Kasia opens 3 times a week. It must answer "How am I doing this month?" in 3 seconds, before any scrolling.
 
 ### Layout (mobile first, top to bottom; desktop uses a 2–3 column grid with the same order)
-1. **Month selector** — "October 2026" with ‹ › arrows. Defaults to the current month. Changing the month updates everything.
+1. **Month selector** — "October 2026" with ‹ › arrows. (A bell with the unread alert count sits in the top bar on every page.) Defaults to the current month. Changing the month updates everything.
 2. **Hero card: Left to spend** — big number "1 240,00 zł left", subline "of 4 500,00 zł budget · ~103 zł/day for 12 days". Color follows overall status. If no budgets: "Set budgets to see how much you have left" + button.
 3. **Alerts banner** (only if unread alerts): "Eating out is at 92%. 6 days left." Dismissible (marks as read).
-4. **Three small cards:** Spent this month (with "▲ 12% vs September" — up is bad, shown in amber; down is good), Income this month, Net worth (sum of balances).
+4. **Three small cards:** Spent this month (with "▲ 12% vs September" — up is bad, shown in amber; down is good; for the current month it compares the same days of last month, for past months whole months; hidden when last month had no spending), Income this month, Net worth (today's sum of balances, whatever month is selected).
 5. **Budgets** — progress bars per category, sorted by usage % descending (most at risk first), top 5 + "See all budgets".
-6. **Spending by category** — donut chart with legend and amounts. Click a slice → filtered transactions. Transfers excluded.
+6. **Spending by category** — donut chart with legend and amounts (top 6 + "Everything else"). Click a slice → filtered transactions. Transfers excluded.
 7. **Last 6 months** — bar chart of total spending per month; current month bar shows "so far" pattern/label.
 8. **Recent transactions** — last 5, with "See all".
 
@@ -263,9 +265,10 @@ Never empty after onboarding (≥1 account is required).
 
 ### Behavior
 - Triggered by any change to expenses (manual add/edit/delete, import, recategorization).
-- Created only when status **crosses** a threshold upward (OK → Warning, Warning/OK → Over). Max one Warning and one Over per category per month. If spending drops back (e.g. a refund), no "good news" alert in MVP.
+- Created only when status **crosses** a threshold upward (OK → Warning, Warning/OK → Over; a jump from OK straight past 100% creates only Over). Max one Warning and one Over per category per month. Changing a limit never creates an alert. Only the current month gets alerts, whatever the source. If spending drops back (e.g. a refund), no "good news" alert in MVP.
 - An import that pushes several categories over creates one alert per category, shown grouped: "This import pushed 2 budgets over 80%."
-- Shown as: bell icon with unread count in the top bar; list of alerts in a dropdown; the newest unread on the dashboard banner.
+- Shown as: bell icon with unread count in the top bar; list of alerts in a dropdown (opening it doesn't mark them read; each alert can be marked read, plus "Mark all as read"); the newest unread on the dashboard banner.
+- The alert's numbers are saved when it is created, so its text never changes later.
 - Copy templates:
   - Warning: "**{Category}** is at {pct}% — {remaining} left for {daysLeft} days."
   - Over: "**{Category}** is over budget by {overAmount}."

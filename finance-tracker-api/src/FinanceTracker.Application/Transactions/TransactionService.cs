@@ -1,5 +1,6 @@
 using FinanceTracker.Application.Abstractions;
 using FinanceTracker.Application.Accounts;
+using FinanceTracker.Application.Alerts;
 using FinanceTracker.Application.Categories;
 using FinanceTracker.Application.Common;
 using FinanceTracker.Domain.Entities;
@@ -14,12 +15,15 @@ namespace FinanceTracker.Application.Transactions;
 /// create, edit, delete (with import tombstones), bulk delete/recategorize and merchant autocomplete.
 /// Writes that pick an account or category run under the same per-user locks as category archive/merge/delete and
 /// account archive, so a transaction can't land in a category or account that is being archived or merged away.
+/// Every write that changes spending checks the budget alerts of the categories it touches in the same database
+/// transaction (<see cref="BudgetAlertDetector"/>).
 /// </summary>
 public sealed partial class TransactionService(
     ITransactionRepository transactions,
     IAccountRepository accounts,
     ICategoryRepository categories,
     IUnitOfWork unitOfWork,
+    BudgetAlertDetector alertDetector,
     TimeProvider timeProvider,
     IValidator<TransactionRequest> validator,
     IValidator<TransactionListQuery> listQueryValidator,
@@ -122,9 +126,12 @@ public sealed partial class TransactionService(
                 return error;
             }
 
+            var before = await alertDetector.CaptureAsync(userId, [Change(request)], cancellationToken);
+
             Apply(transaction, request);
             transactions.Add(transaction);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+            await alertDetector.CreateCrossingAlertsAsync(before, cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);
         }
 
@@ -169,8 +176,15 @@ public sealed partial class TransactionService(
                 return error;
             }
 
+            // Both the old and the new category (and month) of the row may change their usage.
+            var before = await alertDetector.CaptureAsync(
+                userId,
+                [Change(transaction), Change(request)],
+                cancellationToken);
+
             Apply(transaction, request);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+            await alertDetector.CreateCrossingAlertsAsync(before, cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);
         }
 
@@ -193,6 +207,9 @@ public sealed partial class TransactionService(
             return NotFound;
         }
 
+        // Deleting a refund raises its category's spending, so deletes are checked too.
+        var before = await alertDetector.CaptureAsync(userId, [Change(transaction)], cancellationToken);
+
         if (transaction.TransferPairId is { } pairId)
         {
             await transactions.DeleteAsync(userId, [], [pairId], cancellationToken);
@@ -201,6 +218,8 @@ public sealed partial class TransactionService(
         {
             await transactions.DeleteAsync(userId, [transactionId], [], cancellationToken);
         }
+
+        await alertDetector.CreateCrossingAlertsAsync(before, cancellationToken);
         await dbTransaction.CommitAsync(cancellationToken);
 
         LogDeleted(userId, 1);
@@ -235,6 +254,15 @@ public sealed partial class TransactionService(
                 return SomeNotFound;
             }
 
+            // Old categories of every selected row, plus the new category for a recategorization.
+            var changes = headers.Select(h => new SpendingChange(h.CategoryId, h.Date));
+            if (request.Action == BulkTransactionAction.Recategorize)
+            {
+                changes = changes.Concat(headers.Select(h => new SpendingChange(request.CategoryId, h.Date)));
+            }
+
+            var before = await alertDetector.CaptureAsync(userId, [.. changes], cancellationToken);
+
             var result = request.Action == BulkTransactionAction.Delete
                 ? await BulkDeleteAsync(userId, headers, cancellationToken)
                 : await BulkRecategorizeAsync(userId, headers, request.CategoryId!.Value, cancellationToken);
@@ -244,6 +272,7 @@ public sealed partial class TransactionService(
             }
 
             affected = result.Value;
+            await alertDetector.CreateCrossingAlertsAsync(before, cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);
         }
 
@@ -359,6 +388,10 @@ public sealed partial class TransactionService(
 
         return null;
     }
+
+    private static SpendingChange Change(Transaction transaction) => new(transaction.CategoryId, transaction.Date);
+
+    private static SpendingChange Change(TransactionRequest request) => new(request.CategoryId, request.Date!.Value);
 
     private static void Apply(Transaction transaction, TransactionRequest request)
     {

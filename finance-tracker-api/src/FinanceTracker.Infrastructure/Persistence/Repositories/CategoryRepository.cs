@@ -157,8 +157,8 @@ internal sealed class CategoryRepository(AppDbContext dbContext) : ICategoryRepo
             .ExecuteUpdateAsync(s => s.SetProperty(r => r.CategoryId, targetId), cancellationToken);
 
         // Alerts describe the source's own budget usage, which no longer exists after the merge; carrying them
-        // over would report the target at the wrong percentage. The target's status is recomputed by the
-        // alerts logic on the next expense change.
+        // over would report the target at the wrong percentage. The merge itself checks the target's status
+        // for new alerts.
         await dbContext.Alerts
             .Where(a => a.UserId == userId && a.CategoryId == sourceId)
             .ExecuteDeleteAsync(cancellationToken);

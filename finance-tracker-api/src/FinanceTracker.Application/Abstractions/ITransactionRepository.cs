@@ -46,7 +46,9 @@ public interface ITransactionRepository
         Guid transferPairId,
         CancellationToken cancellationToken);
 
-    /// <summary>Type and pair of each of the user's transactions among <paramref name="transactionIds"/>.</summary>
+    /// <summary>
+    /// Type, pair, category and date of each of the user's transactions among <paramref name="transactionIds"/>.
+    /// </summary>
     Task<IReadOnlyList<TransactionHeader>> ListHeadersAsync(
         Guid userId,
         IReadOnlyCollection<Guid> transactionIds,

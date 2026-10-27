@@ -1127,6 +1127,9 @@ public sealed class CategoriesEndpointsTests(ApiFactory factory) : IClassFixture
             CategoryId = categoryId,
             Month = month,
             Level = level,
+            Percent = level == AlertLevel.Over ? 110 : 85,
+            Amount = 15m,
+            DaysLeft = 12,
             CreatedAt = new DateTimeOffset(2026, 10, 20, 12, 0, 0, TimeSpan.Zero),
         };
 }

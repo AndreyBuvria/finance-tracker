@@ -10,8 +10,16 @@ internal sealed class AlertConfiguration : IEntityTypeConfiguration<Alert>
     public void Configure(EntityTypeBuilder<Alert> builder)
     {
         builder.ToTable("Alerts", table =>
-            table.HasCheckConstraint("CK_Alerts_Month_FirstDay", "EXTRACT(DAY FROM \"Month\") = 1"));
+        {
+            table.HasCheckConstraint("CK_Alerts_Month_FirstDay", "EXTRACT(DAY FROM \"Month\") = 1");
+            table.HasCheckConstraint("CK_Alerts_Percent_NonNegative", "\"Percent\" >= 0");
+            table.HasCheckConstraint("CK_Alerts_Amount_NonNegative", "\"Amount\" >= 0");
+            table.HasCheckConstraint("CK_Alerts_DaysLeft_Range", "\"DaysLeft\" BETWEEN 1 AND 31");
+        });
         builder.HasKey(a => a.Id);
+
+        builder.Property(a => a.Amount)
+            .HasPrecision(ConfigurationConstants.MoneyPrecision, ConfigurationConstants.MoneyScale);
 
         builder.Property(a => a.Level)
             .HasConversion<string>()

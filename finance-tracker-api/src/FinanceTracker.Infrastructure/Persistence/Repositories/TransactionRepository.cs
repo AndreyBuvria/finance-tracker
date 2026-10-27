@@ -181,7 +181,7 @@ internal sealed class TransactionRepository(AppDbContext dbContext) : ITransacti
         CancellationToken cancellationToken) =>
         await dbContext.Transactions
             .Where(t => t.UserId == userId && transactionIds.Contains(t.Id))
-            .Select(t => new TransactionHeader(t.Id, t.Type, t.TransferPairId))
+            .Select(t => new TransactionHeader(t.Id, t.Type, t.TransferPairId, t.CategoryId, t.Date))
             .ToListAsync(cancellationToken);
 
     public async Task<int> DeleteAsync(

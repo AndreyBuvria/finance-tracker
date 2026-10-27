@@ -32,11 +32,11 @@ Design a responsive web app UI for "Finance Tracker", a personal budgeting app f
   Entertainment, Subscriptions, Other. Income: Salary, Other income.
 
   APP SHELL
-  - Desktop: left navigation rail/drawer (Dashboard, Transactions, Accounts, Settings). Top bar with
+  - Desktop: left navigation rail/drawer (Dashboard, Transactions, Budgets, Accounts, Settings). Top bar with
   the app name, the current page's primary "Add" button with an "N" shortcut hint (Dashboard and
   Transactions: add a transaction; Accounts: add an account; Settings: none), and a user avatar menu
   (Settings, Log out).
-  - Mobile: top app bar plus bottom navigation (Dashboard, Transactions, Accounts, Settings). A
+  - Mobile: top app bar plus bottom navigation (Dashboard, Transactions, Budgets, Accounts, Settings). A
   floating "+" action button for the current page's "Add" action (hidden on Settings).
   - Dashboard is a later phase: show it as a simple placeholder page with the month selector
   "October 2026 ‹ ›" and an empty-state card "Add your first transaction to see your month."
@@ -132,6 +132,47 @@ Design a responsive web app UI for "Finance Tracker", a personal budgeting app f
   color picker (12 swatches).
   - Merge dialog: "Merge Coffee into…" with a category dropdown, plus a confirmation line "Move 34
   transactions and 1 budget to Eating out?"
+
+  PHASE 2 SCREENS (replace the Dashboard placeholder)
+
+  8. Dashboard
+  - Same month selector as Transactions. Mobile: one column in the FEATURES F7 order; desktop: a
+  12-column grid — hero card (8 cols) + three small cards stacked (4 cols); budgets bars and donut
+  side by side; last 6 months and recent transactions side by side.
+  - Hero card "Left to spend": large number in the status color (OK: primary/green tone, Warning:
+  amber, Over: red), subline "of 4 500,00 zł budget · ~103 zł/day for 12 days". Past month: "Spent
+  4 210,00 zł of 4 500,00 zł budget". No budgets: "Set budgets to see how much you have left" +
+  button "Set budgets".
+  - Alerts banner under the hero: tonal amber (Warning) or red (Over) surface, icon, text, close ×.
+  - Small cards: Spent this month with "▲ 12% vs September" (up = amber, down = green), Income, Net
+  worth.
+  - Budgets card: 5 rows (icon, name, "320 / 400 zł", thin progress bar in the status color, Warning
+  label "Almost there", Over shows "−45,00 zł over"), link "See all budgets".
+  - Donut: 6 category colors + grey "Everything else", total in the middle, legend with amounts.
+  - Bars: 6 months, labels "May"…"Oct", the current month hatched with "so far".
+  - Recent transactions: 5 rows as in the Transactions mobile list, link "See all".
+  - Empty state: same layout with placeholder cards and a central prompt "Add your first transaction
+  or import a statement to see your month."
+  - Charts are simple SVG in the category palette; each has a visually hidden table with the same
+  numbers.
+
+  9. Budgets
+  - Month selector; for a past month a hint chip "Editing a past month".
+  - Table (desktop) / cards (mobile): Category (icon + name), Limit (click → inline number field,
+  Enter saves, Esc cancels), Spent, Remaining ("−45,00 zł over" in red when over), Usage bar, Status
+  ("Almost there" amber / "Over" red / none for OK).
+  - Total row: limits, spent, remaining. Above the table for the current month: "You can spend ~45
+  zł/day for the next 12 days." or "You've used your whole budget for October."
+  - Collapsed section "Spending without a budget · 340,00 zł": rows with icon, name, spent and a
+  "Set limit" text button; hidden categories show a "Hidden" badge and no button.
+  - Empty month: "No budgets for November yet." + primary "Copy from October" + "Start from scratch".
+  - Top bar "Add" opens "Set a limit": category select (expense categories without a limit) +
+  amount.
+
+  10. Alerts bell (top bar, every page)
+  - Bell icon with a small red badge showing the unread count (hidden at 0). Opens a dropdown list:
+  each alert with category icon, text, relative date, unread dot; "Mark all as read" at the top;
+  empty: "No alerts yet."
 
   GENERAL STATES TO INCLUDE
   - A success toast, an inline validation error, and a full-page error: "Something went wrong. Try

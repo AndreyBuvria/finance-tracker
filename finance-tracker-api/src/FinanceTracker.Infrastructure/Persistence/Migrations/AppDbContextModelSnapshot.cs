@@ -78,11 +78,18 @@ namespace FinanceTracker.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DaysLeft")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Level")
                         .IsRequired()
@@ -91,6 +98,9 @@ namespace FinanceTracker.Infrastructure.Persistence.Migrations
 
                     b.Property<DateOnly>("Month")
                         .HasColumnType("date");
+
+                    b.Property<int>("Percent")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("ReadAt")
                         .HasColumnType("timestamp with time zone");
@@ -107,7 +117,13 @@ namespace FinanceTracker.Infrastructure.Persistence.Migrations
 
                     b.ToTable("Alerts", null, t =>
                         {
+                            t.HasCheckConstraint("CK_Alerts_Amount_NonNegative", "\"Amount\" >= 0");
+
+                            t.HasCheckConstraint("CK_Alerts_DaysLeft_Range", "\"DaysLeft\" BETWEEN 1 AND 31");
+
                             t.HasCheckConstraint("CK_Alerts_Month_FirstDay", "EXTRACT(DAY FROM \"Month\") = 1");
+
+                            t.HasCheckConstraint("CK_Alerts_Percent_NonNegative", "\"Percent\" >= 0");
                         });
                 });
 

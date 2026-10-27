@@ -15,4 +15,16 @@ public sealed class BusinessClock(TimeProvider timeProvider)
 
     /// <summary>The current Europe/Warsaw calendar date.</summary>
     public DateOnly Today => DateOnly.FromDateTime(TimeZoneInfo.ConvertTime(timeProvider.GetUtcNow(), _timeZone).DateTime);
+
+    /// <summary>Whether <paramref name="month"/> (its first day) is before, at or after the month of <paramref name="today"/>.</summary>
+    public static MonthPeriod PeriodOf(DateOnly month, DateOnly today)
+    {
+        var currentMonth = new DateOnly(today.Year, today.Month, 1);
+        return month < currentMonth ? MonthPeriod.Past
+            : month == currentMonth ? MonthPeriod.Current
+            : MonthPeriod.Future;
+    }
+
+    /// <summary>Days left in the month of <paramref name="today"/>, today included (1 on the last day).</summary>
+    public static int DaysLeftInMonth(DateOnly today) => DateTime.DaysInMonth(today.Year, today.Month) - today.Day + 1;
 }

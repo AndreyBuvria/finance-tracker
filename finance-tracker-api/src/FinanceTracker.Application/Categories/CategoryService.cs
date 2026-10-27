@@ -1,4 +1,5 @@
 using FinanceTracker.Application.Abstractions;
+using FinanceTracker.Application.Alerts;
 using FinanceTracker.Application.Common;
 using FinanceTracker.Domain.Constants;
 using FinanceTracker.Domain.Entities;
@@ -15,6 +16,7 @@ namespace FinanceTracker.Application.Categories;
 public sealed partial class CategoryService(
     ICategoryRepository categories,
     IUnitOfWork unitOfWork,
+    BudgetAlertDetector alertDetector,
     TimeProvider timeProvider,
     BusinessClock clock,
     IValidator<CategoryRequest> validator,
@@ -343,7 +345,8 @@ public sealed partial class CategoryService(
     /// <summary>
     /// Merges a category into another active one of the same type, in one database transaction: moves all
     /// transactions and rules, adds each budget to the target's budget of the same month (or moves it when the
-    /// target has none), drops the source's alerts, then archives the source.
+    /// target has none), drops the source's alerts, then archives the source. The target's budget status in the
+    /// current month is compared before and after, so a merge that pushes it over a threshold creates an alert.
     /// </summary>
     public async Task<Result<MergeCategoryResponse>> MergeAsync(
         Guid userId,
@@ -403,10 +406,13 @@ public sealed partial class CategoryService(
                 return MergedBudgetTooLarge;
             }
 
+            var before = await alertDetector.CaptureCategoriesAsync(userId, [targetId], cancellationToken);
+
             counts = await categories.ReassignAsync(userId, sourceId, targetId, cancellationToken);
 
             source.IsArchived = true;
             await unitOfWork.SaveChangesAsync(cancellationToken);
+            await alertDetector.CreateCrossingAlertsAsync(before, cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         }
 

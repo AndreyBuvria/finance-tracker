@@ -228,5 +228,13 @@ public sealed record TransactionPage(
     int TotalCount,
     TransactionTotals Totals);
 
-/// <summary>What a bulk action needs to know about a selected transaction.</summary>
-public sealed record TransactionHeader(Guid Id, TransactionType Type, Guid? TransferPairId);
+/// <summary>
+/// What a bulk action needs to know about a selected transaction: its type and pair, and its category and date
+/// for the budget alerts.
+/// </summary>
+public sealed record TransactionHeader(
+    Guid Id,
+    TransactionType Type,
+    Guid? TransferPairId,
+    Guid? CategoryId,
+    DateOnly Date);
